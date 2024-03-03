@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <title>json test</title>
+    </head>
+    <body>
+        <input type="button" id="viewButton" value="表示" onclick="view_Click()"><br>
+        ///
+        <div id="jsonShow">
+
+        </div>
+        ///
+    </body>
+    <script>
+        const jsonraw = 
+'{"id":"112014825774662729","created_at":"2024-02-29T12:43:18.000Z","in_reply_to_id":null,"in_reply_to_account_id":null,"sensitive":false,"spoiler_text":"","visibility":"public","language":"ja","uri":"https://unnerv.jp/users/UN_NERV/statuses/112014825777942851","url":"https://unnerv.jp/@UN_NERV/112014825777942851","replies_count":0,"reblogs_count":0,"favourites_count":0,"edited_at":null,"content":"<p>【新潟県気象警報・注意報2024年02月29日21:43】<br>注意報を解除します。<br><a href="https://unnerv.jp/tags/%E6%B0%97%E8%B1%A1%E8%AD%A6%E5%A0%B1%E6%B3%A8%E6%84%8F%E5%A0%B1\"class=\"mentionhashtag\"rel=\"nofollownoopenernoreferrer\"target=\"_blank\">#<span>気象警報注意報</span></a><a href=\"https://unnerv.jp/tags/%E6%96%B0%E6%BD%9F%E7%9C%8C\"class=\"mentionhashtag\"rel=\"nofollownoopenernoreferrer\"target=\"_blank\">#<span>新潟県</span></a></p>","reblog":null,"account":{"id":"89936","username":"UN_NERV","acct":"UN_NERV@unnerv.jp","display_name":"特務機関NERV","locked":false,"bot":true,"discoverable":false,"indexable":false,"group":false,"created_at":"2017-04-15T00:00:00.000Z","note":"<p>情報ごとにアカウントが別れています。ご自身に必要なテーマだけを選んでリモートフォローすることができます。アカウントの一覧は<ahref=\"https://unnerv.jp/about/more\"rel=\"nofollownoopenernoreferrer\"target=\"_blank\"><spanclass=\"invisible\">https://</span><spanclass=\"\">unnerv.jp/about/more</span><spanclass=\"invisible\"></span></a>に掲載しています。</p>","url":"https://unnerv.jp/@UN_NERV","uri":"https://unnerv.jp/users/UN_NERV","avatar":"https://files.mastodon.social/accounts/avatars/000/089/936/original/29da0bb06afdb1ef.png","avatar_static":"https://files.mastodon.social/accounts/avatars/000/089/936/original/29da0bb06afdb1ef.png","header":"https://files.mastodon.social/accounts/headers/000/089/936/original/cda7b99d98ad62b3.jpeg","header_static":"https://files.mastodon.social/accounts/headers/000/089/936/original/cda7b99d98ad62b3.jpeg","followers_count":22849,"following_count":0,"statuses_count":531463,"last_status_at":"2024-02-29","hide_collections":false,"emojis":[],"fields":[]},"media_attachments":[{"id":"112014826021773880","type":"image","url":"https://files.mastodon.social/cache/media_attachments/files/112/014/826/021/773/880/original/73043e643820b04d.png","preview_url":"https://files.mastodon.social/cache/media_attachments/files/112/014/826/021/773/880/small/73043e643820b04d.png","remote_url":"https://media.unnerv.jp/media_attachments/files/112/014/825/756/411/104/original/991c22416af59f3e.png","preview_remote_url":null,"text_url":null,"meta":{"original":{"width":1920,"height":1080,"size":"1920x1080","aspect":1.7777777777777777},"small":{"width":640,"height":360,"size":"640x360","aspect":1.7777777777777777}},"description":null,"blurhash":"U47-ZwWB4n%MfPt7?bof9F%M~qWB?bxut7of"}],"mentions":[],"tags":[{"name":"新潟県","url":"https://mastodon.social/tags/%E6%96%B0%E6%BD%9F%E7%9C%8C"},{"name":"気象警報注意報","url":"https://mastodon.social/tags/%E6%B0%97%E8%B1%A1%E8%AD%A6%E5%A0%B1%E6%B3%A8%E6%84%8F%E5%A0%B1"}],"emojis":[],"card":null,"poll":null,"favourited":false,"reblogged":false,"muted":false,"bookmarked":false,"filtered":[]}';
+        
+        function view_Click(){
+            try {
+                let jsonNode1 = JSON.parse(jsonraw);
+                let jsonText2 = jsonNode1.payload;
+                let jsonNode2 = JSON.parse(jsonText2);
+                
+                let id = jsonNode2.id.toString();
+                let created_at = new Date(jsonNode2.created_at);
+                let in_reply_to_id = jsonNode2.in_reply_to_id ? jsonNode2.in_reply_to_id.toString() : null;
+                let url = jsonNode2.url.toString();
+                let content = jsonNode2.content.toString();
+                let text = content.replace("<p>", "").replace("</p>", "");
+                
+                let account = jsonNode2.account;
+                let account_acct = account.acct.toString();
+                let account_display_name = account.display_name.toString();
+                
+                let media_attachments = jsonNode2.media_attachments;
+                let media_urls = [];
+                media_attachments.forEach(media_attachment => {
+                    media_urls.push(media_attachment.url.toString());
+                });
+            
+                console.log(url);
+                console.log(`${account_display_name} ${account_acct}  ${created_at.toLocaleString()}  id:${id} reply:${in_reply_to_id || "null"}\n${text}`);
+            
+                media_urls.forEach(media_url => {
+                    console.log(media_url);
+                });
+                console.log("");
+            } catch (ex) {
+                console.log(ex.message);
+            }
+        }
+    </script>
+</html>

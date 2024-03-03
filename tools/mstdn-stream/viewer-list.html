@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <title>Mastodon list stream viewer</title>
+        <style>
+            body{
+                margin: 0 10px;
+            }
+            .inputs{
+                padding: 10px;
+                border: 1px solid black;
+            }
+            li{
+                font-size: 1.25em;
+                font-weight: bold;
+            }
+            .li-dis{
+                font-size: 1rem;
+                font-weight: normal;
+            }
+            input#viewButton{
+                font-size: 1.5em;
+            }
+
+            .controlArea{
+                margin: 0 -10px;
+                padding: 0 0.5em;
+                border-bottom:  1px solid gray;
+
+            }
+            .toot{
+                margin: 0 -10px;
+                padding: 0.5em;
+                border-bottom:  1px solid gray;
+            }
+            .toot-user{
+                width: 100%;
+                display: flex;
+            }
+            .toot-user-icon{
+                margin: 8px;
+                margin-left: 0;
+                border-radius: 100%;
+                /*background-color: black;*/
+            }
+            .toot-user-info{
+                width: 100%;
+            }
+            .toot-user-up{
+                width: 100%;
+                height: 34px;
+                display: flex;
+            }
+            .toot-user-name{
+                margin-top: auto;
+                font-size: 1.25em;
+                font-weight: bold;
+            }
+            .toot-time{
+                margin: 0 0 auto auto;
+                font-size: 0.9em;
+                color: gray;
+            }
+            .toot-user-id{
+                height: 30px;
+                color: gray;
+            }
+            .toot-images{
+                display: flex;
+                flex-wrap: wrap
+            }
+            .toot-image-large{
+                width: 100%;
+                border-radius: 4px;
+            }
+            .toot-image-small{
+                width: 50%;
+                border-radius: 4px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="noViewMode">
+            <p style="color: red; font-size: 30px;">Websocket接続がうまくいかないため開発中断中</p>
+            <h1>Mastodon list stream viewer</h1>
+            <p>Mastodonのlistをストリームで表示します。</p>
+            <p style="color: red;">サーバーに情報は送られませんが、トークン等は暗号化せず表示します。念のため専用アカウント、read:lists,read:statuses権限のみにするなど対策することをお勧めします。</p>
+            <p><div class="inputs">
+                <label>サーバー:<input type="text" id="domain" value=""></label><br>
+                <label>リストのID:<input type="text" id="listID"></label><br>
+                <label>アクセストークン:<input type="text" id="token"></label><br>
+                <input type="button" id="viewButton" value="表示" onclick="view_Click()"><br>
+                <br>
+                ※リストのID: <span style="color: blue;">https://<span style="color: gray;">mastodon.example</span>/deck/lists/</span><span style="color: red;">xxxxx</span>←この部分の数字<br>
+                ※アクセストークン: <a href="https://www.google.com/search?q=Mastodon+API">Mastodon API</a>などで検索してください。 
+            </div></p>
+            <p>
+                <h2>使い方</h2>
+                <ol>
+                    <li>Mastodonアカウント登録<br>
+                        <span class="li-dis">基本どのサーバーでもいいですが、カスタマイズされているサーバーでは表示できない可能性があります。サーバーを上のテキストボックスに入力してください(例:mastodon.example)。</span></li>
+                    <li>リストを作成する<br>
+                        <span class="li-dis">見たいユーザーをリストに入れ、リストのIDをコピーし、上のテキストボックスに貼り付けてください。</span></li>
+                    <li>設定→開発→新規アプリでアプリケーションを作成する<br>
+                        <span class="li-dis"><code>read:lists</code>,<code>read:statuses</code>のみにすることを推奨します。アクセストークンをコピーし、上のテキストボックスに貼り付けてください。</span></li>
+                    <li>ID・トークンを入力し表示ボタンを押す</li>
+                </ol>
+            </p>
+        </div>
+        <div id="viewMode">
+            <div class="controlArea">
+                <div style="display: flex; justify-content: space-between;">
+                    <div id="ctrlArea-time">2024/10/01 11:11:11</div>
+                    <div id="ctrlArea-connect">stream:<span style="color: red;">discon</span><span style="color: green;">nected</span><span style="color: orange;">ing</span> <a href="viewer-list.html">再設定</a></div>
+                </div>
+            </div>
+            <div class="toot">
+                <div class="toot-user">
+                    <img class="toot-user-icon" src="/icon/new_main.png" alt="icon" width="48px" height="48px">
+                    <div class="toot-user-info">
+                        <div class="toot-user-up">
+                            <div class="toot-user-name">特務機関NERV</div>
+                            <div class="toot-time">03/02 12:25</div>
+                        </div>
+                        <div class="toot-user-id">UN_NERV@unnerv.jp</div>
+                    </div>
+                </div>
+                <div class="toot-text">
+                    【新潟県 気象警報・注意報 2024年02月29日 21:43】<br>注意報を解除します。<br><a href="https://unnerv.jp/tags/%E6%B0%97%E8%B1%A1%E8%AD%A6%E5%A0%B1%E6%B3%A8%E6%84%8F%E5%A0%B1" class="mention hashtag" rel="nofollow noopener noreferrer" target="_blank">#<span>気象警報注意報</span></a> <a href="https://unnerv.jp/tags/%E6%96%B0%E6%BD%9F%E7%9C%8C" class="mention hashtag" rel="nofollow noopener noreferrer" target="_blank">#<span>新潟県</span></a>
+                    <div class="toot-images">
+                        <img class="toot-image-large" src="/images/qumast-20240101230550.68.png" alt="(url)">
+                    </div>
+                </div>
+            </div>
+
+            <div class="toot">
+                <div class="toot-user">
+                    <img class="toot-user-icon" src="/icon/new_main.png" alt="icon" width="48px" height="48px">
+                    <div class="toot-user-info">
+                        <div class="toot-user-up">
+                            <div class="toot-user-name">特務機関NERV</div>
+                            <div class="toot-time">03/02 12:25</div>
+                        </div>
+                        <div class="toot-user-id">UN_NERV@unnerv.jp</div>
+                    </div>
+                </div>
+                <div class="toot-text">
+                    【新潟県 気象警報・注意報 2024年02月29日 21:43】<br>注意報を解除します。<br><a href="https://unnerv.jp/tags/%E6%B0%97%E8%B1%A1%E8%AD%A6%E5%A0%B1%E6%B3%A8%E6%84%8F%E5%A0%B1" class="mention hashtag" rel="nofollow noopener noreferrer" target="_blank">#<span>気象警報注意報</span></a> <a href="https://unnerv.jp/tags/%E6%96%B0%E6%BD%9F%E7%9C%8C" class="mention hashtag" rel="nofollow noopener noreferrer" target="_blank">#<span>新潟県</span></a>
+                    <div class="toot-images">
+                        <img class="toot-image-small" src="/images/qumast-20240101230550.68.png" alt="(url)">
+                        <img class="toot-image-small" src="/images/qumast-20240101230550.68.png" alt="(url)">
+                        <img class="toot-image-small" src="/images/qumast-20240101230550.68.png" alt="(url)">
+                        <img class="toot-image-small" src="/images/qumast-20240101230550.68.png" alt="(url)">
+                    </div>
+                    
+                </div>
+            </div>
+            <span style="color: #7777;">フィードの最後です。最大表示数は30です。取得開始直後は表示されません。</span>
+        </div>
+        <script>
+            
+
+            function showViewMode() {
+                document.getElementById("noViewMode").style.display = "none"; 
+                document.getElementById("viewMode").style.display = ""; 
+            }
+
+            function hideViewMode() {
+                document.getElementById("noViewMode").style.display = ""; 
+                document.getElementById("viewMode").style.display = "none"; 
+            }
+
+            function view_Click() {
+                showViewMode();
+            }
+
+            const socket = "";
+
+            async function connect(server, token, listID) {
+                while (true) {
+                    try {
+                        const client = new WebSocket(`wss://${server}}/api/v1/streaming?access_token=${token}&stream=list&list=${listID}`);
+                    
+                        client.onopen = function () {
+                            console.log("接続開始");
+                        };
+                    
+                        client.onmessage = function (event) {
+                            try {
+                                let data = event.data;
+                                let jsonText1 = new TextDecoder().decode(data);
+                                
+                                if (jsonText1 === '') return;
+                                
+                                let jsonNode1 = JSON.parse(jsonText1);
+                                let jsonText2 = jsonNode1.payload;
+                                let jsonNode2 = JSON.parse(jsonText2);
+                                
+                                let id = jsonNode2.id.toString();
+                                let created_at = new Date(jsonNode2.created_at);
+                                let in_reply_to_id = jsonNode2.in_reply_to_id ? jsonNode2.in_reply_to_id.toString() : null;
+                                let url = jsonNode2.url.toString();
+                                let content = jsonNode2.content.toString();
+                                let text = content.replace("<p>", "").replace("</p>", "");
+                                
+                                let account = jsonNode2.account;
+                                let account_acct = account.acct.toString();
+                                let account_display_name = account.display_name.toString();
+                                
+                                let media_attachments = jsonNode2.media_attachments;
+                                let media_urls = [];
+                                media_attachments.forEach(media_attachment => {
+                                    media_urls.push(media_attachment.url.toString());
+                                });
+                            
+                                console.log(url);
+                                console.log(`${account_display_name} ${account_acct}  ${created_at.toLocaleString()}  id:${id} reply:${in_reply_to_id || "null"}\n${text}`);
+                            
+                                media_urls.forEach(media_url => {
+                                    console.log(media_url);
+                                });
+                                console.log("");
+                            } catch (ex) {
+                        console.log(ex.message);
+                    }
+                        };
+                    
+                    
+                        client.onclose = function () {
+                            console.log("[WebSocket] Connection closed. Reconnecting...");
+                        };
+                    
+                        client.onerror = function (error) {
+                            console.error("[WebSocket] Error:", error.message);
+                        };
+                    
+                        await new Promise((resolve) => setTimeout(resolve, 1000));
+                    } catch (ex) {
+                        console.error("[Get]", ex.message);
+                        await new Promise((resolve) => setTimeout(resolve, 1000));
+                        console.log("[Get]切断されました。再接続します。");
+                    }
+                }
+            }
+
+
+        </script>
+    </body>
+</html>

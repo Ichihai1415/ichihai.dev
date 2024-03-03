@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <title>template - simple</title>
+    </head>
+    <body>
+        <input type="button" id="connect" value="接続" onclick="connect()"><br>
+        <div id="jsonShow">
+
+        </div>
+    </body>
+    <script>
+        async function connect(server, token, listID) {
+            while (true) {
+                try {
+                    const client = new WebSocket("wss://mastodon.social/api/v1/streaming?access_token=edQIe9E4VHrHxbCpQdVflL8SZeANCpI8uIBKfLySxas&stream=list&list=89249");
+                
+                    client.onopen = function () {
+                        console.log("接続開始");
+                    };
+                
+                    client.onmessage = function (event) {
+                        try {
+                            let data = event.data;
+                            console.log(data);
+                        } catch (ex) {
+                    console.log(ex.message);
+                }
+                    };
+                
+                
+                    client.onclose = function () {
+                        console.log("[WebSocket] Connection closed. ");
+                    };
+                
+                    client.onerror = function (error) {
+                        console.error("[WebSocket] Error:", error.message);
+                    };
+                
+                    await new Promise((resolve) => setTimeout(resolve, 1000));
+                } catch (ex) {
+                    console.error("[Get]", ex.message);
+                    await new Promise((resolve) => setTimeout(resolve, 1000));
+                    console.log("[Get]切断されました。再接続します。");
+                }
+            }
+        }
+
+    </script>
+</html>
