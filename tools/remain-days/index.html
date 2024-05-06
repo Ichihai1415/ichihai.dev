@@ -13,6 +13,28 @@
                 url("/font/DSEG/DSEG7-Classic/DSEG7Classic-Bold.ttf") format("ttf");
             }
 
+            html{
+                min-height: 100vh;
+            }
+            body {
+                margin: 0;
+            }
+
+            .main {
+                min-height: 94vh;
+                margin: 0 10px;
+            }
+
+            .inputs {
+                display: inline-block;
+                padding: 5px;
+                border: 1px solid #000;
+            }
+
+            .userJSONs {
+                padding-top: 5px;
+            }
+
             table.dates-list {
                 border: 2px solid black;
                 border-collapse: collapse;
@@ -54,13 +76,29 @@
                 transform: translate(0, -100%);
                 color: black;
             }
+
+            .footer {
+                width: 100%;
+                padding: 2px 0px;
+                text-align: center;
+                background-color: #ddd;
+            }
         </style>
     </head>
     <body>
         <div class="main">
             <h1>残り日数一覧</h1>
+            <div class="inputs">
+                取得データ:
+                <input type="text" id="paramInput">
+                <button onclick="addParam()">読み込み</button>
+                <div class="userJSONs">
+                    <button onclick="">JSONファイル読み込み(未作成)</button>
+                    <a href="json-info.html">詳細(未作成)</a>
+                </div>
+            </div>
             <noscript style="color: red;">JavaScriptを有効にしてください。</noscript>
-            <div class="info" id="info"></div>
+            <p class="info" id="info"></p>
             <table class="dates-list" id="dates-list">
 <!--
                 <tr class="dates-head">
@@ -80,41 +118,31 @@
                 </tr>
 -->
             </table>
+            <p>7セグフォントにDSEG7 Classic Boldを使用しています。<a href="https://www.keshikan.net/fonts.html">DSEG by けしかん</a></p>
+        </div>
+        <div class="footer">
+            © 2024 ichihai1415  
         </div>
     </body>
     <script>
-        var getJSON = function(url, callback) {
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', url, true);
-            xhr.responseType = 'json';
-            xhr.onload = function() {
-            var status = xhr.status;
-            if (status === 200) {
-                callback(null, xhr.response);
-            } else {
-                callback(status, xhr.response);
-                }
-            };
-            xhr.send();
-        };
+        const infoDiv = document.getElementById("info");
+        const table = document.getElementById("dates-list");
 
         window.onload = function() {
             const url = new URL(window.location.href);
             const params = url.searchParams;
-            console.log(params);
+            //console.log(params);
             const data = params.get("data");
-            const infoDiv = document.getElementById("info");
             if (data == null) {
-                infoDiv.innerHTML = `<span style="color:red;">URLパラメータを指定する必要があります。</span>`;
+                infoDiv.innerHTML = `<span style="color:red;">URLパラメータ(取得データ)を指定する必要があります。</span>`;
             }
             else {
                 let url = null;
                 if (data == "moshi2024") {
                     url = "moshi2024.json";
                 }
-                
                 if (url == null){
-                    infoDiv.innerHTML = `<span style="color:red;">URLパラメータが正しくありません。</span>`;
+                    infoDiv.innerHTML = `<span style="color:red;">URLパラメータ(取得データ)が正しくありません。</span>`;
                 }
                 else {
                     getJSON(url, function(err, json) {
@@ -122,43 +150,72 @@
                         if (err !== null) {
                             infoDiv.innerHTML = `<span style="color:red;">取得に失敗しました(${err})。</span>`;
                         } else {
-                            const nowDate = new Date();
-                            infoDiv.innerHTML = `<span style="color:blue;">データ:${data} 取得日:${nowDate.getFullYear()}/${plus0(nowDate.getMonth() + 1)}/${plus0(nowDate.getDate())}</span>`;
-                            //var json = JSON.parse(data);
-                            var tableHtml = `<tr class="dates-head"><th class="date">日付</th><th class="content">内容</th><th class="remainDays">日数</th></tr>`;
-                            json.forEach(dateData => {
-                                const date = dateData.date;
-                                const content = dateData.content;
-                                var remainDays_f = (new Date(date) - nowDate) / 86400000;
-                                var tr_class = "dates-entry-ended";
-                                if (remainDays_f > 0){
-                                    remainDays_f += 1;
-                                    tr_class = "dates-entry";
-                                }
-                                const remainDays = parseInt(remainDays_f);
-                                tableHtml += `<tr class="${tr_class}"><td>${date}</td><td>${content}</td><td class="dates"><div class="dates-entry-days">888<div class="dates-entry-days-fore">${remainDays}</div></div>日</td></tr>`;
-                                console.log(`${date},${content},${remainDays}`);
-                                table.innerHTML = tableHtml;
-                            });
+                            displayDates(json);
                         }
                     });
                 }
-                
             }
         }
 
+        function addParam() {
+            let value = document.getElementById("paramInput").value;
+            if (value == "") {
+                infoDiv.innerHTML = `<span style="color:red;">空白にすることはできません。</span>`;
+                return;
+            }
+            let curUrl = window.location.href;
+            let newUrl = curUrl.split('?')[0] + '?data=' + encodeURIComponent(value);
+            window.location.href = newUrl;
+        }
+
+        function getJSON(url, callback) {
+            let xhr = new XMLHttpRequest();
+            xhr.open('GET', url, true);
+            xhr.responseType = 'json';
+            xhr.onload = function() {
+                let status = xhr.status;
+                if (status === 200) {
+                    callback(null, xhr.response);
+                } else {
+                    callback(status, xhr.response);
+                }
+            };
+            xhr.send();
+        };
+
+        function displayDates(json) {
+            let nowDate = new Date();
+            infoDiv.innerHTML = `<span style="color:blue;">取得・基準日:${nowDate.getFullYear()}/${plus0(nowDate.getMonth() + 1)}/${plus0(nowDate.getDate())}<br>
+            名称:${json.control.name}  作者:${json.control.author} 更新:${json.control.update}</span>`;
+            let tableHtml = `<tr class="dates-head"><th class="date">日付</th><th class="content">内容</th><th class="remainDays">日数</th></tr>`;
+            json.dates.forEach(dateData => {
+                let date = dateData.date;
+                let content = dateData.content;
+                let remainDays_f = (new Date(date) - nowDate) / 86400000;
+                let tr_class = "dates-entry-ended";
+                if (remainDays_f > 0) {
+                    remainDays_f += 1;
+                    tr_class = "dates-entry";
+                }
+                let remainDays = parseInt(remainDays_f);
+                let backNum = "";
+                for(let i = 0; i < remainDays.toString().length; i++) {
+                    backNum += "8";
+                }
+                if (remainDays >= 0 || !json.isHideOld) {
+                    tableHtml += `<tr class="${tr_class}"><td>${date}</td><td>${content}</td><td class="dates"><div class="dates-entry-days">${backNum}<div class="dates-entry-days-fore">${remainDays}</div></div>日</td></tr>`;
+                }
+                console.log(`${date},${content},${remainDays}`);
+            });
+            table.innerHTML = tableHtml;
+        }
+
         function plus0(num) {
-            var newNum = num;
+            let newNum = num;
             if(num < 10) {
                 newNum = "0" + num;
             }
             return newNum;
-        }
-
-        function wait(time) {
-            return new Promise( (resolve) => {
-                setTimeout(resolve, time)
-            })
         }
     </script>
 </html>
