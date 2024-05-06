@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+    <head>
+        <meta charset="utf-8">
+        <title>残り日数表示ページ for ichihai1415</title>
+        <style>
+            @font-face 
+            {
+                font-family: DSEG7;
+                src: url("/font/DSEG/DSEG7-Classic/DSEG7Classic-Bold.woff2") format("woff2"),
+                url("/font/DSEG/DSEG7-Classic/DSEG7Classic-Bold.woff") format("woff"),
+                url("/font/DSEG/DSEG7-Classic/DSEG7Classic-Bold.ttf") format("ttf");
+            }
+
+            table.dates-list {
+                border: 2px solid black;
+                border-collapse: collapse;
+                width: 100%;
+            }
+
+            th,td {
+                border: 1px solid gray;
+            }
+
+            tr:first-child {
+                border: 2px solid black;
+            }
+
+            tr.dates-entry-ended {
+                background-color: #aaa;
+            }
+
+            td.dates {
+                text-align: right;
+                padding: 5px 5px 0 0;
+            }
+
+            .dates-entry-days {
+                display: inline-block;
+                position: relative;
+                font-family: DSEG7;
+                font-size: 300%;
+                color: #eee;
+            }
+
+            tr.dates-entry-ended .dates-entry-days {
+                color: #999;
+            }
+
+            .dates-entry-days-fore {
+                position: absolute;
+                right: 0;
+                transform: translate(0, -100%);
+                color: black;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="main">
+            <h1>残り日数一覧</h1>
+            <noscript style="color: red;">JavaScriptを有効にしてください。</noscript>
+            <div class="info" id="info"></div>
+            <table class="dates-list" id="dates-list">
+<!--
+                <tr class="dates-head">
+                    <th class="date">日付</th>
+                    <th class="content">内容</th>
+                    <th class="remainDays">日数</th>
+                </tr>
+                <tr class="dates-entry">
+                    <td>2024/05/12</td>
+                    <td>全統記述模試#1</td>
+                    <td class="dates">
+                        <div class="dates-entry-days">888
+                            <div class="dates-entry-days-fore">7</div>
+                        </div>
+                        日
+                    </td>
+                </tr>
+-->
+            </table>
+        </div>
+    </body>
+    <script>
+        var getJSON = function(url, callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', url, true);
+            xhr.responseType = 'json';
+            xhr.onload = function() {
+            var status = xhr.status;
+            if (status === 200) {
+                callback(null, xhr.response);
+            } else {
+                callback(status, xhr.response);
+                }
+            };
+            xhr.send();
+        };
+
+        window.onload = function() {
+            const url = new URL(window.location.href);
+            const params = url.searchParams;
+            console.log(params);
+            const data = params.get("data");
+            const infoDiv = document.getElementById("info");
+            if (data == null) {
+                infoDiv.innerHTML = `<span style="color:red;">URLパラメータを指定する必要があります。</span>`;
+            }
+            else {
+                let url = null;
+                if (data == "moshi2024") {
+                    url = "moshi2024.json";
+                }
+                
+                if (url == null){
+                    infoDiv.innerHTML = `<span style="color:red;">URLパラメータが正しくありません。</span>`;
+                }
+                else {
+                    getJSON(url, function(err, json) {
+                        const table = document.getElementById("dates-list");
+                        if (err !== null) {
+                            infoDiv.innerHTML = `<span style="color:red;">取得に失敗しました(${err})。</span>`;
+                        } else {
+                            const nowDate = new Date();
+                            infoDiv.innerHTML = `<span style="color:blue;">データ:${data} 取得日:${nowDate.getFullYear()}/${plus0(nowDate.getMonth() + 1)}/${plus0(nowDate.getDate())}</span>`;
+                            //var json = JSON.parse(data);
+                            var tableHtml = `<tr class="dates-head"><th class="date">日付</th><th class="content">内容</th><th class="remainDays">日数</th></tr>`;
+                            json.forEach(dateData => {
+                                const date = dateData.date;
+                                const content = dateData.content;
+                                var remainDays_f = (new Date(date) - nowDate) / 86400000;
+                                var tr_class = "dates-entry-ended";
+                                if (remainDays_f > 0){
+                                    remainDays_f += 1;
+                                    tr_class = "dates-entry";
+                                }
+                                const remainDays = parseInt(remainDays_f);
+                                tableHtml += `<tr class="${tr_class}"><td>${date}</td><td>${content}</td><td class="dates"><div class="dates-entry-days">888<div class="dates-entry-days-fore">${remainDays}</div></div>日</td></tr>`;
+                                console.log(`${date},${content},${remainDays}`);
+                                table.innerHTML = tableHtml;
+                            });
+                        }
+                    });
+                }
+                
+            }
+        }
+
+        function plus0(num) {
+            var newNum = num;
+            if(num < 10) {
+                newNum = "0" + num;
+            }
+            return newNum;
+        }
+
+        function wait(time) {
+            return new Promise( (resolve) => {
+                setTimeout(resolve, time)
+            })
+        }
+    </script>
+</html>
