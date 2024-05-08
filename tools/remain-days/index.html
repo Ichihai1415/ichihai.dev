@@ -53,6 +53,10 @@
                 background-color: #aaa;
             }
 
+            td.date {
+                font-size: 200%;
+            }
+
             td.dates {
                 text-align: right;
                 padding: 5px 5px 0 0;
@@ -88,6 +92,8 @@
     <body>
         <div class="main">
             <h1>残り日数一覧</h1>
+            <p>注意:ダークモード拡張機能が入っていると正常に表示されない場合があります。また一部の端末で位置が少しずれることがあります。</p>
+            <p>7セグフォントにDSEG7 Classic Boldを使用しています。<a href="https://www.keshikan.net/fonts.html">7セグ・14セグフォント 「DSEG」</a></p>
             <div class="inputs">
                 取得データ:
                 <input type="text" id="paramInput">
@@ -107,7 +113,7 @@
                     <th class="remainDays">日数</th>
                 </tr>
                 <tr class="dates-entry">
-                    <td>2024/05/12</td>
+                    <td class="date">2024/05/12</td>
                     <td>全統記述模試#1</td>
                     <td class="dates">
                         <div class="dates-entry-days">888
@@ -118,7 +124,6 @@
                 </tr>
 -->
             </table>
-            <p>7セグフォントにDSEG7 Classic Boldを使用しています。<a href="https://www.keshikan.net/fonts.html">DSEG by けしかん</a></p>
         </div>
         <div class="footer">
             © 2024 ichihai1415  
@@ -146,7 +151,6 @@
                 }
                 else {
                     getJSON(url, function(err, json) {
-                        const table = document.getElementById("dates-list");
                         if (err !== null) {
                             infoDiv.innerHTML = `<span style="color:red;">取得に失敗しました(${err})。</span>`;
                         } else {
@@ -164,14 +168,15 @@
                 return;
             }
             let curUrl = window.location.href;
-            let newUrl = curUrl.split('?')[0] + '?data=' + encodeURIComponent(value);
+            let newUrl = curUrl.split('?')[0] + "?data=" + encodeURIComponent(value);
             window.location.href = newUrl;
         }
 
         function getJSON(url, callback) {
+            console.log("GET " + url)
             let xhr = new XMLHttpRequest();
-            xhr.open('GET', url, true);
-            xhr.responseType = 'json';
+            xhr.open("GET", url, true);
+            xhr.responseType = "json";
             xhr.onload = function() {
                 let status = xhr.status;
                 if (status === 200) {
@@ -184,35 +189,42 @@
         };
 
         function displayDates(json) {
-            let nowDate = new Date();
-            infoDiv.innerHTML = `<span style="color:blue;">取得・基準日:${nowDate.getFullYear()}/${plus0(nowDate.getMonth() + 1)}/${plus0(nowDate.getDate())}<br>
-            名称:${json.control.name}  作者:${json.control.author} 更新:${json.control.update}</span>`;
-            let tableHtml = `<tr class="dates-head"><th class="date">日付</th><th class="content">内容</th><th class="remainDays">日数</th></tr>`;
-            json.dates.forEach(dateData => {
-                let date = dateData.date;
-                let content = dateData.content;
-                let remainDays_f = (new Date(date) - nowDate) / 86400000;
-                let tr_class = "dates-entry-ended";
-                if (remainDays_f > 0) {
-                    remainDays_f += 1;
-                    tr_class = "dates-entry";
-                }
-                let remainDays = parseInt(remainDays_f);
-                let backNum = "";
-                for(let i = 0; i < remainDays.toString().length; i++) {
-                    backNum += "8";
-                }
-                if (remainDays >= 0 || !json.isHideOld) {
-                    tableHtml += `<tr class="${tr_class}"><td>${date}</td><td>${content}</td><td class="dates"><div class="dates-entry-days">${backNum}<div class="dates-entry-days-fore">${remainDays}</div></div>日</td></tr>`;
-                }
-                console.log(`${date},${content},${remainDays}`);
-            });
-            table.innerHTML = tableHtml;
+            try {
+                let nowDate = new Date();
+                infoDiv.innerHTML = 
+                `名称: <span style="color:blue;">${json.control.name}</span><br>
+                作成者: <span style="color:blue;">${json.control.author}</span><br>
+                更新: <span style="color:blue;">${json.control.update}</span><br>
+                取得・基準日: <span style="color:blue;">${nowDate.getFullYear()}/${plus0(nowDate.getMonth() + 1)}/${plus0(nowDate.getDate())}</span>`;
+                let tableHtml = `<tr class="dates-head"><th class="date">日付</th><th class="content">内容</th><th class="remainDays">日数</th></tr>`;
+                json.dates.forEach(dateData => {
+                    let date = dateData.date;
+                    let content = dateData.content;
+                    let remainDays_f = (new Date(date) - nowDate) / 86400000;
+                    let tr_class = "dates-entry-ended";
+                    if (remainDays_f > 0) {
+                        remainDays_f += 1;
+                        tr_class = "dates-entry";
+                    }
+                    let remainDays = parseInt(remainDays_f);
+                    let backNum = "";
+                    for(let i = 0; i < remainDays.toString().length; i++) {
+                        backNum += "8";
+                    }
+                    if (remainDays >= 0 || !json.isHideOld) {
+                        tableHtml += `<tr class="${tr_class}"><td class="date">${date}</td><td>${content}</td><td class="dates"><div class="dates-entry-days">${backNum}<div class="dates-entry-days-fore">${remainDays}</div></div>日</td></tr>`;
+                    }
+                    console.log(`${date},${content},${remainDays}`);
+                });
+                table.innerHTML = tableHtml;
+            } catch (error) {
+                infoDiv.innerHTML = `<span style="color:red;">表示に失敗しました(${error})。</span>`;
+            }
         }
 
         function plus0(num) {
             let newNum = num;
-            if(num < 10) {
+            if (num < 10) {
                 newNum = "0" + num;
             }
             return newNum;
