@@ -1,6 +1,5 @@
 {
-    "control" : 
-    {
+    "control" : {
         "name" : "2024年度高3向け模試日程",
         "description" : "ichihai1415での情報です。人により異なる可能性があります。",
         "author" : "admin",
@@ -8,8 +7,7 @@
         "update" : "2024/05/06"
     },
     "isHideOld" : false,
-    "dates" : 
-    [
+    "dates" : [
         {
             "date" : "2024/05/05",
             "content" : "全統共テ模試(希望者のみ)<br>成績公開:05/31"

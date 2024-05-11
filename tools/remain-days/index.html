@@ -5,17 +5,17 @@
         <meta name="viewport" content="width=device-width, initial-scale=0.75">
         <title>残り日数表示ページ for ichihai1415</title>
         <style>
-            @font-face 
-            {
+            @font-face {
                 font-family: DSEG7;
                 src: url("/font/DSEG/DSEG7-Classic/DSEG7Classic-Bold.woff2") format("woff2"),
                 url("/font/DSEG/DSEG7-Classic/DSEG7Classic-Bold.woff") format("woff"),
                 url("/font/DSEG/DSEG7-Classic/DSEG7Classic-Bold.ttf") format("ttf");
             }
 
-            html{
+            html {
                 min-height: 100vh;
             }
+
             body {
                 margin: 0;
             }
@@ -41,7 +41,7 @@
                 width: 100%;
             }
 
-            th,td {
+            th, td {
                 border: 1px solid gray;
             }
 
@@ -107,9 +107,11 @@
             <p>注意:ダークモード拡張機能が入っていると正常に表示されない場合があります。また一部の端末で位置が少しずれることがあります。</p>
             <p>7セグフォントにDSEG7 Classic Boldを使用しています。<a href="https://www.keshikan.net/fonts.html">7セグ・14セグフォント 「DSEG」</a></p>
             <div class="inputs">
-                取得データ:
-                <input type="text" id="paramInput">
-                <button onclick="addParam()">読み込み</button>
+                <form onsubmit="return addParam()">
+                    取得データ:
+                    <input type="text" id="paramInput">
+                    <button onclick="addParam()">読み込み</button>
+                </form>
                 <div class="userJSONs">
                     <button onclick="">JSONファイル読み込み(未作成)</button>
                     <a href="json-info.html">詳細(未作成)</a>
@@ -136,14 +138,13 @@
                 </tr>
 -->
             </table>
-        </div>
-        <div class="footer">
-            © 2024 ichihai1415  
-        </div>
+        </div><br>
+        <div class="footer">© 2024 ichihai1415</div>
     </body>
     <script>
         const infoDiv = document.getElementById("info");
         const table = document.getElementById("dates-list");
+        const defTitle = "残り日数表示ページ for ichihai1415";
 
         window.onload = function() {
             const url = new URL(window.location.href);
@@ -152,6 +153,7 @@
             const data = params.get("data");
             if (data == null) {
                 infoDiv.innerHTML = `<span style="color:red;">URLパラメータ(取得データ)を指定する必要があります。</span>`;
+                document.title = defTitle;
             }
             else {
                 let url = null;
@@ -160,11 +162,13 @@
                 }
                 if (url == null){
                     infoDiv.innerHTML = `<span style="color:red;">URLパラメータ(取得データ)が正しくありません。</span>`;
+                    document.title = defTitle;
                 }
                 else {
                     getJSON(url, function(err, json) {
                         if (err !== null) {
                             infoDiv.innerHTML = `<span style="color:red;">取得に失敗しました(${err})。</span>`;
+                            document.title = defTitle;
                         } else {
                             displayDates(json);
                         }
@@ -177,11 +181,13 @@
             let value = document.getElementById("paramInput").value;
             if (value == "") {
                 infoDiv.innerHTML = `<span style="color:red;">空白にすることはできません。</span>`;
+                document.title = defTitle;
                 return;
             }
             let curUrl = window.location.href;
             let newUrl = curUrl.split('?')[0] + "?data=" + encodeURIComponent(value);
             window.location.href = newUrl;
+            return false;//リロード阻止 参考:https://qiita.com/CleanDiesel/items/a6e404b253b916992bd8
         }
 
         function getJSON(url, callback) {
@@ -220,7 +226,7 @@
                     }
                     let remainDays = parseInt(remainDays_f);
                     let backNum = "";
-                    for(let i = 0; i < remainDays.toString().length; i++) {
+                    for (let i = 0; i < remainDays.toString().length; i++) {
                         backNum += "8";
                     }
                     if (remainDays >= 0 || !json.isHideOld) {
@@ -229,8 +235,10 @@
                     console.log(`${date},${content},${remainDays}`);
                 });
                 table.innerHTML = tableHtml;
+                document.title = `[${json.control.name}] ` + defTitle;
             } catch (error) {
                 infoDiv.innerHTML = `<span style="color:red;">表示に失敗しました(${error})。</span>`;
+                document.title = defTitle;
             }
         }
 
