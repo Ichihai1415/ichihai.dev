@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8" />
+        <title>cookie test</title>
+        <script src="/js/ichihai.js" async></script>
+        <style>
+            div {
+                padding: 10px;
+                margin: 10px;
+                font-size: 200%;
+                border: 1px solid #000;
+            }
+
+            button {
+                font-size: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            Cookie
+            <button onclick="cookie_save()">保存</button>
+        </div>
+        <div>
+            <button onclick="cookie_read()">読み込み</button>
+            <span id="cookie_list"></span>
+        </div>
+    </body>
+    <script>
+        function cookie_save() {
+            const now = new Date();
+            setCookie("time=" + now.toString(), 60);
+        }
+
+        function cookie_read() {
+            const cookies = getCookies();
+            console.log(cookies);
+            let cl = document.getElementById("cookie_list");
+            let inHtml = "";
+            Object.keys(cookies).forEach((key) => {
+                inHtml += key + "=" + cookies[key] + "<br>";
+                console.log("cookie reading: " + key + "=" + cookies[key]);
+            });
+            cl.innerHTML = inHtml;
+        }
+    </script>
+</html>
