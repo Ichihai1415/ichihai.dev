@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width" />
+        <title>cmd textarea</title>
+        <style>
+            :root {
+                --titlebar: var(--titlebar-focus); /*ここで変えれる*/
+                --titlebar-focus: #07e;
+                --titlebar-unfocus: #202020;
+            }
+
+            body {
+                margin: 0;
+            }
+
+            .cmd {
+                height: 512px;
+                border: 1px solid var(--titlebar);
+            }
+
+            .cmd-titlebar {
+                height: 32px;
+                display: flex;
+                font-size: 12px;
+                color: #fff;
+                background-color: var(--titlebar);
+            }
+
+            .cmd-icon {
+                width: 16px;
+                height: 12px;
+                margin: auto 8px;
+                border: 1px solid #999;
+            }
+
+            .cmd-icon-titlebar {
+                height: 3px;
+                display: flex;
+                background-color: #ddd;
+            }
+
+            .cmd-icon-button {
+                width: 1px;
+                height: 1px;
+                margin: 1px;
+                margin-left: 0;
+                background-color: #999;
+            }
+
+            .cmd-icon-text {
+                margin: auto 0;
+                font-size: 6px;
+                text-align: center;
+                color: #fff;
+                background-color: #000;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                user-select: none;
+            }
+
+            .cmd-titlebar-text {
+                margin: auto 0;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                user-select: none;
+            }
+
+            .cmd-titlebar-button {
+                width: 48px;
+                margin: -1px;
+                border: none;
+                font-size: 16px;
+                color: #fff;
+                background-color: var(--titlebar);
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                user-select: none;
+            }
+
+            .cmd-titlebar-button#cmd-titlebar-min {
+                margin-left: auto;
+            }
+
+            .cmd-titlebar-button#cmd-titlebar-min:hover,
+            .cmd-titlebar-button#cmd-titlebar-max:hover {
+                background-color: #fff2;
+            }
+
+            .cmd-titlebar-button#cmd-titlebar-close:hover {
+                background-color: #f00;
+            }
+
+            .cmd-textarea {
+                width: 100%;
+            }
+
+            #cmd {
+                width: 100%;
+                min-height: 480px;
+                padding: 0;
+                border: none;
+                color: #c0c0c0;
+                background-color: #000;
+                resize: none;
+                outline: none;
+                scrollbar-color: #959595 #171717;
+                overflow-y: scroll;
+            }
+
+            #cmd::-webkit-scrollbar {
+                background-color: #171717;
+            }
+
+            #cmd::-webkit-scrollbar-thumb {
+                background-color: #959595;
+            }
+
+            #cmd::selection {
+                color: #333;
+                background-color: #f3f3f3;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="cmd">
+            <div class="cmd-titlebar">
+                <div class="cmd-icon">
+                    <div class="cmd-icon-titlebar">
+                        <div
+                            class="cmd-icon-button"
+                            style="margin-left: auto"
+                        ></div>
+                        <div class="cmd-icon-button"></div>
+                        <div class="cmd-icon-button"></div>
+                    </div>
+                    <div class="cmd-icon-text">i:\_</div>
+                </div>
+                <span class="cmd-titlebar-text"
+                    >コマンドプロンプトのようなテキストボックス</span
+                >
+                <button
+                    class="cmd-titlebar-button"
+                    id="cmd-titlebar-min"
+                    aria-label="minimize"
+                >
+                    －
+                </button>
+                <button
+                    class="cmd-titlebar-button"
+                    id="cmd-titlebar-max"
+                    aria-label="maximize"
+                >
+                    ☐
+                </button>
+                <button
+                    class="cmd-titlebar-button"
+                    id="cmd-titlebar-close"
+                    aria-label="close"
+                >
+                    ✕
+                </button>
+            </div>
+            <div class="cmd-textarea">
+                <textarea id="cmd" spellcheck="false" aria-label="cmd">
+Ichihai.dev - textarea cmd
+(c) 2024 Ichihai1415
+
+cmd@ichihai.dev&gt;</textarea
+                >
+            </div>
+        </div>
+    </body>
+</html>

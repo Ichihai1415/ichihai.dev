@@ -1,15 +1,21 @@
 <!DOCTYPE html>
 <html lang="ja-JP">
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=0.75">
+        <meta charset="utf-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=0.75"
+        />
         <title>残り日数表示ページ for ichihai1415</title>
         <style>
             @font-face {
                 font-family: DSEG7;
-                src: url("/font/DSEG/DSEG7-Classic/DSEG7Classic-Bold.woff2") format("woff2"),
-                url("/font/DSEG/DSEG7-Classic/DSEG7Classic-Bold.woff") format("woff"),
-                url("/font/DSEG/DSEG7-Classic/DSEG7Classic-Bold.ttf") format("ttf");
+                src: url("/font/DSEG/DSEG7-Classic/DSEG7Classic-Bold.woff2")
+                        format("woff2"),
+                    url("/font/DSEG/DSEG7-Classic/DSEG7Classic-Bold.woff")
+                        format("woff"),
+                    url("/font/DSEG/DSEG7-Classic/DSEG7Classic-Bold.ttf")
+                        format("ttf");
             }
 
             html {
@@ -41,7 +47,8 @@
                 width: 100%;
             }
 
-            th, td {
+            th,
+            td {
                 border: 1px solid gray;
             }
 
@@ -57,13 +64,13 @@
                 font-size: 200%;
             }
 
-            @media screen and (max-width: 1000px) { 
+            @media screen and (max-width: 1000px) {
                 td.date {
                     font-size: 150%;
                 }
             }
 
-            @media screen and (max-width: 500px) { 
+            @media screen and (max-width: 500px) {
                 td.date {
                     font-size: 100%;
                 }
@@ -100,16 +107,27 @@
                 background-color: #ddd;
             }
         </style>
+        <script src="/js/ichihai.js" async></script>
     </head>
     <body>
         <div class="main">
-            <h1>残り日数一覧</h1>
-            <p>注意:ダークモード拡張機能が入っていると正常に表示されない場合があります。また一部の端末で位置が少しずれることがあります。</p>
-            <p>7セグフォントにDSEG7 Classic Boldを使用しています。<a href="https://www.keshikan.net/fonts.html">7セグ・14セグフォント 「DSEG」</a></p>
+            <a href="."><h1>残り日数一覧</h1></a>
+            <p>
+                注意:ダークモード拡張機能が入っていると正常に表示されない場合があります(ダークテーマは実装予定です)。また一部の端末で位置が少しずれることがあります。
+            </p>
+            <p>
+                お知らせ:Cookieに取得したデータ名を保存します(30日有効)。URLパラメータなしでアクセスした場合、Cookieにデータ名があればそれを自動で読み込みます。
+            </p>
+            <p>
+                7セグフォントにDSEG7 Classic Boldを使用しています。<a
+                    href="https://www.keshikan.net/fonts.html"
+                    >7セグ・14セグフォント 「DSEG」</a
+                >
+            </p>
             <div class="inputs">
                 <form onsubmit="return addParam()">
                     取得データ:
-                    <input type="text" id="paramInput">
+                    <input type="text" id="paramInput" />
                     <button onclick="addParam()">読み込み</button>
                 </form>
                 <div class="userJSONs">
@@ -117,10 +135,12 @@
                     <a href="json-info.html">詳細(未作成)</a>
                 </div>
             </div>
-            <noscript style="color: red;">JavaScriptを有効にしてください。</noscript>
+            <noscript style="color: red"
+                >JavaScriptを有効にしてください。</noscript
+            >
             <p class="info" id="info"></p>
             <table class="dates-list" id="dates-list">
-<!--
+                <!--例
                 <tr class="dates-head">
                     <th class="date">日付</th>
                     <th class="content">内容</th>
@@ -138,64 +158,76 @@
                 </tr>
 -->
             </table>
-        </div><br>
+        </div>
+        <br />
         <div class="footer">© 2024 ichihai1415</div>
     </body>
     <script>
         const infoDiv = document.getElementById("info");
         const table = document.getElementById("dates-list");
+        const paramInput = document.getElementById("paramInput");
         const defTitle = "残り日数表示ページ for ichihai1415";
+        let cookies = null;
 
-        window.onload = function() {
+        window.onload = function () {
             const url = new URL(window.location.href);
             const params = url.searchParams;
-            //console.log(params);
-            const data = params.get("data");
+            let data = params.get("data");
+            cookies = getCookies();
+            console.log(`data=${data},cookies=[data=${cookies["data"]}]`);
+            if (data == null && cookies["data"] != undefined) {
+                data = cookies["data"];
+                console.log("Cookieからデータ指定を読み込みました: " + data);
+                addParam(data);
+                return;
+            }
             if (data == null) {
                 infoDiv.innerHTML = `<span style="color:red;">URLパラメータ(取得データ)を指定する必要があります。</span>`;
                 document.title = defTitle;
-            }
-            else {
+            } else {
                 let url = null;
                 if (data == "moshi2024") {
                     url = "moshi2024.json";
                 }
-                if (url == null){
+                if (url == null) {
                     infoDiv.innerHTML = `<span style="color:red;">URLパラメータ(取得データ)が正しくありません。</span>`;
                     document.title = defTitle;
-                }
-                else {
-                    getJSON(url, function(err, json) {
+                } else {
+                    getJSON(url, function (err, json) {
                         if (err !== null) {
                             infoDiv.innerHTML = `<span style="color:red;">取得に失敗しました(${err})。</span>`;
                             document.title = defTitle;
                         } else {
                             displayDates(json);
+                            setCookie("data=" + data);
                         }
                     });
                 }
             }
-        }
+        };
 
-        function addParam() {
-            let value = document.getElementById("paramInput").value;
-            if (value == "") {
+        function addParam(data = null) {
+            if (data == null) {
+                data = paramInput.value;
+            }
+            if (data == "") {
                 infoDiv.innerHTML = `<span style="color:red;">空白にすることはできません。</span>`;
                 document.title = defTitle;
-                return;
+                return false;
             }
             let curUrl = window.location.href;
-            let newUrl = curUrl.split('?')[0] + "?data=" + encodeURIComponent(value);
+            let newUrl =
+                curUrl.split("?")[0] + "?data=" + encodeURIComponent(data);
             window.location.href = newUrl;
-            return false;//リロード阻止 参考:https://qiita.com/CleanDiesel/items/a6e404b253b916992bd8
+            return false; //リロード阻止 参考:https://qiita.com/CleanDiesel/items/a6e404b253b916992bd8
         }
 
         function getJSON(url, callback) {
-            console.log("GET " + url)
+            console.log("GET " + url);
             let xhr = new XMLHttpRequest();
             xhr.open("GET", url, true);
             xhr.responseType = "json";
-            xhr.onload = function() {
+            xhr.onload = function () {
                 let status = xhr.status;
                 if (status === 200) {
                     callback(null, xhr.response);
@@ -204,18 +236,25 @@
                 }
             };
             xhr.send();
-        };
+        }
 
         function displayDates(json) {
             try {
                 let nowDate = new Date();
-                infoDiv.innerHTML = 
-                `名称: <span style="color:blue;">${json.control.name}</span><br>
-                作成者: <span style="color:blue;">${json.control.author}</span><br>
-                更新: <span style="color:blue;">${json.control.update}</span><br>
-                取得・基準日: <span style="color:blue;">${nowDate.getFullYear()}/${plus0(nowDate.getMonth() + 1)}/${plus0(nowDate.getDate())}</span>`;
+                infoDiv.innerHTML = `名称: <span style="color:blue;">${
+                    json.control.name
+                }</span><br>
+                作成者: <span style="color:blue;">${
+                    json.control.author
+                }</span><br>
+                更新: <span style="color:blue;">${
+                    json.control.update
+                }</span><br>
+                取得・基準日: <span style="color:blue;">${nowDate.getFullYear()}/${plus0(
+                    nowDate.getMonth() + 1
+                )}/${plus0(nowDate.getDate())}</span>`;
                 let tableHtml = `<tr class="dates-head"><th class="date">日付</th><th class="content">内容</th><th class="remainDays">日数</th></tr>`;
-                json.dates.forEach(dateData => {
+                json.dates.forEach((dateData) => {
                     let date = dateData.date;
                     let content = dateData.content;
                     let remainDays_f = (new Date(date) - nowDate) / 86400000;

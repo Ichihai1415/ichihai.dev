@@ -1,1 +1,43 @@
-welcome! 未完成です
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width" />
+        <title>ichihai.dev</title>
+        <style>
+            .main {
+                max-width: 1000px;
+                margin: 0 auto;
+            }
+
+            .iframe-wrap {
+                position: relative;
+                padding-bottom: 100%;
+            }
+
+            iframe {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                border: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="main">
+            <h1>Welcome!</h1>
+            <p>
+                未完成です。ちょっとページありますがサイトマップなんてないので<a
+                    href="https://github.com/Ichihai1415/ichihai.dev"
+                    >GitHub</a
+                >で探してください。
+            </p>
+            <p>
+                何もないのは寂しいのでコマンドプロンプトみたいなやつを置いときます。何も起きないし文字消せるけど。パソコンで見てね。<a href="/parts/cmd.html">単体はここ</a>
+            </p>
+            <div class="iframe-wrap">
+                <iframe src="/parts/cmd.html" title="cmd"></iframe>
+            </div>
+        </div>
+    </body>
+</html>

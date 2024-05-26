@@ -1,5 +1,5 @@
 /**
- *Cookieの配列を取得します。
+ *Cookieの配列を取得します。処理例:Object.keys(cookies).forEach((key) => { });
  * @returns {Array} Cookieの配列
  */
 function getCookies() {
@@ -17,14 +17,14 @@ function getCookies() {
             cookieArr[cookie_[0]] = cookie_[1];
         }
     } else {
-        console.error("cookie not found.");
+        console.log("[getCookies]cookie not found.");
     }
     return cookieArr;
 }
 
 /**
  * Cookieを保存します。
- * @param {*} value 保存する値("name=data"など形式)
+ * @param {*} value 保存する値("name=data"など形式(; はいらない))
  * @param {*} maxAge 有効期間(秒) 既定は30日
  */
 function setCookie(value, maxAge = 2592000) {
