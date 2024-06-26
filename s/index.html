@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>ichihai short URLs</title>
+        <style>
+            table.urls-list {
+                border: 2px solid black;
+                border-collapse: collapse;
+                width: 100%;
+            }
+
+            th,
+            td {
+                border: 1px solid gray;
+            }
+
+            tr:first-child {
+                border: 2px solid black;
+            }
+        </style>
+        <script src="/js/ichihai.js" async></script>
+    </head>
+    <body>
+        <div class="main">
+            <p id="urlHint">
+                <span style="color: blue">https://ichihai.dev/s?id={ID}</span
+                >のように指定してください。
+            </p>
+            <noscript style="color: red"
+                ><p>JavaScriptを有効にしてください。</p></noscript
+            >
+            <p><span class="info-err" id="info-err"></span></p>
+            <p><span class="info" id="info"></span></p>
+            <table class="urls-list" id="urls-list">
+                <!--例
+                <tr class="urls-head">
+                    <th class="date">ID</th>
+                    <th class="content">URL</th>
+                    <th class="remainDays">説明</th>
+                </tr>
+                <tr class="urls-entry">
+                    <td>home</td>
+                    <td>
+                        <a href="https://ichihai.dev">https://ichihai.dev</a>
+                    </td>
+                    <td>ホーム。</td>
+                </tr>
+            --></table>
+        </div>
+    </body>
+    <script>
+        const errDiv = document.getElementById("info-err");
+        const infoDiv = document.getElementById("info");
+        const table = document.getElementById("urls-list");
+
+        window.onload = async function () {
+            let json = await getJSON("short-urls.json");
+            console.log(json);
+            id = getParam("id");
+            console.log(id);
+            if (id == null) {
+                errDiv.innerHTML = `<span style="color:red;">URLパラメータ(ID)を指定する必要があります。</span>`;
+            } else {
+                let idItem = json.datas.find((item) => item.id == id);
+                //console.log(idItem);
+                if (idItem == null) {
+                    console.error(`ID=${id}のURLが見つかりませんでした。`);
+                    errDiv.innerHTML = `<span style="color:red;">ID=${id}のURLが見つかりませんでした。</span>`;
+                } else {
+                    let url = idItem.url;
+                    //console.log(url);
+                    location.href = url;
+                    errDiv.innerHTML = `Redirecting to <a href="${url}">${url}</a> ...`;
+                    document.getElementById("urlHint").style = "display: none;";
+                    return;
+                }
+            }
+            displayUrls(json);
+        };
+
+        async function getJSON(url) {
+            try {
+                console.log("[getJSON] GET " + url);
+                const response = await fetch(url);
+                return response.json();
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function getParam(name) {
+            const url = new URL(window.location.href);
+            const params = url.searchParams;
+            return params.get(name);
+        }
+
+        function displayUrls(json) {
+            try {
+                infoDiv.innerHTML = `
+                更新: <span style="color:blue;">${json.update}</span>`;
+                let tableHtml = `<tr class="urls-head"><th>ID</th><th>URL</th><th>説明</th></tr>`;
+                json.datas.forEach((dateData) => {
+                    let id = dateData.id;
+                    let url = dateData.url;
+                    let description = dateData.description;
+                    tableHtml += `<tr class="urls-entry"><td>${id}</td><td><a href="${url}">${url}</a></td><td>${description}</td></tr>`;
+                    console.log(`${id}, ${url}, ${description}`);
+                });
+                table.innerHTML = tableHtml;
+            } catch (error) {
+                infoDiv.innerHTML = `<span style="color:red;">表示に失敗しました(${error})。</span>`;
+            }
+        }
+
+        function plus0(num) {
+            let newNum = num;
+            if (num < 10) {
+                newNum = "0" + num;
+            }
+            return newNum;
+        }
+    </script>
+</html>

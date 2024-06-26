@@ -1,0 +1,10 @@
+{
+    "update": "2024/06/26",
+    "datas": [
+        {
+            "id": "eqs",
+            "url": "https://blazor.ichihai.dev/equation-solver",
+            "description": "EquationSolver in Blazor"
+        }
+    ]
+}
