@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OBS仮想カメラの映像を表示</title>
+</head>
+<body>
+    <div>
+        <h1>OBS仮想カメラの映像を表示</h1>
+        <div>
+            <video id="video" autoplay></video>
+        </div>
+    </div>
+    <script>
+        const video = document.getElementById('video');
+
+navigator.mediaDevices.enumerateDevices().then(devices => {
+    const videoDevices = devices.filter(device => device.kind === 'videoinput');
+    console.log(videoDevices);
+    const virtualCam = videoDevices.find(device => device.label.includes('OBS Virtual Camera'));
+
+    if (virtualCam) {
+        navigator.mediaDevices.getUserMedia({
+            video: { deviceId: virtualCam.deviceId },
+            audio: false
+        }).then(stream => {
+            video.srcObject = stream;
+            video.play();
+        }).catch(error => {
+            console.error('Error accessing media devices.', error);
+        });
+    } else {
+        console.error('OBS Virtual Camera not found.');
+    }
+});
+
+    </script>
+</body>
+</html>
