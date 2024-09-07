@@ -28,7 +28,9 @@
         </style>
     </head>
     <body>
-        <div class="info" id="info">表示されない場合データの指定が間違っている可能性があります。開発者モードのコンソールを確認してください。</div>
+        <div class="info" id="info">
+            表示されない場合データの指定が間違っている可能性があります。開発者モードのコンソールを確認してください。
+        </div>
         <table class="data-list" id="data-list">
             <!--例
             <tr class="data-head">
@@ -86,23 +88,32 @@
             }
         };
 
-        function getXml(url) {
-            fetch(url)
+        function getXml(url) {/*ブラウザから直接は無理っぽい*/
+            fetch(
+                url /*, {
+                mode: "no-cors",
+            }*/
+            )
                 .then((res) => {
                     if (res.status >= 200 && res.status < 300) {
                         return res.text();
                     }
                     infoDiv.innerHTML = `<span style="color:red;">取得に失敗しました(${res.status}/${res.statusText})。</span>`;
-                    throw new Error(`${res.statusText}(${res.status})`);
+                    throw new Error(
+                        `取得に失敗しました(${res.status}/${res.statusText})。`
+                    );
                 })
                 .then((xmlString) => {
                     const parser = new DOMParser();
-                    const xml = parser.parseFromString(xmlString, "text/xml");
+                    const xml = parser.parseFromString(
+                        xmlString,
+                        "application/xml"
+                    );
                     displayData(xml);
                     //console.log(xml);
                 })
                 .catch((e) => {
-                    infoDiv.innerHTML = `<span style="color:red;">表示に失敗しました(${error})。</span>`;
+                    infoDiv.innerHTML = `<span style="color:red;">取得に失敗しました。 => ${e}</span>`;
                     console.error(e.message);
                 });
         }
@@ -173,8 +184,8 @@
                     );
                 });
                 table.innerHTML = tableHtml;
-            } catch (error) {
-                infoDiv.innerHTML = `<span style="color:red;">表示に失敗しました(${error})。</span>`;
+            } catch (e) {
+                infoDiv.innerHTML = `<span style="color:red;">表示に失敗しました(${e})。</span>`;
             }
         }
     </script>
