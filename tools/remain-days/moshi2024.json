@@ -4,7 +4,7 @@
         "description" : "ichihai1415での情報です。人により異なる可能性があります。",
         "author" : "admin",
         "authorInfo" : "X@ProjectS31415_1",
-        "update" : "2024/05/06"
+        "update" : "2024/09/05"
     },
     "isHideOld" : false,
     "dates" : [
@@ -31,10 +31,6 @@
         {
             "date" : "2024/08/25",
             "content" : "全統記述模試<br>成績公開:10/07"
-        },
-        {
-            "date" : "2024/09/07",
-            "content" : "進研駿台共テ模試<br>成績公開:10/05"
         },
         {
             "date" : "2024/10/06",
