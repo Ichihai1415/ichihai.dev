@@ -32,3 +32,14 @@ function setCookie(value, maxAge = 2592000) {
     document.cookie = saveCookie;
     console.log("[setCookie]cookie saved: " + saveCookie);
 }
+
+/**
+ * URLパラメータを取得します。
+ * @param {*} name パラメータ名
+ * @returns 対応するパラメータ
+ */
+function getParam(name) {
+    const url = new URL(window.location.href);
+    const params = url.searchParams;
+    return params.get(name);
+}

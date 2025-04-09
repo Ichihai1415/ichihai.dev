@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja-JP">
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,39 +10,55 @@
                 margin: 0%;
                 color: white;
             }
-            .header {
+
+            header {
                 height: 70px;
                 padding: 10px;
                 font-size: 32px;
                 background-color: rgb(0, 0, 0);
                 display: flex;
             }
+
             .icon {
                 padding: 3px;
                 font-size: 16px;
             }
+
             .header-main {
                 padding: 0px;
                 font-size: 48px;
             }
+
             .header-link {
                 padding: 10px;
+            }
+
+            a {
+                text-decoration: none;
+                color: white;
+            }
+
+            @media screen and (max-width: 800px) {
+                .header-sub {
+                    display: none;
+                }
             }
         </style>
     </head>
     <body>
-        <div class="header">
-            <img
-                class="icon"
-                src="/icon/new_main.png"
-                alt="icon"
-                width="64px"
-                height="64px"
-            />
-            <div class="header-main">ichihai.dev</div>
+        <header>
+            <a href="/game/icon.html"
+                ><img
+                    class="icon"
+                    src="/icon/new_main.png"
+                    alt="icon"
+                    width="64px"
+                    height="64px"
+            /></a>
+            <a href="/index.html"><div class="header-main">ichihai.dev</div></a>
             <div class="header-sub">
-                <div class="header-link">home</div>
+                <div class="header-link">tools</div>
             </div>
-        </div>
+        </header>
     </body>
 </html>

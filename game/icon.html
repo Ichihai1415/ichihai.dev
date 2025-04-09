@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width" />
+        <title>ichihai icon game!</title>
+        <style>
+            html,
+            body {
+                margin: 0;
+                width: 512px;
+                height: 512px;
+            }
+
+            .area {
+                width: 512px;
+                height: 512px;
+                max-height: 512px;
+                padding: 0px;
+                background-color: black;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+
+            .c_row {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .circle {
+                width: 32px;
+                height: 32px;
+                margin: 48px;
+                background-color: rgb(100, 100, 250);
+                border-radius: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="area">
+            <div class="c_row">
+                <div class="circle" id="circle-1" onclick="clickC('1')"></div>
+                <div class="circle" id="circle-2" onclick="clickC('2')"></div>
+                <div class="circle" id="circle-3" onclick="clickC('3')"></div>
+            </div>
+            <div class="c_row">
+                <div class="circle" id="circle-4" onclick="clickC('4')"></div>
+                <div class="circle" id="circle-5" onclick="clickC('5')"></div>
+                <div class="circle" id="circle-6" onclick="clickC('6')"></div>
+            </div>
+            <div class="c_row">
+                <div class="circle" id="circle-8" onclick="clickC('7')"></div>
+                <div class="circle" id="circle-7" onclick="clickC('8')"></div>
+                <div class="circle" id="circle-9" onclick="clickC('9')"></div>
+            </div>
+        </div>
+        <script>
+            var record = "";
+
+            function clickC(num) {
+                console.log("[clickC]entered: " + num);
+                record += num;
+                CheckRecord();
+            }
+
+            function checkRecord() {
+                if (record == "729438165") {
+                    console.log("[checkRecord]record matched: " + record);
+                    alert("正解！");
+                    record = "";
+                    Redirect("");
+                } else if (record == "31415") {
+                    console.log("[checkRecord]record matched: " + record);
+                    alert("ProjectS31415 ！");
+                    record = "";
+                }
+            }
+
+            function redirect(url) {
+                console.log("[redirect]redirecting: " + url);
+                if (url == "") {
+                    window.location.href = "https://ichihai.dev/";
+                } else {
+                    window.location.href = url;
+                }
+            }
+        </script>
+    </body>
+</html>
