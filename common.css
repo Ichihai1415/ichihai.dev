@@ -1,0 +1,59 @@
+body {
+    background-color: #ddd;
+}
+
+main {
+    max-width: 800px;
+    padding: 0 10px;
+    margin: auto;
+    background-color: #bbb;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0;
+    padding-left: 6px;
+}
+
+p {
+    margin: 0;
+    padding: 4px 0;
+}
+
+h1 {
+    border-left: 10px solid #f22;
+    border-bottom: 2px solid #f11;
+}
+
+h2 {
+    border-left: 8px solid #2f2;
+    border-bottom: 1px solid #1f1;
+}
+
+h3 {
+    border-left: 6px solid #22f;
+    border-bottom: 1px solid #11f;
+}
+
+h4 {
+    border-left: 4px solid #2ff;
+    border-bottom: 1px solid #1ff;
+}
+
+h5 {
+    border-left: 3px solid #f2f;
+    border-bottom: 1px solid #f1f;
+}
+
+h6 {
+    border-left: 2px solid #ff2;
+    border-bottom: 1px solid #ff1;
+}
+
+.spacer {
+    height: 10px;
+}

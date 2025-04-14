@@ -11,10 +11,11 @@
                 color: white;
             }
 
-            header {
+            .header {
                 height: 70px;
                 padding: 10px;
                 font-size: 32px;
+                color: white;
                 background-color: rgb(0, 0, 0);
                 display: flex;
             }
@@ -26,19 +27,30 @@
 
             .header-main {
                 padding: 0px;
+                padding-right: 40px;
                 font-size: 48px;
             }
 
-            .header-link {
+            .header-tab {
                 padding: 10px;
+                margin-top: 4px;
+                text-decoration: underline;
             }
 
-            a {
+            .header-link {
                 text-decoration: none;
                 color: white;
             }
 
-            @media screen and (max-width: 800px) {
+            .header-sub {
+                transition: 1s;
+            }
+
+            .header-sub:hover {
+                background-color: #444;
+            }
+
+            @media screen and (max-width: 600px) {
                 .header-sub {
                     display: none;
                 }
@@ -46,8 +58,8 @@
         </style>
     </head>
     <body>
-        <header>
-            <a href="/game/icon.html"
+        <div class="header">
+            <a class="header-link" href="/game/icon.html"
                 ><img
                     class="icon"
                     src="/icon/new_main.png"
@@ -55,10 +67,14 @@
                     width="64px"
                     height="64px"
             /></a>
-            <a href="/index.html"><div class="header-main">ichihai.dev</div></a>
+            <a class="header-link" href="/index.html"
+                ><div class="header-main">ichihai.dev</div></a
+            >
             <div class="header-sub">
-                <div class="header-link">tools</div>
+                <a class="header-link" href="/tools/"
+                    ><div class="header-tab">tools</div></a
+                >
             </div>
-        </header>
+        </div>
     </body>
 </html>

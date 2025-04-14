@@ -10,14 +10,14 @@ function getCookies() {
     let cookieArr = new Array();
     const cookie = decodeURIComponent(document.cookie);
     if (cookie != "") {
-        console.log("[getCookies]cookie(raw): " + cookie);
+        console.log("[ichihai.js/getCookies]cookie(raw): " + cookie);
         const cookies = document.cookie.split("; ");
         for (let i = 0; i < cookies.length; i++) {
             const cookie_ = cookies[i].split("=");
             cookieArr[cookie_[0]] = cookie_[1];
         }
     } else {
-        console.log("[getCookies]cookie not found.");
+        console.log("[ichihai.js/getCookies]cookie not found.");
     }
     return cookieArr;
 }
@@ -30,7 +30,7 @@ function getCookies() {
 function setCookie(value, maxAge = 2592000) {
     const saveCookie = value + "; max-age=" + maxAge + "; ";
     document.cookie = saveCookie;
-    console.log("[setCookie]cookie saved: " + saveCookie);
+    console.log("[ichihai.js/setCookie]cookie saved: " + saveCookie);
 }
 
 /**

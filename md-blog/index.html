@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>md-blog redirecter</title>
+        <meta
+            name="description"
+            content="GitHubにあるmd-blogにリダイレクトします。"
+        />
+        <script src="/js/ichihai.js"></script>
+        <style></style>
+    </head>
+    <body>
+        <main>redirecting...</main>
+
+        <script>
+            const baseUrl = "https://github.com/Ichihai1415/md-blog/blob/main/";
+
+            window.onload = function () {
+                const p = getParam("p");
+                if (p == null) {
+                    document.querySelector("main").innerHTML =
+                        "<h1>URLパラメータが指定されていません。</h1>" +
+                        "<p><span style='color: #888'>https://ichihai.dev/md-blog/</span>?p=で指定してください。例:<code>?p=career/main</code></p>";
+                } else {
+                    window.location.href = baseUrl + p + ".md";
+                }
+            };
+        </script>
+    </body>
+</html>
