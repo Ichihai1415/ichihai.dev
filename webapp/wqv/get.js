@@ -40,3 +40,17 @@ function getG() {
             console.error("Error fetching data:", error);
         });
 }
+
+
+
+function getJ() {
+    const url =
+        "https://www.data.jma.go.jp/developer/xml/feed/extra.xml";
+    getRawData(url)
+        .then((data) => {
+            console.log(data);
+        })
+        .catch((error) => {
+            console.error("Error fetching data:", error);
+        });
+}
