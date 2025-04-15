@@ -5,11 +5,22 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>WorldQuakeViewer for Web</title>
         <script src="get.js"></script>
+        <script src="draw.js"></script>
+        <link rel="stylesheet" href="style.css" />
     </head>
     <body>
-        <canvas id="canvas"></canvas>
-        <button id="getU" onclick="getU()">GET U</button>
-        <button id="getG" onclick="getG()">GET G</button>
-        <button id="getJ" onclick="getJ()">GET J</button>
+        <!--<canvas id="img"></canvas>-->
+        <button id="getU" onclick="getU()">GET usgs</button>
+        <button id="getG" onclick="getG()">GET gfz</button>
+        <div id="info">
+            <table id="infoT">
+                <tr>
+                    <th>発生日時</th>
+                    <th>震央</th>
+                    <th>マグニチュード</th>
+                    <th>深さ</th>
+                </tr>
+            </table>
+        </div>
     </body>
 </html>
