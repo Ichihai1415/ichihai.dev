@@ -2,15 +2,26 @@
     --width: ;
 }
 
-html, body {
+html,
+body {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    
 }
 
-canvas.img {
+canvas#img {
     width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
     background-color: black;
-    display: none ;/*temp*/
+}
+
+table#infoT {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    border: 1px solid black;
 }
