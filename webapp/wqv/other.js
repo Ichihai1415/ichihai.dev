@@ -1,9 +1,3 @@
-function resizeCanvas() {
-    //いらんかも
-    canvas.width = window.innerWidth;
-    canvas.height = (window.innerWidth * 10) / 16;
-}
-
 class Data {
     constructor() {
         this.Author = null;

@@ -1,3 +1,5 @@
+import { LL2FERC } from "../../programs/LL2FERC/main.js";
+
 function getRawData(url) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
@@ -17,7 +19,7 @@ function getRawData(url) {
     });
 }
 
-function getU() {
+window.getU = () => {
     const url =
         "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geojson";
     getRawData(url)
@@ -39,9 +41,9 @@ function getU() {
         .catch((error) => {
             console.error("Error fetching data:", error);
         });
-}
+};
 
-function getG() {
+window.getG = () => {
     const url =
         "https://geofon.gfz-potsdam.de/fdsnws/event/1/query?format=text&minmag=4.5&limit=10&end=2100-01-01";
     getRawData(url)
@@ -68,4 +70,10 @@ function getG() {
         .catch((error) => {
             console.error("Error fetching data:", error);
         });
-}
+};
+
+window.getCode = () => {
+    const lat = 35.681236;
+    const lon = 139.767125;
+    console.log(LL2FERC.getCode(lat, lon));
+};

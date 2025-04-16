@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>WorldQuakeViewer for Web</title>
         <script src="other.js"></script>
-        <script src="get.js"></script>
+        <script src="get.js" type="module"></script>
         <script src="draw.js"></script>
         <link rel="stylesheet" href="style.css" />
     </head>
@@ -14,6 +14,7 @@
         <button id="getU" onclick="getU()">GET usgs</button>
         <button id="getG" onclick="getG()">GET gfz</button>
         <button id="draw" onclick="drawData()">draw</button>
+        <button id="getCode" onclick="getCode(10, 30)">get code test</button>
         <div id="info">
             <table id="infoT">
                 <!--<tr>

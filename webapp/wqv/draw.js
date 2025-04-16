@@ -1,21 +1,15 @@
-function drawBase(ctx) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "#00001E";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-}
-
-function drawData() {
+function drawData(/*data*/) {
     let data = new Data();
     data.Lat = 90;
     data.Lon = 180;
     data.Depth = 10;
-    //console.log("data(2):");
+
+    //console.log("data:");
     //console.log(data);
 
     let canvas = document.getElementById("img");
     let ctx = canvas.getContext("2d");
     const zoom = 10;
-    //drawBase(ctx);
     let img = new Image();
     img.src = "map.png";
     img.onload = function () {
