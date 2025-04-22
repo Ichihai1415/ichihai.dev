@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>スロットみたいなやつ</title>
+        <link rel="stylesheet" href="style.css" />
+        <script src="/js/ichihai.js"></script>
+    </head>
+    <body>
+        <main>
+            <div class="slot-container">
+                <div class="slot-num" id="slot-num1"></div>
+                <div class="slot-num" id="slot-num2"></div>
+                <div class="slot-num" id="slot-num3"></div>
+            </div>
+            <div class="slot-container">
+                <button class="stop" id="stop-1" onclick="stop1()" disabled>
+                    ・
+                </button>
+                <button class="stop" id="stop-2" onclick="stop2()" disabled>
+                    ・
+                </button>
+                <button class="stop" id="stop-3" onclick="stop3()" disabled>
+                    ・
+                </button>
+            </div>
+            <div class="slot-container">
+                <button class="start" id="start" onclick="start()">
+                    start
+                </button>
+                <button class="stop-all" id="stop-all" onclick="stop_all()">
+                    stop all
+                </button>
+            </div>
+        </main>
+        <script>
+            let playing1 = false;
+            let playing2 = false;
+            let playing3 = false;
+
+            let money = 500;
+            let debt = 500;
+
+            function start() {
+                playing1 = true;
+                playing2 = true;
+                playing3 = true;
+                document.getElementById("start").disabled = true;
+                document.getElementById("stop-1").disabled = false;
+                document.getElementById("stop-2").disabled = false;
+                document.getElementById("stop-3").disabled = false;
+            }
+
+            function stop1() {
+                playing1 = false;
+                document.getElementById("stop-1").disabled = true;
+                const num1 = Math.floor(Math.random() * 10);
+                document.getElementById("slot-num1").innerHTML = num1;
+                checkResult();
+            }
+
+            function stop2() {
+                playing2 = false;
+                document.getElementById("stop-2").disabled = true;
+                const num2 = Math.floor(Math.random() * 10);
+                document.getElementById("slot-num2").innerHTML = num2;
+                checkResult();
+            }
+
+            function stop3() {
+                playing3 = false;
+                document.getElementById("stop-3").disabled = true;
+                const num3 = Math.floor(Math.random() * 10);
+                document.getElementById("slot-num3").innerHTML = num3;
+                checkResult();
+            }
+
+            function stop_all() {
+                stop1();
+                stop2();
+                stop3();
+            }
+
+            function checkResult() {
+                if (!playing1 && !playing2 && !playing3) {
+                    document.getElementById("start").disabled = false;
+                    document.getElementById("stop-1").disabled = true;
+                    document.getElementById("stop-2").disabled = true;
+                    document.getElementById("stop-3").disabled = true;
+                    const result = document.getElementById("result");
+                }
+            }
+
+            function updateSlots() {
+                if (playing1) {
+                    const num1 = Math.floor(Math.random() * 10);
+                    document.getElementById("slot-num1").innerHTML = num1;
+                }
+                if (playing2) {
+                    const num2 = Math.floor(Math.random() * 10);
+                    document.getElementById("slot-num2").innerHTML = num2;
+                }
+                if (playing3) {
+                    const num3 = Math.floor(Math.random() * 10);
+                    document.getElementById("slot-num3").innerHTML = num3;
+                }
+                setTimeout(updateSlots, 30);
+            }
+        </script>
+        <script>
+            updateSlots();
+            let cookies = getCookies("money");
+        </script>
+    </body>
+</html>

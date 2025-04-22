@@ -1,0 +1,50 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: #AAA;
+}
+
+main {
+    max-width: 800px;
+    min-height: 100vh;
+    background-color: #EEE;
+    margin: 0 auto;
+    padding-top: 20px;
+}
+
+.slot-container {
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+.slot-num {
+    width: 25%;
+    aspect-ratio: 1 / 1;
+    border: 1px solid #000;
+    border-collapse: collapse;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10vw;
+}
+
+button.stop {
+    width: 25%;
+    aspect-ratio: 2 / 1;
+    margin: 1px;
+}
+
+button.start, button.stop-all {
+    width: 25%;
+    aspect-ratio: 2 / 1;
+    margin-top: 10vw;
+}
+
+@media screen and (min-width: 800px) {
+    button.start, button.stop-all {
+        margin-top: 80px;
+    }
+}

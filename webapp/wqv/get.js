@@ -54,10 +54,9 @@ window.getG = () => {
             const lines = data.split("\n");
             lines.forEach((element) => {
                 const data = element.split("|");
-                /*なんかundifinedが出る
-                if ((data.length = 0));
-                if (data[0] == "#EventID");
-*/
+                if (data.length == 0) return;
+                if (data[0] == "#EventID") return;
+
                 //#EventID|Time|Latitude|Longitude|Depth/km|Author|Catalog|Contributor|ContributorID|MagType|Magnitude|MagAuthor|EventLocationName|EventType
                 const time = data[1];
                 const hypoName = data[13];
@@ -72,8 +71,15 @@ window.getG = () => {
         });
 };
 
-window.getCode = () => {
-    const lat = 35.681236;
-    const lon = 139.767125;
+window.getCode = (lat, lon) => {
     console.log(LL2FERC.getCode(lat, lon));
 };
+
+window.getName_ja = (lat, lon) => {
+    console.log(LL2FERC.getName_ja_fromLatLon(lat, lon));
+};
+
+window.getName_enUS = (lat, lon) => {
+    console.log(LL2FERC.getName_enUS_fromLatLon(lat, lon));
+};
+
