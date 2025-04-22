@@ -9,6 +9,22 @@
     </head>
     <body>
         <main>
+            <p>
+                money: <span class="gameValue" id="money">500</span>
+                <button id="moreMoney" onclick="moreMoney()">
+                    more money(+500)</button
+                ><br />
+                debt: <span class="gameValue" id="debt">500</span>
+                <button id="payDebt" onclick="payDebt()">pay debt</button><br />
+                bet:
+                <input
+                    type="number"
+                    id="bet"
+                    value="10"
+                    min="0"
+                    onchange="betChange()"
+                /><br />
+            </p>
             <div class="slot-container">
                 <div class="slot-num" id="slot-num1"></div>
                 <div class="slot-num" id="slot-num2"></div>
@@ -26,11 +42,17 @@
                 </button>
             </div>
             <div class="slot-container">
-                <button class="start" id="start" onclick="start()">
-                    start
-                </button>
-                <button class="stop-all" id="stop-all" onclick="stop_all()">
+                <button class="stsp" id="start" onclick="start()">start</button>
+                <button
+                    class="stsp"
+                    id="stop-all"
+                    onclick="stop_all()"
+                    disabled
+                >
                     stop all
+                </button>
+                <button class="stsp" id="fastPlay" onclick="playFast()">
+                    play fast
                 </button>
             </div>
         </main>
@@ -41,6 +63,7 @@
 
             let money = 500;
             let debt = 500;
+            let bet = 10;
 
             function start() {
                 playing1 = true;
@@ -50,6 +73,13 @@
                 document.getElementById("stop-1").disabled = false;
                 document.getElementById("stop-2").disabled = false;
                 document.getElementById("stop-3").disabled = false;
+                document.getElementById("stop-all").disabled = false;
+                money -= bet;
+                if (money < 0) {
+                    debt += money;
+                    money = 0;
+                }
+                updateGameValue();
             }
 
             function stop1() {
@@ -82,13 +112,28 @@
                 stop3();
             }
 
+            function playFast() {
+                start();
+                stop_all();
+            }
+
             function checkResult() {
                 if (!playing1 && !playing2 && !playing3) {
                     document.getElementById("start").disabled = false;
                     document.getElementById("stop-1").disabled = true;
                     document.getElementById("stop-2").disabled = true;
                     document.getElementById("stop-3").disabled = true;
-                    const result = document.getElementById("result");
+                    document.getElementById("stop-all").disabled = true;
+                    const value = parseInt(
+                        document.getElementById("slot-num1").innerText +
+                            document.getElementById("slot-num2").innerText +
+                            document.getElementById("slot-num3").innerText
+                    );
+                    if (value > 900)
+                        //temp
+                        money += (bet * value) / 10;
+
+                    updateGameValue();
                 }
             }
 
@@ -107,10 +152,46 @@
                 }
                 setTimeout(updateSlots, 30);
             }
+
+            function moreMoney() {
+                money += 500;
+                debt += 500;
+                updateGameValue();
+            }
+
+            function updateGameValue() {
+                document.getElementById("money").innerHTML = money;
+                document.getElementById("debt").innerHTML = debt;
+            }
+
+            function payDebt() {
+                if (money >= debt) {
+                    money -= debt;
+                    debt = 0;
+                    updateGameValue();
+                }
+            }
+
+            function betChange() {
+                bet = document.getElementById("bet").value;
+                if (bet < 0) {
+                    document.getElementById("bet").value = 0;
+                } else {
+                    document.getElementById("bet").value = money;
+                }
+            }
+
+            function showAlert(message, style) {}
         </script>
         <script>
             updateSlots();
-            let cookies = getCookies("money");
+            let cookies = getCookies();
+            if (cookies["money"] != undefined) money = cookies["money"];
+            if (cookies["debt"] != undefined) debt = cookies["debt"];
+            if (cookies["bet"] != undefined) {
+                bet = cookies["bet"];
+                document.getElementById("bet").value = bet;
+            }
         </script>
     </body>
 </html>

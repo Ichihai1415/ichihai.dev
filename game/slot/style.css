@@ -1,15 +1,25 @@
-html, body {
+html,
+body {
     margin: 0;
     padding: 0;
-    background-color: #AAA;
+    background-color: #aaa;
 }
 
 main {
     max-width: 800px;
     min-height: 100vh;
-    background-color: #EEE;
+    background-color: #eee;
     margin: 0 auto;
-    padding-top: 20px;
+    padding-top: 10px;
+}
+
+p {
+    padding-left: 20px;
+}
+
+span.gameValue,
+input#bet {
+    font-weight: bold;
 }
 
 .slot-container {
@@ -17,7 +27,6 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-    
 }
 
 .slot-num {
@@ -37,14 +46,15 @@ button.stop {
     margin: 1px;
 }
 
-button.start, button.stop-all {
+button.stsp {
     width: 25%;
     aspect-ratio: 2 / 1;
     margin-top: 10vw;
 }
 
 @media screen and (min-width: 800px) {
-    button.start, button.stop-all {
+    button.start,
+    button.stop-all {
         margin-top: 80px;
     }
 }
