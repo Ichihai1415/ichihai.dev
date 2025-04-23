@@ -9,22 +9,40 @@
     </head>
     <body>
         <main>
-            <p>
-                money: <span class="gameValue" id="money">500</span>
-                <button id="moreMoney" onclick="moreMoney()">
-                    more money(+500)</button
-                ><br />
-                debt: <span class="gameValue" id="debt">500</span>
-                <button id="payDebt" onclick="payDebt()">pay debt</button><br />
-                bet:
-                <input
-                    type="number"
-                    id="bet"
-                    value="10"
-                    min="0"
-                    onchange="betChange()"
-                /><br />
-            </p>
+            <div class="gameInfo">
+                <div class="gameInfoElem">
+                    money: <span class="gameValue" id="money">500</span>
+                </div>
+                <div class="gameInfoElem">
+                    bet:
+                    <input
+                        type="number"
+                        id="bet"
+                        value="10"
+                        min="0"
+                        onchange="betChange()"
+                    />
+                </div>
+                <div class="gameInfoElem">
+                    <button id="saveGame" onclick="saveGame()">save game</button
+                    >(Save in Cookie, valid for 30 days.)
+                </div>
+                <div class="gameInfoElem">
+                    display-update:
+                    <input
+                        type="number"
+                        id="updtMs"
+                        value="30"
+                        min="1"
+                        onchange="updtMsChange()"
+                    />ms
+                </div>
+                <div class="gameInfoElem">
+                    <button id="deleteSave" onclick="deleteSave()">
+                        delete save
+                    </button>
+                </div>
+            </div>
             <div class="slot-container">
                 <div class="slot-num" id="slot-num1"></div>
                 <div class="slot-num" id="slot-num2"></div>
@@ -52,18 +70,53 @@
                     stop all
                 </button>
                 <button class="stsp" id="fastPlay" onclick="playFast()">
-                    play fast
+                    auto play
                 </button>
             </div>
+            <table class="result">
+                <tr>
+                    <th>x777</th>
+                    <th>x20</th>
+                    <th>x5</th>
+                    <th>x3.14</th>
+                    <th>x0</th>
+                </tr>
+                <tr>
+                    <td id="t_x777">0</td>
+                    <td id="t_x20">0</td>
+                    <td id="t_x5">0</td>
+                    <td id="t_x3-14">0</td>
+                    <td id="t_x0">0</td>
+                </tr>
+            </table>
+
+            <p>
+                仕様: <br />
+                ・777: bet*777<br />
+                ・000,111,222,333,444,555,666,888,999: bet*20<br />
+                ・012,123,234,345,456,567,678,789: bet*5<br />
+                ・314: bet*3.14<br />
+                ・それ以外: bet*0<br />
+                ・期待値: 1.00014<br />
+            </p>
+            <p>
+                裏技: F12キーの開発者モードのコンソールで<code
+                    >money=<span style="color: #888">任意の数</span>;</code
+                >を実行するとmoneyを変更可能(プレイすると表示も変わる)
+            </p>
         </main>
+        <div class="footer">
+            <p>スロットみたいなやつ　by Ichihai1415</p>
+        </div>
         <script>
             let playing1 = false;
             let playing2 = false;
             let playing3 = false;
 
             let money = 500;
-            let debt = 500;
             let bet = 10;
+
+            let updtMs = 30;
 
             function start() {
                 playing1 = true;
@@ -75,10 +128,6 @@
                 document.getElementById("stop-3").disabled = false;
                 document.getElementById("stop-all").disabled = false;
                 money -= bet;
-                if (money < 0) {
-                    debt += money;
-                    money = 0;
-                }
                 updateGameValue();
             }
 
@@ -112,9 +161,17 @@
                 stop3();
             }
 
+            let isAuto = false;
+
             function playFast() {
-                start();
-                stop_all();
+                if (isAuto) {
+                    document.getElementById("fastPlay").style.backgroundColor =
+                        "buttonface";
+                } else {
+                    document.getElementById("fastPlay").style.backgroundColor =
+                        "#DDD";
+                }
+                isAuto = !isAuto;
             }
 
             function checkResult() {
@@ -129,14 +186,88 @@
                             document.getElementById("slot-num2").innerText +
                             document.getElementById("slot-num3").innerText
                     );
-                    if (value > 900)
-                        //temp
-                        money += (bet * value) / 10;
 
+                    switch (value) {
+                        case 0:
+                        case 111:
+                        case 222:
+                        case 333:
+                        case 444:
+                        case 555:
+                        case 666:
+                        case 888:
+                        case 999:
+                            money += bet * 20;
+                            document.getElementById("t_x20").innerHTML++;
+                            break;
+                        case 777:
+                            money += bet * 777;
+                            document.getElementById("t_x777").innerHTML++;
+                            break;
+                        case 12:
+                        case 123:
+                        case 234:
+                        case 345:
+                        case 456:
+                        case 567:
+                        case 678:
+                        case 789:
+                            money += bet * 5;
+                            document.getElementById("t_x5").innerHTML++;
+                            break;
+                        case 314:
+                            money += Math.round(bet * 3.14);
+                            document.getElementById("t_x3-14").innerHTML++;
+                        default:
+                            document.getElementById("t_x0").innerHTML++;
+                            break;
+                    } //(9*20+1*777+8*5+1*3.14)/1000=1.00014
                     updateGameValue();
                 }
             }
 
+            function updateGameValue() {
+                document.getElementById("money").innerHTML = money;
+                moneyColorCheck();
+            }
+
+            function betChange() {
+                bet = document.getElementById("bet").value;
+                if (bet < 0) document.getElementById("bet").value = 0;
+            }
+
+            function updtMsChange() {
+                updtMs = document.getElementById("updtMs").value;
+                if (updtMs < 1) document.getElementById("updtMs").value = 1;
+            }
+
+            function saveGame() {
+                setCookie("money=" + money);
+                setCookie("bet=" + bet);
+                alert("game saved.");
+            }
+
+            function deleteSave() {
+                money = 500;
+                bet = 10;
+                setCookie("money=" + money);
+                setCookie("bet=" + bet);
+                updateGameValue();
+                document.getElementById("bet").value = bet;
+                alert("save deleted.");
+            }
+
+            function moneyColorCheck() {
+                if (money < 0) {
+                    document.getElementById("money").style.color = "red";
+                } else {
+                    document.getElementById("money").style.color = "black";
+                }
+            }
+
+            function showAlert(message, style) {} //なんか表示する用作りたければ
+        </script>
+        <script>
             function updateSlots() {
                 if (playing1) {
                     const num1 = Math.floor(Math.random() * 10);
@@ -150,48 +281,23 @@
                     const num3 = Math.floor(Math.random() * 10);
                     document.getElementById("slot-num3").innerHTML = num3;
                 }
-                setTimeout(updateSlots, 30);
-            }
-
-            function moreMoney() {
-                money += 500;
-                debt += 500;
-                updateGameValue();
-            }
-
-            function updateGameValue() {
-                document.getElementById("money").innerHTML = money;
-                document.getElementById("debt").innerHTML = debt;
-            }
-
-            function payDebt() {
-                if (money >= debt) {
-                    money -= debt;
-                    debt = 0;
-                    updateGameValue();
+                if (isAuto) {
+                    start();
+                    stop_all();
                 }
+                setTimeout(updateSlots, updtMs);
             }
 
-            function betChange() {
-                bet = document.getElementById("bet").value;
-                if (bet < 0) {
-                    document.getElementById("bet").value = 0;
-                } else {
-                    document.getElementById("bet").value = money;
-                }
-            }
-
-            function showAlert(message, style) {}
-        </script>
-        <script>
-            updateSlots();
             let cookies = getCookies();
+            console.log(cookies);
             if (cookies["money"] != undefined) money = cookies["money"];
-            if (cookies["debt"] != undefined) debt = cookies["debt"];
             if (cookies["bet"] != undefined) {
                 bet = cookies["bet"];
                 document.getElementById("bet").value = bet;
             }
+            updateGameValue();
+
+            updateSlots();
         </script>
     </body>
 </html>

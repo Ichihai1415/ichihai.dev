@@ -13,13 +13,37 @@ main {
     padding-top: 10px;
 }
 
-p {
-    padding-left: 20px;
+.gameInfo {
+    display: flex;
+    margin: 0 20px 5vw 20px;
+    flex-wrap: wrap;
+}
+
+.gameInfoElem {
+    max-width: 100%;
+    margin: 0 5px;
+    white-space: nowrap;
+    box-sizing: border-box;
 }
 
 span.gameValue,
-input#bet {
+input#bet,
+input#updtMs,
+button#saveGame,
+button#deleteSave {
     font-weight: bold;
+}
+
+input#bet {
+    width: 100px;
+}
+
+input#updtMs {
+    width: 50px;
+}
+
+button#deleteSave {
+    color: red;
 }
 
 .slot-container {
@@ -37,7 +61,7 @@ input#bet {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 10vw;
+    font-size: 16vw;
 }
 
 button.stop {
@@ -53,8 +77,42 @@ button.stsp {
 }
 
 @media screen and (min-width: 800px) {
-    button.start,
-    button.stop-all {
+    .gameInfo {
+        margin-bottom: 40px;
+    }
+
+    .slot-num {
+        font-size: 128px;
+    }
+
+    button.stsp {
         margin-top: 80px;
     }
+}
+
+table {
+    margin: 20px auto 0 auto;
+    border: 1px solid #000;
+    border-collapse: collapse;
+}
+
+th {
+    min-width: 50px;
+    border: 2px solid #000;
+    text-align: right;
+}
+
+td {
+    border: 1px solid #000;
+    text-align: right;
+}
+
+code {
+    background-color: #ccc;
+    padding: 3px;
+    border-radius: 3px;
+}
+
+p {
+    margin-left: 20px;
 }
