@@ -6,7 +6,6 @@
         <title>ichihai.dev header</title>
         <style>
             body {
-                width: 100vw;
                 margin: 0%;
                 color: white;
             }
@@ -21,17 +20,16 @@
             }
 
             .icon {
-                padding: 3px;
                 font-size: 16px;
             }
 
             .header-main {
-                padding: 0px;
-                padding-right: 40px;
+                padding: 0 10px 0 0;
                 font-size: 48px;
             }
 
             .header-tab {
+                height: 70px;
                 padding: 10px;
                 margin-top: 4px;
                 text-decoration: underline;
@@ -43,15 +41,27 @@
             }
 
             .header-sub {
-                transition: 1s;
+                transition: 0.5s;
             }
 
             .header-sub:hover {
                 background-color: #444;
             }
 
-            @media screen and (max-width: 600px) {
-                .header-sub {
+            .header-menu-icon-wrap {
+                margin-left: auto;
+            }
+
+            @media screen and (max-width: 410px) {
+                .header-main {
+                    height: 100%;
+                    padding-top: 12px;
+                    font-size: 30px;
+                }
+            }
+
+            @media screen and (max-width: 320px) {
+                .header-main {
                     display: none;
                 }
             }
@@ -64,16 +74,20 @@
                     class="icon"
                     src="/icon/new_main.png"
                     alt="icon"
-                    width="64px"
-                    height="64px"
+                    width="70px"
+                    height="70px"
             /></a>
             <a class="header-link" href="/index.html"
                 ><div class="header-main">ichihai.dev</div></a
             >
-            <div class="header-sub">
-                <a class="header-link" href="/tools/"
-                    ><div class="header-tab">tools</div></a
-                >
+            <div class="header-menu-icon-wrap">
+                <image
+                    class="header-menu-icon"
+                    src="sansen.svg"
+                    width="70px"
+                    height="70px"
+                    alt="menu"
+                />
             </div>
         </div>
     </body>
