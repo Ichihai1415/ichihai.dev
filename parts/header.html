@@ -40,11 +40,7 @@
                 color: white;
             }
 
-            .header-sub {
-                transition: 0.5s;
-            }
-
-            .header-sub:hover {
+            .header-tab:hover {
                 background-color: #444;
             }
 
@@ -64,6 +60,20 @@
                 .header-main {
                     display: none;
                 }
+            }
+
+            .header-sub {
+                display: flex; /*通常none*/
+                background-color: #222;
+            }
+
+            .header-sub-link-wrap {
+                padding: 0 10px;
+                transition: 0.2s;
+            }
+
+            .header-sub-link-wrap:hover {
+                background-color: #444;
             }
         </style>
     </head>
@@ -90,5 +100,41 @@
                 />
             </div>
         </div>
+        <div class="header-sub">
+            <div class="header-sub-link-wrap">
+                <a class="header-link" href="/index.html">tools</a>
+            </div>
+            <div class="header-sub-link-wrap">
+                <a class="header-link" href="/index.html">webapp</a>
+            </div>
+            <div class="header-sub-link-wrap">
+                <a class="header-link" href="/index.html">game</a>
+            </div>
+            <div class="header-sub-link-wrap">
+                <a class="header-link" href="/index.html">sitemap</a>
+            </div>
+            <div class="header-sub-link-wrap">
+                <a class="header-link" href="/aboutme/links/index.html"
+                    >リンク集</a
+                >
+            </div>
+        </div>
     </body>
+    <script>
+        document
+            .querySelector(".header-menu-icon-wrap")
+            .addEventListener("click", function () {
+                const headerSub = document.querySelector(".header-sub");
+                if (headerSub.style.display == "none") {
+                    headerSub.style.display = "flex";
+                    document.querySelector(".header-menu-icon").src =
+                        "/parts/sansen_sub.svg";
+                } else {
+                    headerSub.style.display = "none";
+                    document.querySelector(".header-menu-icon").src =
+                        "/parts/sansen.svg";
+                }
+                console.log(headerSub.style.display);
+            });
+    </script>
 </html>

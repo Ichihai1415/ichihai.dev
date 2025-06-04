@@ -17,11 +17,7 @@ h5,
 h6 {
     margin: 10px 0 0 0;
     padding-left: 6px;
-}
-
-p {
-    margin: 0;
-    padding: 4px 0;
+    background-color: #999;
 }
 
 h1 {
@@ -54,6 +50,25 @@ h6 {
     border-bottom: 1px solid #ff1;
 }
 
+p {
+    margin: 0;
+    padding: 4px 0;
+}
+
 .spacer {
     height: 10px;
+}
+
+.caution {
+    background-color: #fff;
+    border: 2px solid #cc4;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.name {
+    padding: 0 4px;
+    background-color: #aaa;
+    border-radius: 4px;
 }
