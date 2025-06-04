@@ -3,19 +3,20 @@
 fetch("/parts/header.html")
     .then((response) => response.text())
     .then((data) => (document.querySelector("header").innerHTML = data))
-    .then(() => {//ローカルだとここに入れないと動かない？
+    .then(() => {
+        const headerSub = document.querySelector(".header-sub");
         document
             .querySelector(".header-menu-icon-wrap")
             .addEventListener("click", function () {
-                const headerSub = document.querySelector(".header-sub");
-                if (headerSub.style.display == "none") {
-                    headerSub.style.display = "flex";
-                    document.querySelector(".header-menu-icon").src =
-                        "/parts/sansen_sub.svg";
-                } else {
+                console.log(headerSub.style.display);
+                if (headerSub.style.display == "flex") {
                     headerSub.style.display = "none";
                     document.querySelector(".header-menu-icon").src =
                         "/parts/sansen.svg";
+                } else {
+                    headerSub.style.display = "flex";
+                    document.querySelector(".header-menu-icon").src =
+                        "/parts/sansen_sub.svg";
                 }
                 //console.log(headerSub.style.display);
             });
