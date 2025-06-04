@@ -3,7 +3,7 @@
 fetch("/parts/header.html")
     .then((response) => response.text())
     .then((data) => (document.querySelector("header").innerHTML = data))
-    .then(() => {//ここに入れないと動かない
+    .then(() => {//ローカルだとここに入れないと動かない？
         document
             .querySelector(".header-menu-icon-wrap")
             .addEventListener("click", function () {
@@ -17,7 +17,7 @@ fetch("/parts/header.html")
                     document.querySelector(".header-menu-icon").src =
                         "/parts/sansen.svg";
                 }
-                console.log(headerSub.style.display);
+                //console.log(headerSub.style.display);
             });
     });
 
