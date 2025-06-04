@@ -3,44 +3,215 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>template</title>
-        <meta name="description" content="template" />
+        <title>逆翻訳生成機</title>
+        <meta name="description" content="個人用です。" />
         <link rel="stylesheet" href="/common.css" />
+        <style>
+            textarea {
+                width: 100%;
+                height: 100px;
+                margin-top: 10px;
+            }
+            button {
+                margin-left: 10px;
+            }
+
+            input.lang {
+                width: 60px;
+            }
+
+            code {
+                font-size: 0.9rem;
+                background-color: #aaa;
+                padding: 2px 4px;
+                border-radius: 4px;
+            }
+        </style>
     </head>
     <body>
         <header><!--/js/common.js で追加される--></header>
         <main>
             <div class="spacer"></div>
-            <h1>head 1</h1>
+            <h1>逆翻訳生成機</h1>
+            <p>
+                注意: Google翻訳をGoogle Apps
+                Scriptで呼び出して返すAPIを自作し利用しています。使いすぎ、仕様変更で動かなくなることがあります。<br />
+                言語はGoogle翻訳の言語コードを使用しています。<br />
+                例:
+                日本語は<code>ja</code>、英語は<code>en</code>、ハワイ語は<code
+                    >haw</code
+                ><br />
+            </p>
+            <br />
+            翻訳前言語:
+            <input type="text" class="lang" id="lang0" value="ja" />
+            <button class="start" id="start" onclick="start()">開始！</button
+            ><br />
+            <textarea
+                id="text0"
+                placeholder="ここにテキストを入力してください"
+            ></textarea
+            ><br />
+            ↓ 翻訳後言語:
+            <input type="text" class="lang" id="lang1" value="haw" />
             <textarea
                 id="text1"
-                placeholder="ここにテキストを入力してください"
-            ></textarea>
-            <input type="button" class="start" id="start" value="開始!" /><br />
-            <br />
-            ↓
-            <select id="lang1">
-                <option value="1">選択肢1</option>
-            </select>
-            <br />
-            <span class="text-output" id="text-output1"></span>
-            <br />
-            <span class="text-output" id="text-output2"></span>
-            <br />
-            <span class="text-output" id="text-output3"></span>
-            <br />
-            <span class="text-output" id="text-output4"></span>
-            <br />
-            <span class="text-output" id="text-output5"></span>
-            <br />
-            <span class="text-output" id="text-output6"></span>
-            <br />
-            <span class="text-output" id="text-output7"></span>
-            <br />
-            <span class="text-output" id="text-output8"></span>
+                placeholder="（翻訳１回目の結果がここに表示されます）"
+                readonly
+            ></textarea
+            ><br />
+            ↓ 翻訳後言語:
+            <input type="text" class="lang" id="lang2" value="zh-CN" />
+            <textarea
+                id="text2"
+                placeholder="（翻訳２回目の結果がここに表示されます）"
+                readonly
+            ></textarea
+            ><br />
+            ↓ 翻訳後言語:
+            <input type="text" class="lang" id="lang3" value="en" />
+            <textarea
+                id="text3"
+                placeholder="（翻訳３回目の結果がここに表示されます）"
+                readonly
+            ></textarea
+            ><br />
+            ↓ 翻訳後言語:
+            <input type="text" class="lang" id="lang4" value="hi" />
+            <textarea
+                id="text4"
+                placeholder="（翻訳４回目の結果がここに表示されます）"
+                readonly
+            ></textarea
+            ><br />
+            ↓ 翻訳後言語:
+            <input type="text" class="lang" id="lang5" value="it" />
+            <textarea
+                id="text5"
+                placeholder="（翻訳５回目の結果がここに表示されます）"
+                readonly
+            ></textarea
+            ><br />
+            ↓ 翻訳後言語:
+            <input type="text" class="lang" id="lang6" value="ru" />
+            <textarea
+                id="text6"
+                placeholder="（翻訳６回目の結果がここに表示されます）"
+                readonly
+            ></textarea
+            ><br />
+            ↓ 翻訳後言語:
+            <input type="text" class="lang" id="lang7" value="is" />
+            <textarea
+                id="text7"
+                placeholder="（翻訳７回目の結果がここに表示されます）"
+                readonly
+            ></textarea
+            ><br />
+            ↓ 翻訳後言語:
+            <input type="text" class="lang" id="lang8" value="ko" />
+            <textarea
+                id="text8"
+                placeholder="（翻訳８回目の結果がここに表示されます）"
+                readonly
+            ></textarea
+            ><br />
+            ↓ 翻訳後言語:
+            <input type="text" class="lang" id="lang9" value="haw" />
+            <textarea
+                id="text9"
+                placeholder="（翻訳９回目の結果がここに表示されます）"
+                readonly
+            ></textarea
+            ><br />
+            ↓ 翻訳後言語:
+            <input type="text" class="lang" id="lang10" value="ja" />
+            <textarea
+                id="text10"
+                placeholder="（翻訳１０回目の結果がここに表示されます）"
+                readonly
+            ></textarea
+            ><br />
+            <button class="move10to0" id="move10to0" onclick="move10to0()">
+                一番最初に反映</button
+            ><br />
         </main>
 
         <footer><!--/js/common.js で追加される--></footer>
         <script src="/js/common.js"></script>
+        <script>
+            function start() {
+                afterClear();
+                if (document.getElementById("text0").value == "")
+                    alert("テキストを入力してください。");
+                else doTranslate(1);
+            }
+
+            function doTranslate(id) {
+                document.getElementById("start").disabled = true;
+                const url =
+                    "https://script.google.com/macros/s/AKfycbwjIda3Vlpjb3XBx98YsjxaFSA0R6ITSx9fwsUqKyxnG7j-qJ2o94d0K-LEnu7-BzCa/exec";
+                const text = document.getElementById(`text${id - 1}`).value;
+                const sourceLang = document.getElementById(
+                    `lang${id - 1}`
+                ).value;
+                const targetLang = document.getElementById(`lang${id}`).value;
+                fetchResponse(url, text, sourceLang, targetLang).then(
+                    (response) => {
+                        if (response) {
+                            document.getElementById(`text${id}`).value =
+                                response;
+                            if (id < 10) {
+                                doTranslate(id + 1);
+                            } else {
+                                document.getElementById(
+                                    "start"
+                                ).disabled = false;
+                            }
+                        } else {
+                            document.getElementById(`text${id}`).value =
+                                "<翻訳に失敗しました>";
+                            document.getElementById("start").disabled = false;
+                        }
+                    }
+                );
+            }
+
+            function afterClear() {
+                for (let i = 1; i <= 10; i++) {
+                    document.getElementById(`text${i}`).value = "";
+                }
+            }
+
+            function move10to0() {
+                const text10 = document.getElementById("text10").value;
+                document.getElementById("text0").value = text10;
+                afterClear();
+            }
+        </script>
+        <script>
+            async function fetchResponse(url, text, source, target) {
+                try {
+                    const params = new URLSearchParams({
+                        text,
+                        source,
+                        target,
+                    });
+                    const response = await fetch(`${url}?${params.toString()}`);
+
+                    if (!response.ok) {
+                        throw new Error(
+                            `HTTP error! Status: ${response.status}`
+                        );
+                    }
+
+                    const result = await response.text(); // 生文字列として取得
+                    return result;
+                } catch (error) {
+                    console.error("Error fetching response:", error);
+                    return null;
+                }
+            }
+        </script>
     </body>
 </html>
