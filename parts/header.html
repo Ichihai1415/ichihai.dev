@@ -63,7 +63,7 @@
             }
 
             .header-sub {
-                display: flex; /*通常none*/
+                display: none; /*通常none、テスト時flex*/
                 background-color: #222;
             }
 
@@ -120,21 +120,4 @@
             </div>
         </div>
     </body>
-    <script>
-        document
-            .querySelector(".header-menu-icon-wrap")
-            .addEventListener("click", function () {
-                const headerSub = document.querySelector(".header-sub");
-                if (headerSub.style.display == "none") {
-                    headerSub.style.display = "flex";
-                    document.querySelector(".header-menu-icon").src =
-                        "/parts/sansen_sub.svg";
-                } else {
-                    headerSub.style.display = "none";
-                    document.querySelector(".header-menu-icon").src =
-                        "/parts/sansen.svg";
-                }
-                console.log(headerSub.style.display);
-            });
-    </script>
 </html>

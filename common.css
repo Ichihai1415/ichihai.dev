@@ -6,7 +6,7 @@ main {
     max-width: 800px;
     padding: 0 10px;
     margin: auto;
-    background-color: #bbb;
+    background-color: #ccc;
 }
 
 h1,
@@ -17,7 +17,7 @@ h5,
 h6 {
     margin: 10px 0 0 0;
     padding-left: 6px;
-    background-color: #999;
+    background-color: #bbb;
 }
 
 h1 {
@@ -67,7 +67,7 @@ p {
     margin: 10px 0;
 }
 
-.name {
+code {
     padding: 0 4px;
     background-color: #aaa;
     border-radius: 4px;
