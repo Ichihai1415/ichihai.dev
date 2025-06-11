@@ -61,14 +61,14 @@ p {
 
 .caution {
     background-color: #ff02;
-    border-left: 4px solid #ff4;
+    border-left: 4px solid #aa4;
     padding: 10px;
     margin: 10px 0;
 }
 
 .caution-head {
     font-weight: bold;
-    color: #fe3;
+    color: #aa4;
 }
 
 code {
@@ -78,12 +78,24 @@ code {
 }
 
 del {
-    background-color: #f448;
     padding: 0 4px;
     border-radius: 4px;
 }
 
 ins {
+    padding: 0 4px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+del.fill {
+    background-color: #f448;
+    padding: 0 4px;
+    border-radius: 4px;
+}
+
+ins.fill {
     background-color: #4f48;
     padding: 0 4px;
     border-radius: 4px;
