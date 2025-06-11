@@ -1,12 +1,12 @@
 body {
-    background-color: #ddd;
+    background-color: #ccc;
 }
 
 main {
     max-width: 800px;
     padding: 0 10px;
     margin: auto;
-    background-color: #ccc;
+    background-color: #eee;
 }
 
 h1,
@@ -17,7 +17,7 @@ h5,
 h6 {
     margin: 10px 0 0 0;
     padding-left: 6px;
-    background-color: #bbb;
+    background-color: #ddd;
 }
 
 h1 {
@@ -60,15 +60,33 @@ p {
 }
 
 .caution {
-    background-color: #fff;
-    border: 2px solid #cc4;
-    border-radius: 5px;
+    background-color: #ff02;
+    border-left: 4px solid #ff4;
     padding: 10px;
     margin: 10px 0;
+}
+
+.caution-head {
+    font-weight: bold;
+    color: #fe3;
 }
 
 code {
     padding: 0 4px;
     background-color: #aaa;
     border-radius: 4px;
+}
+
+del {
+    background-color: #f448;
+    padding: 0 4px;
+    border-radius: 4px;
+}
+
+ins {
+    background-color: #4f48;
+    padding: 0 4px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
 }
