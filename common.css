@@ -71,6 +71,18 @@ p {
     color: #aa4;
 }
 
+.warning {
+    background-color: #f002;
+    border-left: 4px solid #c00;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.warning-head {
+    font-weight: bold;
+    color: #c00;
+}
+
 code {
     padding: 0 4px;
     background-color: #aaa;

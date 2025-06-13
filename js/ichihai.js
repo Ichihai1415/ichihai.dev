@@ -43,3 +43,65 @@ function getParam(name) {
     const params = url.searchParams;
     return params.get(name);
 }
+
+/**
+ * 文字列をgzip圧縮し、Base64文字列として返します。
+ * @param {string} str 圧縮する文字列
+ * @returns {Promise<string>} 圧縮されたデータ（Base64文字列）
+ */
+async function gzipCompress(str) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(str);
+    const cs = new CompressionStream("gzip");
+    const writer = cs.writable.getWriter();
+    writer.write(data);
+    writer.close();
+    const compressed = await new Response(cs.readable).arrayBuffer();
+    return btoa(String.fromCharCode(...new Uint8Array(compressed)));
+}
+
+/**
+ * gzip圧縮データを解凍して文字列に戻します。
+ * @param {string} compressed 圧縮されたデータ
+ * @returns {Promise<string>} 解凍された文字列
+ */
+async function gzipDecompress(base64) {
+    const binaryString = atob(base64);
+    const len = binaryString.length;
+    const compressed = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+        compressed[i] = binaryString.charCodeAt(i);
+    }
+    const ds = new DecompressionStream("gzip");
+    const writer = ds.writable.getWriter();
+    writer.write(compressed);
+    writer.close();
+    const decompressed = await new Response(ds.readable).arrayBuffer();
+    const decoder = new TextDecoder();
+    return decoder.decode(decompressed);
+}
+
+/**
+ * 指定したURLからXHRで生テキストを取得します。
+ * @param {string} url 取得するURL
+ * @returns {Promise<string>} レスポンステキスト
+ */
+function fetchTextXHR(url) {
+    return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", url, true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    resolve(xhr.responseText);
+                } else {
+                    reject(new Error("XHR failed: " + xhr.status));
+                }
+            }
+        };
+        xhr.onerror = function () {
+            reject(new Error("XHR network error"));
+        };
+        xhr.send();
+    });
+}
