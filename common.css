@@ -4,7 +4,7 @@ body {
 
 main {
     max-width: 800px;
-    padding: 0 10px;
+    padding: 10px;
     margin: auto;
     background-color: #eee;
 }
@@ -15,7 +15,7 @@ h3,
 h4,
 h5,
 h6 {
-    margin: 10px 0 0 0;
+    margin: 10px 0 10px 0;
     padding-left: 6px;
     background-color: #ddd;
 }
@@ -69,18 +69,6 @@ p {
 .caution-head {
     font-weight: bold;
     color: #aa4;
-}
-
-.warning {
-    background-color: #f002;
-    border-left: 4px solid #c00;
-    padding: 10px;
-    margin: 10px 0;
-}
-
-.warning-head {
-    font-weight: bold;
-    color: #c00;
 }
 
 code {
