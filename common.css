@@ -102,3 +102,9 @@ ins.fill {
     text-decoration: none;
     font-weight: bold;
 }
+
+.ref {
+    padding: 10px;
+    background-color: #bbb;
+    border-radius: 8px;
+}
