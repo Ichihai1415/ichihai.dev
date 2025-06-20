@@ -63,6 +63,17 @@ p {
     height: 10px;
 }
 
+.notice {
+    background-color: #0f02;
+    border-left: 4px solid #4a4;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.notice-head {
+    font-weight: bold;
+    color: #4a4;
+}
 .caution {
     background-color: #ff02;
     border-left: 4px solid #aa4;
