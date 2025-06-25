@@ -135,3 +135,7 @@ ins.fill {
     background-color: #bbb;
     border-radius: 8px;
 }
+
+summary {
+    font-size: 1.6rem;
+}
