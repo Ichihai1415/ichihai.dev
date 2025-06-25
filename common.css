@@ -139,3 +139,7 @@ ins.fill {
 summary {
     font-size: 1.6rem;
 }
+
+.font-mincho {
+    font-family: serif;
+}
