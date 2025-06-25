@@ -4,8 +4,8 @@ export const onRequest = async (context) => {
     const asset = await context.env.ASSETS.fetch(context.request);
 
     if (asset.status === 404 && isDat) {
-        return asset;
+        return new Response(null, { status: 404 });
     }
 
-    return new Response(null, { status: 404 });
+    return asset;
 };
