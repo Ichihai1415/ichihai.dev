@@ -1,0 +1,170 @@
+{
+    "comment": "html表記などに対応したい、",
+    "name": "若松",
+    "enables": [
+        "direction",
+        "class",
+        "name",
+        "number",
+        "time",
+        "destination",
+        "platform"
+    ],
+    "directions": [
+        {
+            "name": "金沢大学・朝霧台方面",
+            "value": 1
+        },
+        {
+            "name": "金沢駅方面",
+            "value": 2
+        }
+    ],
+    "trains": [
+        {
+            "direction": 2,
+            "class": "",
+            "name": "西金沢線",
+            "number": 53,
+            "time": "06:50",
+            "destination": "西金沢駅",
+            "platform": "D",
+            "additional": null
+        },
+        {
+            "direction": 2,
+            "class": "",
+            "name": "鈴見線",
+            "number": 92,
+            "time": "07:00",
+            "destination": "金沢駅",
+            "platform": "B",
+            "additional": null
+        },
+        {
+            "direction": 2,
+            "class": "",
+            "name": "鈴見線",
+            "number": 92,
+            "time": "07:20",
+            "destination": "金沢駅",
+            "platform": "B",
+            "additional": null
+        },
+        {
+            "direction": 2,
+            "class": "",
+            "name": "鈴見線",
+            "number": 92,
+            "time": "07:38",
+            "destination": "金沢駅",
+            "platform": "B",
+            "additional": null
+        },
+        {
+            "direction": 1,
+            "class": "",
+            "name": "金沢大学線",
+            "number": 94,
+            "time": "07:55",
+            "destination": "金沢大学",
+            "platform": "C",
+            "additional": null
+        },
+        {
+            "direction": 1,
+            "class": "",
+            "name": "西金沢線",
+            "number": 96,
+            "time": "08:02",
+            "destination": "金沢大学",
+            "platform": "C",
+            "additional": null
+        },
+        {
+            "direction": 2,
+            "class": "",
+            "name": "鈴見線",
+            "number": 92,
+            "time": "08:05",
+            "destination": "金沢駅",
+            "platform": "B",
+            "additional": null
+        },
+        {
+            "direction": 1,
+            "class": "",
+            "name": "金沢大学線",
+            "number": 93,
+            "time": "08:17",
+            "destination": "金沢大学",
+            "platform": "A",
+            "additional": null
+        },
+        {
+            "direction": 2,
+            "class": "",
+            "name": "鈴見線",
+            "number": 92,
+            "time": "08:29",
+            "destination": "金沢駅",
+            "platform": "B",
+            "additional": null
+        },
+        {
+            "direction": 1,
+            "class": "",
+            "name": "鈴見線",
+            "number": 92,
+            "time": "08:32",
+            "destination": "朝霧台",
+            "platform": "A",
+            "additional": null
+        },
+        {
+            "direction": 2,
+            "class": "",
+            "name": "西金沢線",
+            "number": 53,
+            "time": "06:50",
+            "destination": "西金沢駅",
+            "platform": "D",
+            "additional": null
+        },
+        {
+            "direction": 2,
+            "class": "",
+            "name": "金沢大学",
+            "number": 93,
+            "time": "08:45",
+            "destination": "金沢駅",
+            "platform": "B",
+            "additional": null
+        }
+    ],
+    "class-colors": {
+        "": "#ffffff",
+        "快速": "#0000ff"
+    },
+
+    "template-null": {
+        "direction": null,
+        "class": null,
+        "name": null,
+        "number": null,
+        "time": null,
+        "destination": null,
+        "platform": null,
+        "additional": null
+    },
+    "template-empty": {
+        "direction": null,
+        "class": "",
+        "name": "",
+        "number": null,
+        "time": "",
+        "destination": "",
+        "platform": "",
+        "additional": null
+    }
+}
