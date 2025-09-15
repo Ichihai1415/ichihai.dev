@@ -172,8 +172,7 @@
                 <button id="dot-gen-display" onclick="updateDot()">表示</button>
                 <button id="dot-gen-make" onclick="saveDot()">保存</button>
                 <div class="dot-gen-inputs-container">
-                    <div class="dot-gen-inputs-v"><!--scriptで自動追加--></div>
-                    <div class="dot-gen-inputs-i"><!--scriptで自動追加--></div>
+                    <div class="dot-gen-inputs"><!--scriptで自動追加--></div>
                 </div>
             </div>
         </main>
@@ -205,19 +204,6 @@
             });
 
             for (let r = 0; r < 320; r++) {
-                let nr = document.createElement("span");
-                nr.textContent =
-                    r +
-                    1 +
-                    " (" +
-                    Math.floor(r / 16 + 1) +
-                    "-" +
-                    ((r % 16) + 1) +
-                    ")";
-                document.querySelector(".dot-gen-inputs-v").appendChild(nr);
-                document
-                    .querySelector(".dot-gen-inputs-v")
-                    .appendChild(document.createElement("br"));
                 for (let c = 0; c < 16; c++) {
                     let inp = document.createElement("input");
                     inp.type = "number";
@@ -228,16 +214,34 @@
                     inp.addEventListener(
                         "change",
                         function () {
+                            let v = inp.value;
+                            if (v == "0") {
+                                inp.style.backgroundColor = "#665555";
+                            } else if (v == "1") {
+                                inp.style.backgroundColor = "#0f0";
+                            } else if (v == "2") {
+                                inp.style.backgroundColor = "#ffaa00";
+                            } else if (v == "3") {
+                                inp.style.backgroundColor = "#ff0000";
+                            }
                             updateDot();
                         },
                         false
                     ); //自動反映(高負荷)
-                    document
-                        .querySelector(".dot-gen-inputs-i")
-                        .appendChild(inp);
+                    document.querySelector(".dot-gen-inputs").appendChild(inp);
                 }
+                let nr = document.createElement("span");
+                nr.textContent =
+                    r +
+                    1 +
+                    " (" +
+                    Math.floor(r / 16 + 1) +
+                    "-" +
+                    ((r % 16) + 1) +
+                    ")";
+                document.querySelector(".dot-gen-inputs").appendChild(nr);
                 document
-                    .querySelector(".dot-gen-inputs-i")
+                    .querySelector(".dot-gen-inputs")
                     .appendChild(document.createElement("br"));
             }
         </script>
