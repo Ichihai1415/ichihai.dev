@@ -8,10 +8,6 @@
         <link rel="stylesheet" href="/common.css" />
         <style>
             :root {
-                --dot-color-0: #665555;
-                --dot-color-1: #00ff00;
-                --dot-color-2: #ffaa00;
-                --dot-color-3: #ff0000;
             }
 
             main {
@@ -83,7 +79,7 @@
             }
 
             .sign-displays {
-                background-color: #292525;
+                background-color: #2c2828;
             }
 
             .sign-display-single {
@@ -101,11 +97,47 @@
             }
 
             .sign-display-1cell {
-                margin: 1px;
-                width: 3px;
-                height: 3px;
+                margin: -2.5px;
+                width: 10px;
+                height: 10px;
                 border-radius: 100%;
-                background-color: #665555;
+                background: radial-gradient(
+                    #766,
+                    #655 14.142%,
+                    #544 21.213%,
+                    #4336 28.281%,
+                    #0000 35.355%
+                );
+                /*標準:(1,3,1) (-2.5,10,-2.5)*/
+                /*r=5 -> l=7.071  14.142%/1px*/
+                /*中心から四角形角までで100% => 1/sqrt(2)=0.7071*/
+            }
+
+            .dot1 {
+                background: radial-gradient(
+                    #8f8e 7.071%,
+                    #4d4c 21.213%,
+                    #0c08 35.355%,
+                    #0000 70.71%
+                );
+            }
+
+            .dot2 {
+                background: radial-gradient(
+                    #fede 7.071%,
+                    #feac 21.213%,
+                    #f408 35.355%,
+                    #0000 70.71%
+                );
+            }
+
+            .dot3 {
+                background: radial-gradient(
+                    #fffc 7.071%,
+                    #fccc 21.213%,
+                    #f008 35.355%,
+                    #0000 70.71%
+                );
             }
 
             .dot-gen-inputs-container {
@@ -165,7 +197,7 @@
                 </div>
                 <div class="sign-displays"><!--scriptで自動追加--></div>
             </div>
-
+            <button onclick="loadDot_test()">テストデータ読み込み</button>
             <div class="dot-generator">
                 ドット作成ツール<br />
                 0:消灯 1:緑 2:オレンジ 3:赤
@@ -211,18 +243,24 @@
                     inp.max = "3";
                     inp.value = "0";
                     inp.classList.add("dot-gen-inputs-inp");
+                    inp.style.backgroundColor = "#655555";
                     inp.addEventListener(
                         "change",
                         function () {
                             let v = inp.value;
-                            if (v == "0") {
-                                inp.style.backgroundColor = "#665555";
-                            } else if (v == "1") {
-                                inp.style.backgroundColor = "#0f0";
-                            } else if (v == "2") {
-                                inp.style.backgroundColor = "#ffaa00";
-                            } else if (v == "3") {
-                                inp.style.backgroundColor = "#ff0000";
+                            switch (v) {
+                                case "0":
+                                    inp.style.backgroundColor = "#655555";
+                                    break;
+                                case "1":
+                                    inp.style.backgroundColor = "#0f0";
+                                    break;
+                                case "2":
+                                    inp.style.backgroundColor = "#fa0";
+                                    break;
+                                case "3":
+                                    inp.style.backgroundColor = "#f00";
+                                    break;
                             }
                             updateDot();
                         },
@@ -253,21 +291,13 @@
                 for (let i = 0; i < inputs.length; i++) {
                     let v = inputs[i].value;
                     if (v == "0") {
-                        dis[i].style.backgroundColor = "#665555";
+                        dis[i].className = "sign-display-1cell";
                     } else if (v == "1") {
-                        //type1
-                        dis[i].style.backgroundColor = "#0f0";
-                        //type2
-                        //dis[i].style.border = "1px solid #0f0";
-                        //dis[i].style.margin = "0";
-                        //type3
-                        //dis[i].style.backgroundColor = "#ffffff";
-                        //dis[i].style.border = "1px solid #0f0";
-                        //dis[i].style.margin = "0";
+                        dis[i].className = "sign-display-1cell dot1";
                     } else if (v == "2") {
-                        dis[i].style.backgroundColor = "#ffaa00";
+                        dis[i].className = "sign-display-1cell dot2";
                     } else if (v == "3") {
-                        dis[i].style.backgroundColor = "#ff0000";
+                        dis[i].className = "sign-display-1cell dot3";
                     }
                 }
             }
@@ -289,6 +319,50 @@
                 a.href = URL.createObjectURL(blob);
                 a.download = "dot.txt";
                 a.click();
+            }
+
+            function loadDot(text) {
+                let lines = text.split("\n");
+                let inputs = document.querySelectorAll(".dot-gen-inputs-inp");
+                for (let r = 0; r < Math.min(lines.length, 320); r++) {
+                    let line = lines[r];
+                    for (let c = 0; c < Math.min(line.length, 16); c++) {
+                        inputs[r * 16 + c].value = line[c];
+                        switch (line[c]) {
+                            case "0":
+                                inputs[r * 16 + c].style.backgroundColor =
+                                    "#655555";
+                                break;
+                            case "1":
+                                inputs[r * 16 + c].style.backgroundColor =
+                                    "#0f0";
+                                break;
+                            case "2":
+                                inputs[r * 16 + c].style.backgroundColor =
+                                    "#fa0";
+                                break;
+                            case "3":
+                                inputs[r * 16 + c].style.backgroundColor =
+                                    "#f00";
+                                break;
+                        }
+                    }
+                }
+                updateDot();
+            }
+
+            function loadDot_test() {
+                fetch("data/dot/tsuruga-platform_3-5_sr-khimeji-1120.txt")
+                    .then((response) => response.text())
+                    .then((text) => loadDot(text));
+            }
+
+            function loadDot_file(file) {
+                let reader = new FileReader();
+                reader.onload = function (e) {
+                    loadDot(e.target.result);
+                };
+                reader.readAsText(file);
             }
         </script>
     </body>
