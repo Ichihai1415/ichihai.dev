@@ -3,8 +3,8 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>template</title>
-        <meta name="description" content="template" />
+        <title>発車標シミュレーター</title>
+        <meta name="description" content="発車標シミュレーター" />
         <link rel="stylesheet" href="/common.css" />
         <style>
             :root {
@@ -115,6 +115,10 @@
             .dot-gen-inputs-i {
                 margin-left: 10px;
             }
+
+            .dot-gen-inputs-inp {
+                width: 30px;
+            }
         </style>
     </head>
     <body>
@@ -166,7 +170,7 @@
                 ドット作成ツール<br />
                 0:消灯 1:緑 2:オレンジ 3:赤
                 <button id="dot-gen-display" onclick="updateDot()">表示</button>
-                <button id="dot-gen-make" onclick="saveDot()">作成</button>
+                <button id="dot-gen-make" onclick="saveDot()">保存</button>
                 <div class="dot-gen-inputs-container">
                     <div class="dot-gen-inputs-v"><!--scriptで自動追加--></div>
                     <div class="dot-gen-inputs-i"><!--scriptで自動追加--></div>
@@ -220,8 +224,7 @@
                     inp.min = "0";
                     inp.max = "3";
                     inp.value = "0";
-                    inp.style.width = "30px";
-
+                    inp.classList.add("dot-gen-inputs-inp");
                     inp.addEventListener(
                         "change",
                         function () {
@@ -241,7 +244,7 @@
         <script>
             //このへんはAIの自動入力がほぼ完成させてるよ、すごいねAI
             function updateDot() {
-                let inputs = document.querySelectorAll(".dot-gen-inputs input");
+                let inputs = document.querySelectorAll(".dot-gen-inputs-inp");
                 let dis = document.querySelectorAll(".sign-display-1cell");
                 for (let i = 0; i < inputs.length; i++) {
                     let v = inputs[i].value;
@@ -266,7 +269,7 @@
             }
 
             function saveDot() {
-                let inputs = document.querySelectorAll(".dot-gen-inputs input");
+                let inputs = document.querySelectorAll(".dot-gen-inputs-inp");
                 let lines = [];
                 for (let r = 0; r < 320; r++) {
                     let line = [];
