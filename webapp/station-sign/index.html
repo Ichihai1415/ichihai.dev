@@ -157,7 +157,7 @@
         <header><!--/js/common.js で追加される--></header>
         <main>
             <h1>発車標シミュレーター</h1>
-            v0.1.5 2025/09/16 アカンサス号仮追加、説明追加<br />
+            v0.1.6 2025/09/16 表示ディスプレイ切り替えを仮実装<br />
             <ul>
                 <li>
                     ドットの再現度を上げるため幅が大きく（スクロールバー除き1800px必須）、パソコン用です。ただしノートパソコンなど設定によっては見切れる場合があります。画面を縮小してください。
@@ -333,16 +333,25 @@
             function updateDot() {
                 let inputs = document.querySelectorAll(".dot-gen-inputs-inp");
                 let dis = document.querySelectorAll(".sign-display-1cell");
+                let t =
+                    (document.getElementById("display-num").value - 1) *
+                    16 *
+                    320;
                 for (let i = 0; i < inputs.length; i++) {
                     let v = inputs[i].value;
-                    if (v == "0") {
-                        dis[i].className = "sign-display-1cell";
-                    } else if (v == "1") {
-                        dis[i].className = "sign-display-1cell dot1";
-                    } else if (v == "2") {
-                        dis[i].className = "sign-display-1cell dot2";
-                    } else if (v == "3") {
-                        dis[i].className = "sign-display-1cell dot3";
+                    switch (v) {
+                        case "0":
+                            dis[t + i].className = "sign-display-1cell";
+                            break;
+                        case "1":
+                            dis[t + i].className = "sign-display-1cell dot1";
+                            break;
+                        case "2":
+                            dis[t + i].className = "sign-display-1cell dot2";
+                            break;
+                        case "3":
+                            dis[t + i].className = "sign-display-1cell dot3";
+                            break;
                     }
                 }
             }
