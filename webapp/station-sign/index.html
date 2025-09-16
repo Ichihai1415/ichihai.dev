@@ -11,7 +11,7 @@
             }
 
             main {
-                min-width: 1800px !important;
+                min-width: 1780px !important;
             }
 
             .sign {
@@ -156,7 +156,42 @@
     <body>
         <header><!--/js/common.js で追加される--></header>
         <main>
-            <div class="spacer"></div>
+            <h1>発車標シミュレーター</h1>
+            v0.1.5 2025/09/16 アカンサス号仮追加、説明追加<br />
+            <ul>
+                <li>
+                    ドットの再現度を上げるため幅が大きく（スクロールバー除き1800px必須）、パソコン用です。ただしノートパソコンなど設定によっては見切れる場合があります。画面を縮小してください。
+                </li>
+                <li>
+                    スマホ・タブレットの場合は画面を横にすると見切れないかもしれません。
+                </li>
+                <li>現在はまだまだ作成中です。仕様も未確定です。</li>
+                <li>
+                    一部の文字の再現に<a
+                        href="https://ys223.blogspot.com/2020/01/jrjr.html"
+                        target="_blank"
+                        >yoshi223のブログ</a
+                    >の画像を参考にしました。
+                </li>
+                <li>
+                    ドットの再現は、html表示時スクリプトでドットを生成し、classを変更することで色の変更を実現しています。
+                    色はグラデーションにし、marginを負にして被せることで光を再現しています。
+                    ドットは縦でグループにしています。これにより文字を流すことがやりやすくなるはずです(未実装)。
+                </li>
+                <li>
+                    下のドット作成ツールは使い勝手が悪いです(処理の簡素化の都合上)。
+                    ちゃんと横にします(別ページで...)。（横にするとめっちゃ長くなるので…と思ったけど埋め込んでなんとかできるかも）
+                </li>
+                <li>修正点、助言等ありましたらXで教えてください。</li>
+                <li>
+                    html、css、javascript、ドットデータ等各データは自由に利用してもらっていいですが、Xで連絡やリンク等していただけるとありがたいです。
+                </li>
+            </ul>
+
+            敦賀駅ホーム(ハピラインふくい移管後)の3,5番線ホーム<br />
+            画像:
+            <a href="ref-img/20250812_104604.jpg">20250812_104604.jpg</a
+            >(ちなみに、Train NameのNが剥がれてlになってます) <br /><br />
             <div class="sign" id="tsuruga-platform_3-5">
                 <!--別スタイル追加するとき以下のclass名は変えるなどしておく-->
                 <div class="sign-header">
@@ -197,7 +232,17 @@
                 </div>
                 <div class="sign-displays"><!--scriptで自動追加--></div>
             </div>
-            <button onclick="loadDot_test()">テストデータ読み込み</button>
+
+            <br />
+            表示番号:
+            <input type="number" id="display-num" value="1" min="1" max="3" />
+            <br />
+
+            テストデータ読み込み(上書きします)<button
+                onclick="loadDot_test('tsuruga-platform_3-5_sr-khimeji-1120.txt')"
+            >
+                敦賀 新快速</button
+            ><button onclick="loadDot_test('tmp.txt')">tmp</button>
             <div class="dot-generator">
                 ドット作成ツール<br />
                 0:消灯 1:緑 2:オレンジ 3:赤
@@ -351,8 +396,8 @@
                 updateDot();
             }
 
-            function loadDot_test() {
-                fetch("data/dot/tsuruga-platform_3-5_sr-khimeji-1120.txt")
+            function loadDot_test(fileName) {
+                fetch("data/dot/" + fileName)
                     .then((response) => response.text())
                     .then((text) => loadDot(text));
             }
