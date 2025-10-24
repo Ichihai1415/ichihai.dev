@@ -1,10 +1,20 @@
 {
-    "update": "2024/06/26",
+    "update": "2025/10/24",
     "datas": [
         {
             "id": "eqs",
             "url": "https://blazor.ichihai.dev/equation-solver",
             "description": "EquationSolver in Blazor"
+        },
+        {
+            "id": "tomari4_1",
+            "url": "/blog/2025/tomari4-aomori.html",
+            "description": "泊4号　個人記事詳細版　青森巡検編"
+        },
+        {
+            "id": "tomari4_2",
+            "url": "/blog/2025/tomari4-eq.html",
+            "description": "泊4号　個人記事詳細版　2025年の地震編"
         }
     ]
 }
