@@ -8,7 +8,6 @@
         <link rel="stylesheet" href="/common.css" />
         <style>
             table {
-                width: 100%;
                 border: solid 2px #000;
                 border-collapse: collapse;
             }
@@ -21,12 +20,23 @@
             tr,
             th,
             td {
+                padding: 5px;
                 border: solid 1px #000;
                 text-align: center;
             }
 
-            .tb-num {
+            input.num {
                 width: 30px;
+            }
+            input.check {
+                -moz-transform: scale(2);
+                -webkit-transform: scale(2);
+                transform: scale(2);
+                margin-top: 12px;
+            }
+            input.text {
+                width: 100px;
+                background-color: #bbb;
             }
         </style>
     </head>
@@ -38,35 +48,57 @@
                 <li>スマホ向けに作成しています。</li>
                 <li>何か問題等あればLINEなどで連絡してください。</li>
             </ul>
-
+            <br />
+            <input
+                type="number"
+                id="playerNum"
+                value="4"
+                min="1"
+                max="10"
+            />人で
+            <button onclick="init()">初期化</button>
+            <br /><br />
             <table>
                 <tr>
                     <th>プレイヤー</th>
                     <th>野宿</th>
                     <th>思い出</th>
+                    <th>終了したか</th>
+                </tr>
+                <tr>
+                    <td>(初期化を</td>
+                    <td>押すと</td>
+                    <td>表示</td>
+                    <td>されます)</td>
                 </tr>
             </table>
         </main>
         <footer><!--/js/common.js で追加される--></footer>
         <script src="/js/common.js"></script>
         <script>
-            const player = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
-            window.onload = reset(1);
-
-            function reset(playerNum) {
+            function initTable(playerNum) {
                 const main = document.querySelector("main table");
+                while (main.rows.length > 1) {
+                    main.deleteRow(1);
+                }
                 for (let i = 0; i < playerNum; i++) {
                     const tr = document.createElement("tr");
+                    tr.id = `player_${i}`;
 
                     const tdName = document.createElement("td");
-                    tdName.textContent = player[i];
+                    textInput = document.createElement("input");
+                    textInput.type = "text";
+                    textInput.classList.add("text");
+                    textInput.id = `playerName_${i}`;
+                    tdName.textContent = `(${i + 1})`;
+                    tdName.appendChild(textInput);
                     tr.appendChild(tdName);
 
                     const tdNozyuku = document.createElement("td");
                     const tbNozyuku = document.createElement("input");
                     tbNozyuku.type = "number";
                     tbNozyuku.id = `${i}_nozyuku`;
-                    tbNozyuku.className = "tb-num";
+                    tbNozyuku.className = "num";
                     tbNozyuku.value = "0";
                     tdNozyuku.appendChild(tbNozyuku);
                     const btnAddNozyuku = document.createElement("button");
@@ -81,7 +113,7 @@
                     const tbOmoide = document.createElement("input");
                     tbOmoide.type = "number";
                     tbOmoide.id = `${i}_omoide`;
-                    tbOmoide.className = "tb-num";
+                    tbOmoide.className = "num";
                     tbOmoide.value = "0";
                     tdOmoide.appendChild(tbOmoide);
                     const btnAddOmoide = document.createElement("button");
@@ -104,8 +136,21 @@
                     tdOmoide.appendChild(btnAddOmoide3);
                     tr.appendChild(tdOmoide);
 
+                    const isEnded = document.createElement("input");
+                    isEnded.type = "checkbox";
+                    isEnded.id = `${i}_ended`;
+                    isEnded.classList.add("check");
+                    tr.appendChild(isEnded);
+
                     main.appendChild(tr);
                 }
+            }
+
+            function init() {
+                const playerNum = parseInt(
+                    document.getElementById("playerNum").value
+                );
+                initTable(playerNum);
             }
 
             window.onbeforeunload = function () {
