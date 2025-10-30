@@ -38,6 +38,9 @@
                 width: 100px;
                 background-color: #bbb;
             }
+            button {
+                background-color: #ccc;
+            }
         </style>
     </head>
     <body>
@@ -56,7 +59,13 @@
                 value="4"
                 min="1"
                 max="10"
-            />人で
+            /><button onclick="document.getElementById('playerNum').stepUp()">
+                +1</button
+            ><button onclick="document.getElementById('playerNum').stepDown()">
+                -1
+            </button>
+
+            人で
             <button onclick="init()">初期化</button>
             <br /><br />
             現在:
@@ -69,7 +78,7 @@
             />周目<br />
             <table>
                 <tr>
-                    <th>プレイヤー</th>
+                    <th>ﾌﾟﾚｲﾔｰ</th>
                     <th>野宿</th>
                     <th>思い出</th>
                     <th>終了したか</th>
@@ -157,7 +166,7 @@
 
             function init() {
                 const main = document.querySelector("main table");
-                if (main.rows.length > 1)
+                if (main.rows.length > 2)
                     if (
                         !window.confirm(
                             "初期化すると現在のデータは消えます。初期化しますか？"
