@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>限界旅行すごろく記録ツール</title>
+        <meta name="description" content="限界旅行すごろく記録ツール" />
+        <link rel="stylesheet" href="/common.css" />
+        <style>
+            table {
+                width: 100%;
+                border: solid 2px #000;
+                border-collapse: collapse;
+            }
+
+            tr:first-child {
+                background-color: #ddd;
+                border: solid 2px #000;
+            }
+
+            tr,
+            th,
+            td {
+                border: solid 1px #000;
+                text-align: center;
+            }
+
+            .tb-num {
+                width: 30px;
+            }
+        </style>
+    </head>
+    <body>
+        <header><!--/js/common.js で追加される--></header>
+        <main>
+            <h1>限界旅行すごろく記録ツール</h1>
+            <ul>
+                <li>スマホ向けに作成しています。</li>
+                <li>何か問題等あればLINEなどで連絡してください。</li>
+            </ul>
+
+            <table>
+                <tr>
+                    <th>プレイヤー</th>
+                    <th>野宿</th>
+                    <th>思い出</th>
+                </tr>
+            </table>
+        </main>
+        <footer><!--/js/common.js で追加される--></footer>
+        <script src="/js/common.js"></script>
+        <script>
+            const player = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+            window.onload = reset(1);
+
+            function reset(playerNum) {
+                const main = document.querySelector("main table");
+                for (let i = 0; i < playerNum; i++) {
+                    const tr = document.createElement("tr");
+
+                    const tdName = document.createElement("td");
+                    tdName.textContent = player[i];
+                    tr.appendChild(tdName);
+
+                    const tdNozyuku = document.createElement("td");
+                    const tbNozyuku = document.createElement("input");
+                    tbNozyuku.type = "number";
+                    tbNozyuku.id = `${i}_nozyuku`;
+                    tbNozyuku.className = "tb-num";
+                    tbNozyuku.value = "0";
+                    tdNozyuku.appendChild(tbNozyuku);
+                    const btnAddNozyuku = document.createElement("button");
+                    btnAddNozyuku.textContent = "+1";
+                    btnAddNozyuku.onclick = function () {
+                        addValue(i, 1, 1);
+                    };
+                    tdNozyuku.appendChild(btnAddNozyuku);
+                    tr.appendChild(tdNozyuku);
+
+                    const tdOmoide = document.createElement("td");
+                    const tbOmoide = document.createElement("input");
+                    tbOmoide.type = "number";
+                    tbOmoide.id = `${i}_omoide`;
+                    tbOmoide.className = "tb-num";
+                    tbOmoide.value = "0";
+                    tdOmoide.appendChild(tbOmoide);
+                    const btnAddOmoide = document.createElement("button");
+                    btnAddOmoide.textContent = "+1";
+                    btnAddOmoide.onclick = function () {
+                        addValue(i, 2, 1);
+                    };
+                    tdOmoide.appendChild(btnAddOmoide);
+                    tr.appendChild(tdOmoide);
+
+                    const tbOmoide3 = document.createElement("input");
+                    tbOmoide3.type = "number";
+                    tbOmoide3.id = `${i}_omoide`;
+                    tbOmoide3.value = "0";
+                    const btnAddOmoide3 = document.createElement("button");
+                    btnAddOmoide3.textContent = "+3";
+                    btnAddOmoide3.onclick = function () {
+                        addValue(i, 2, 3);
+                    };
+                    tdOmoide.appendChild(btnAddOmoide3);
+                    tr.appendChild(tdOmoide);
+
+                    main.appendChild(tr);
+                }
+            }
+
+            window.onbeforeunload = function () {
+                return "";
+            };
+
+            function addValue(playerIndex, type, value) {
+                const tbId = `${playerIndex}_${
+                    type === 1 ? "nozyuku" : "omoide"
+                }`;
+                const tb = document.getElementById(tbId);
+                if (tb) {
+                    const currentValue = parseInt(tb.value) || 0;
+                    tb.value = currentValue + value;
+                }
+            }
+        </script>
+    </body>
+</html>
