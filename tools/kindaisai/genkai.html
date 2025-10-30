@@ -52,12 +52,21 @@
             <input
                 type="number"
                 id="playerNum"
+                class="num"
                 value="4"
                 min="1"
                 max="10"
             />人で
             <button onclick="init()">初期化</button>
             <br /><br />
+            現在:
+            <input
+                type="number"
+                id="turn"
+                class="num"
+                value="1"
+                min="1"
+            />周目<br />
             <table>
                 <tr>
                     <th>プレイヤー</th>
@@ -147,6 +156,14 @@
             }
 
             function init() {
+                const main = document.querySelector("main table");
+                if (main.rows.length > 1)
+                    if (
+                        !window.confirm(
+                            "初期化すると現在のデータは消えます。初期化しますか？"
+                        )
+                    )
+                        return;
                 const playerNum = parseInt(
                     document.getElementById("playerNum").value
                 );
