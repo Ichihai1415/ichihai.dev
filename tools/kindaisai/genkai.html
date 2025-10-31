@@ -49,6 +49,7 @@
             <h1>限界旅行すごろく記録ツール</h1>
             <ul>
                 <li>スマホ向けに作成しています。</li>
+                <li>テキストボックス右のボタンを押すと値を変えられます。</li>
                 <li>何か問題等あればLINEなどで連絡してください。</li>
             </ul>
             <br />
@@ -75,7 +76,9 @@
                 class="num"
                 value="1"
                 min="1"
-            />周目<br />
+            /><button onclick="document.getElementById('turn').stepUp()">
+                +1</button
+            >周目<br />
             <table>
                 <tr>
                     <th>ﾌﾟﾚｲﾔｰ</th>
