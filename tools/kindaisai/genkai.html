@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>限界旅行すごろく記録ツール</title>
+        <meta name="description" content="限界旅行すごろく記録ツール" />
+        <link rel="stylesheet" href="/common.css" />
+        <style>
+            table {
+                border: solid 2px #000;
+                border-collapse: collapse;
+            }
+
+            tr:first-child {
+                background-color: #ddd;
+                border: solid 2px #000;
+            }
+
+            tr,
+            th,
+            td {
+                padding: 5px;
+                border: solid 1px #000;
+                text-align: center;
+            }
+
+            input.num {
+                width: 30px;
+            }
+            input.check {
+                -moz-transform: scale(2);
+                -webkit-transform: scale(2);
+                transform: scale(2);
+                margin-top: 12px;
+            }
+            input.text {
+                width: 100px;
+                background-color: #bbb;
+            }
+            button {
+                background-color: #ccc;
+            }
+        </style>
+    </head>
+    <body>
+        <header><!--/js/common.js で追加される--></header>
+        <main>
+            <h1>限界旅行すごろく記録ツール</h1>
+            <ul>
+                <li>スマホ向けに作成しています。</li>
+                <li>テキストボックス右のボタンを押すと値を変えられます。</li>
+                <li>何か問題等あればLINEなどで連絡してください。</li>
+            </ul>
+            <br />
+            <input
+                type="number"
+                id="playerNum"
+                class="num"
+                value="4"
+                min="1"
+                max="10"
+            /><button onclick="document.getElementById('playerNum').stepUp()">
+                +1</button
+            ><button onclick="document.getElementById('playerNum').stepDown()">
+                -1
+            </button>
+
+            人で
+            <button onclick="init()">初期化</button>
+            <br /><br />
+            現在:
+            <input
+                type="number"
+                id="turn"
+                class="num"
+                value="1"
+                min="1"
+            /><button onclick="document.getElementById('turn').stepUp()">
+                +1</button
+            >周目<br />
+            <table>
+                <tr>
+                    <th>ﾌﾟﾚｲﾔｰ</th>
+                    <th>野宿</th>
+                    <th>思い出</th>
+                    <th>終了したか</th>
+                </tr>
+                <tr>
+                    <td>(初期化を</td>
+                    <td>押すと</td>
+                    <td>表示</td>
+                    <td>されます)</td>
+                </tr>
+            </table>
+        </main>
+        <footer><!--/js/common.js で追加される--></footer>
+        <script src="/js/common.js"></script>
+        <script>
+            function initTable(playerNum) {
+                const main = document.querySelector("main table");
+                while (main.rows.length > 1) {
+                    main.deleteRow(1);
+                }
+                for (let i = 0; i < playerNum; i++) {
+                    const tr = document.createElement("tr");
+                    tr.id = `player_${i}`;
+
+                    const tdName = document.createElement("td");
+                    //textInput = document.createElement("input");
+                    //textInput.type = "text";
+                    //textInput.classList.add("text");
+                    //textInput.id = `playerName_${i}`;
+                    tdName.textContent = `(${i + 1})`;
+                    //tdName.appendChild(textInput);
+                    tr.appendChild(tdName);
+
+                    const tdNozyuku = document.createElement("td");
+                    const tbNozyuku = document.createElement("input");
+                    tbNozyuku.type = "number";
+                    tbNozyuku.id = `${i}_nozyuku`;
+                    tbNozyuku.className = "num";
+                    tbNozyuku.value = "0";
+                    tdNozyuku.appendChild(tbNozyuku);
+                    const btnAddNozyuku = document.createElement("button");
+                    btnAddNozyuku.textContent = "+1";
+                    btnAddNozyuku.onclick = function () {
+                        addValue(i, 1, 1);
+                    };
+                    tdNozyuku.appendChild(btnAddNozyuku);
+                    tr.appendChild(tdNozyuku);
+
+                    const tdOmoide = document.createElement("td");
+                    const tbOmoide = document.createElement("input");
+                    tbOmoide.type = "number";
+                    tbOmoide.id = `${i}_omoide`;
+                    tbOmoide.className = "num";
+                    tbOmoide.value = "0";
+                    tdOmoide.appendChild(tbOmoide);
+                    const btnAddOmoide = document.createElement("button");
+                    btnAddOmoide.textContent = "+1";
+                    btnAddOmoide.onclick = function () {
+                        addValue(i, 2, 1);
+                    };
+                    tdOmoide.appendChild(btnAddOmoide);
+                    tr.appendChild(tdOmoide);
+
+                    const tbOmoide3 = document.createElement("input");
+                    tbOmoide3.type = "number";
+                    tbOmoide3.id = `${i}_omoide`;
+                    tbOmoide3.value = "0";
+                    const btnAddOmoide3 = document.createElement("button");
+                    btnAddOmoide3.textContent = "+3";
+                    btnAddOmoide3.onclick = function () {
+                        addValue(i, 2, 3);
+                    };
+                    tdOmoide.appendChild(btnAddOmoide3);
+                    tr.appendChild(tdOmoide);
+
+                    const isEnded = document.createElement("input");
+                    isEnded.type = "checkbox";
+                    isEnded.id = `${i}_ended`;
+                    isEnded.classList.add("check");
+                    tr.appendChild(isEnded);
+
+                    main.appendChild(tr);
+                }
+            }
+
+            function init() {
+                const main = document.querySelector("main table");
+                if (main.rows.length > 2)
+                    if (
+                        !window.confirm(
+                            "初期化すると現在のデータは消えます。初期化しますか？"
+                        )
+                    )
+                        return;
+                const playerNum = parseInt(
+                    document.getElementById("playerNum").value
+                );
+                initTable(playerNum);
+            }
+
+            window.onbeforeunload = function () {
+                return "";
+            };
+
+            function addValue(playerIndex, type, value) {
+                const tbId = `${playerIndex}_${
+                    type === 1 ? "nozyuku" : "omoide"
+                }`;
+                const tb = document.getElementById(tbId);
+                if (tb) {
+                    const currentValue = parseInt(tb.value) || 0;
+                    tb.value = currentValue + value;
+                }
+            }
+        </script>
+    </body>
+</html>

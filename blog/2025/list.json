@@ -1,0 +1,18 @@
+[
+    {
+        "title": "泊4号個人記事 詳細版 青森巡検前後旅行編",
+        "abstract": "泊4号の個人記事の詳細版です。",
+        "tags": ["travel", "railway"],
+        "filename": "tomari4-aomori.html",
+        "createDate": "2025/10/24",
+        "updateDate": "2025/10/24"
+    },
+    {
+        "title": "泊4号個人記事 詳細版 2025年の地震編",
+        "abstract": "泊4号の個人記事の詳細版です。",
+        "tags": ["earthquake"],
+        "filename": "tomari4-eq.html",
+        "createDate": "2025/10/24",
+        "updateDate": "2025/10/24"
+    }
+]
