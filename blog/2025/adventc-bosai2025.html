@@ -141,7 +141,7 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
         <header><!--/js/common.js で追加される--></header>
 
         <main>
-            2025/12/0公開 2025/12/0更新
+            2025/12/02公開 2025/12/07更新
             <h1>今年作ったやつの解説的なもの（2025）</h1>
             この記事は<a
                 href="https://adventar.org/calendars/11308"
@@ -153,13 +153,35 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
             ←(8): （さん）<br />
             →(10): （さん）<br />
             -->
+            <h2>メインポイント</h2>
+            無駄なところが多いので要点を置いておきます。
+            <ul>
+                <li>
+                    <a href="#eew-replayer">EEWReplayer</a>:
+                    過去の緊急地震速報の取得・描画。作成中。
+                </li>
+                <li>
+                    <a href="#jma-xml-viewer">JmaXmlViewer</a>:
+                    気象庁XML処理ソフト。作成中（ほぼできてない）。<br />
+                    気象庁XMLのxsdを用いた処理は<a
+                        href="https://qiita.com/Ichihai1415/items/5bbf4245f36b3e2d345e"
+                        target="_blank"
+                        >Qiitaの記事</a
+                    >を参照。
+                </li>
+                <li>
+                    <a href="#geojson">Ichihai1415.GeoJSON</a>:
+                    GeoJSON処理ライブラリ。描画まで一通り使える。
+                </li>
+            </ul>
+            気象庁XMLについてはこの記事に技術的な情報をちょっとだけ。
 
             <h2>大学進学でいろんなところに出かけた話</h2>
             <p>
                 初手関係ないことですがまあいいとして、無事金沢大学に進学してのんびりしています。
                 地理同好会という（簡単に言えば旅行）サークルに入っており、1か月に1回ほど北陸を、年に2回遠くを巡検しています。
                 自然地理系の会員が少なく地震系はおそらく自分しかいないですが...<br />
-                その他ふらっと出かけたりもしています。これらのうち災害関連のものをまとめます。
+                その他ふらっと出かけたりもしています。これらのうち比較的災害関連のものをまとめます。
             </p>
             <ul>
                 <li>
@@ -172,7 +194,7 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                 </li>
                 <li>
                     <u>2025/09/20 女川など</u><br />
-                    下北巡検に向かう道中に寄った。滞在時間は列車折り返しの約30分だけだったが、一通り見て回った。その後気仙沼線BRTに乗り、高い防潮堤が伸びる沿岸を走った。
+                    下北巡検に向かう道中に寄った。滞在時間は列車折り返しの約30分だけだったが、一通り見て回った。その後気仙沼線BRTに乗った。
                 </li>
                 <li>
                     <u>2025/09/25 フォッサマグナパーク周辺</u><br />
@@ -187,12 +209,12 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                     ふと出かけたくなったので。鉄道に乗ったり強震観測点を見たり散歩。
                 </li>
                 <li>
-                    <u>2025/12/04 七尾？・珠洲？</u><br />
+                    <u>2025/12/04 珠洲</u><br />
                     <a
                         href="https://eduweb.sta.kanazawa-u.ac.jp/portal/Public/Syllabus/DetailMain.aspx?lct_idx=A000000000220499&je_cd=1"
                         target="_blank"
                         >「災害復興支援実習」</a
-                    >という講義。（これ書いているのは12/02）
+                    >という講義。被災された方にお話を伺い、コミュニティー・アーカイブとして保存します(記事執筆時作成中、作業量がとんでもない)。
                 </li>
             </ul>
             <p>
@@ -285,10 +307,11 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                     </tr>
                 </tbody>
             </table>
-            住んでるところがやや揺れやすい気がします。最近は西方沖も落ち着いてきましたね。
+            この他ミシっと鳴るものが何度もありました。住んでるところがやや揺れやすい気がします。最近は西方沖も落ち着いてきましたね。
             <h2>本編</h2>
             今年は1点集中はあまりしてない感じです。WorldQuakeViewer2も先延ばし続けています()<br />
-            WakaTimeのmonthly reportのメールをまとめるとこんな感じでした。
+            WakaTimeのmonthly
+            reportのメールをまとめるとこんな感じでした。(12月は2024年)(*:なぜかmonthlyが来ていなかったのでweeklyで概算)　2024/01/21~累計600時間。
             <table>
                 <tr>
                     <th>12月</th>
@@ -316,14 +339,16 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                     <td>6:58</td>
                     <td>24:43</td>
                     <td>4:22</td>
-                    <td>(30~40h、3日に来るはず)</td>
+                    <td>*38:43</td>
                 </tr>
             </table>
-            (12月は2024年)　2024/01/21~累計600時間。<br /><br />
-
+            <del>なんだこの分布。</del>
+            <br />
+            <br />
             <p>
                 メインプロジェクトに<span style="color: red">★</span
-                >マークを付けています。順番は最終pushが古い順です。去年以前からのものも含みます。しょうもないものと進捗がほぼないのもの、参照用データは除いています。
+                >マークを付けています。順番は開始ではなく最終pushが古い順です。去年以前からのものも含みます。しょうもないものと進捗がほぼないのもの、参照用データは除いています。<br />
+                名前をクリックするとGitHubに飛びます。
             </p>
 
             <h3>
@@ -333,7 +358,7 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                     >JmaEqPointsConverter</a
                 >
             </h3>
-            震度観測点座標データを作成するソフト。作成したデータもある。少々怪しいところがあるが気にしない。気象庁内部JSONおよびコード管理表及び個別コード表を使用。
+            震度観測点座標データを作成するソフト。少々怪しいところがあるが気にしない。気象庁内部JSONおよびコード管理表及び個別コード表を使用。
 
             <h3>
                 <a
@@ -389,7 +414,7 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
             </h3>
             キキクルと雨雲レーターを取得して表示するソフト。雨雲接近デスクトップ通知、キキクル黒検知を追加したい。
 
-            <h3>
+            <h3 id="eew-replayer">
                 <span style="color: red">★</span
                 ><a
                     href="https://github.com/Ichihai1415/EEWReplayer"
@@ -398,7 +423,7 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                 >（作成中）
             </h3>
             過去の緊急地震速報を取得・描画するソフト。気象庁ホームページ　緊急地震速報（予報）の内容のページからデータを取得したり、気象庁XMLのデータを独自形式に変換したり、描画データから再現動画を作成したりできる。<br />
-            再現動画（上のはDM-D.S.S.で受信したデータを使用、下のは緊急地震速報（予報）の内容）
+            再現動画（上のはDM-D.S.S.で受信したデータを使用、下のは緊急地震速報（予報）の内容のデータを使用）
             <blockquote class="twitter-tweet">
                 <p lang="ja" dir="ltr">
                     こっちも
@@ -427,7 +452,7 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                 >
             </blockquote>
 
-            <h3>
+            <h3 id="jma-xml-viewer">
                 <span style="color: red">★</span
                 ><a
                     href="https://github.com/Ichihai1415/JmaXmlViewer/tree/dev"
@@ -438,17 +463,22 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
             気象庁XML処理ソフト。必要作業量が膨大で、共通簡易処理と季節観測くらいしかできていない。デシリアライズクラスはxsdで作成したものを一部編集して利用（<a
                 href="https://github.com/Ichihai1415/JmaXmlViewer/blob/dev/JmaXmlViewer/Utilities/jmx.cs"
                 target="_blank"
-                >https://github.com/Ichihai1415/JmaXmlViewer/blob/dev/JmaXmlViewer/Utilities/jmx.cs</a
-            >）。
-
-            <h3>
-                <a
+                >JmaXmlViewer/Utilities/jmx.cs</a
+            >）。詳細は<a
+                href="https://qiita.com/Ichihai1415/items/5bbf4245f36b3e2d345e"
+                target="_blank"
+                >Qiitaの記事</a
+            >を参照。
+            <h3 id="geojson">
+                <span style="color: red">★</span
+                ><a
                     href="https://github.com/Ichihai1415/Ichihai1415.GeoJSON"
                     target="_blank"
                     >Ichihai1415.GeoJSON</a
                 >
             </h3>
-            GeoJSON処理ライブラリ。描画しやすい統合された独自クラスにできるほか、一応描画までできる。
+            GeoJSON処理ライブラリ。描画しやすい統合された独自クラスにできるほか、一応描画までできる。<br />
+            技術的なことは特に書くことがないのでGitHubを見てください。
         </main>
         <footer><!--/js/common.js で追加される--></footer>
         <script src="/js/common.js"></script>
