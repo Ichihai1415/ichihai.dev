@@ -1,4 +1,4 @@
-export const onRequest = async (context) => {
+export const onRequest = async (context: any) => {
     const url = new URL(context.request.url);
     const isDat = url.pathname.endsWith(".dat");
     const asset = await context.env.ASSETS.fetch(context.request);
