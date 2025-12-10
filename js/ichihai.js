@@ -80,3 +80,27 @@ async function gzipDecompress(base64) {
     const decoder = new TextDecoder();
     return decoder.decode(decompressed);
 }
+
+/**
+ * URLを指定してデータを取得します。
+ * @param {string} url URL
+ * @returns （.thenで処理）
+ */
+async function getRawData(url) {
+    return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", url, true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    resolve(xhr.responseText);
+                } else {
+                    reject(
+                        new Error(`Request failed with status: ${xhr.status}`)
+                    );
+                }
+            }
+        };
+        xhr.send();
+    });
+}
