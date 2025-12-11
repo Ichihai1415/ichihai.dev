@@ -1,3 +1,5 @@
+import * as crypto_AES_GCM from "/js/crypto/AES-GCM.js";
+
 /**
  *Cookieの配列を取得します。処理例:Object.keys(cookies).forEach((key) => { });
  * @returns {Array} Cookieの配列
@@ -105,87 +107,3 @@ async function getRawData(url) {
     });
 }
 
-// UTF-8 文字列を ArrayBuffer に変換
-function strToArrayBuffer(str) {
-    return new TextEncoder().encode(str);
-}
-
-// ArrayBuffer を Base64 に変換
-function arrayBufferToBase64(buffer) {
-    return btoa(String.fromCharCode(...new Uint8Array(buffer)));
-}
-
-// Base64 を ArrayBuffer に変換
-function base64ToArrayBuffer(base64) {
-    return Uint8Array.from(atob(base64), (c) => c.charCodeAt(0)).buffer;
-}
-
-// 鍵を生成（AES-GCM 256bit）
-async function generateKey() {
-    return crypto.subtle.generateKey(
-        { name: "AES-GCM", length: 256 },
-        true, // exportable
-        ["encrypt", "decrypt"]
-    );
-}
-
-// 鍵を Base64 文字列にエクスポート
-async function exportKey(key) {
-    const raw = await crypto.subtle.exportKey("raw", key);
-    return arrayBufferToBase64(raw);
-}
-
-// Base64 文字列から鍵をインポート
-async function importKey(base64Key) {
-    const raw = base64ToArrayBuffer(base64Key);
-    return crypto.subtle.importKey("raw", raw, { name: "AES-GCM" }, true, [
-        "encrypt",
-        "decrypt",
-    ]);
-}
-
-// 暗号化
-async function encryptText(plainText, key) {
-    const iv = crypto.getRandomValues(new Uint8Array(12)); // 初期化ベクトル
-    const encoded = strToArrayBuffer(plainText);
-    const cipherBuffer = await crypto.subtle.encrypt(
-        { name: "AES-GCM", iv },
-        key,
-        encoded
-    );
-
-    return {
-        iv: arrayBufferToBase64(iv),
-        data: arrayBufferToBase64(cipherBuffer),
-    };
-}
-
-// 復号
-async function decryptText(encryptedData, key) {
-    const iv = base64ToArrayBuffer(encryptedData.iv);
-    const cipherBuffer = base64ToArrayBuffer(encryptedData.data);
-    const decryptedBuffer = await crypto.subtle.decrypt(
-        { name: "AES-GCM", iv: new Uint8Array(iv) },
-        key,
-        cipherBuffer
-    );
-    return new TextDecoder().decode(decryptedBuffer);
-}
-
-async function decryptWithBase64Key(ivBase64, dataBase64, base64Key) {
-    // 鍵をインポート
-    const key = await importKey(base64Key);
-
-    // IV と暗号文を ArrayBuffer に変換
-    const iv = new Uint8Array(base64ToArrayBuffer(ivBase64));
-    const cipherBuffer = base64ToArrayBuffer(dataBase64);
-
-    // 復号処理
-    const decryptedBuffer = await crypto.subtle.decrypt(
-        { name: "AES-GCM", iv },
-        key,
-        cipherBuffer
-    );
-
-    return new TextDecoder().decode(decryptedBuffer);
-}

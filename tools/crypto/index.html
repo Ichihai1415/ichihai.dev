@@ -99,39 +99,29 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
         <!--変えたければ変える要素-->
         <!--<link rel="icon" href="/icon/favicon.png" />-->
         <!--毎回変わる要素-->
-        <title>北鉄バス金大付近運用表 | ichihai.dev</title>
+        <title>暗号化ツール | tools | ichihai.dev</title>
         <meta
             property="og:title"
-            content="北鉄バス金大付近運用表 | ichihai.dev"
+            content="暗号化ツール | tools | ichihai.dev"
         />
-        <meta
-            name="description"
-            content="北陸鉄道金沢近郊バスのうち、主に金沢付近における車両の運用まとめです。"
-        />
+        <meta name="description" content="文字列の暗号化・複合ができます。" />
         <meta
             property="og:description"
-            content="北陸鉄道金沢近郊バスのうち、主に金沢付近における車両の運用まとめです。"
+            content="文字列の暗号化・複合ができます。"
         />
         <meta property="og:type" content="website" />
         <meta property="og:image" content="" />
 
         <link rel="stylesheet" href="/common.css" />
-        <script src="/js/ichihai.js"></script>
+        <script type="module" defer src="script.js"></script>
         <style>
-            table {
-                border-collapse: collapse;
-                font-size: 0.9rem;
+            .crypto-out {
+                padding-left: 8px;
                 border: 1px solid black;
             }
 
-            td,
-            th {
-                padding: 1px;
-                border: 1px solid gray;
-                text-align: center;
-            }
-            th {
-                border-bottom: 2px solid black;
+            .crypto-in {
+                padding: 0 0 8px 16px;
             }
         </style>
     </head>
@@ -139,113 +129,25 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
         <header><!--/js/common.js で追加される--></header>
 
         <main>
-            <h1>北鉄バス金大付近運用表</h1>
-            注意:
-            私は知識がないので適当です。記録ミス等で誤りがある可能性があります。
-            <table id="table">
-                <tr>
-                    <th>番号</th>
-                    <th>日付</th>
-                    <th>時刻</th>
-                    <th>場所（付近）</th>
-                    <th>路線番号/路線名</th>
-                    <th>塗装</th>
-                    <th>所属？</th>
-                    <th>コメント</th>
-                </tr>
-                <!--
-                <tr>
-                    <td rowspan="2">12-345</td>
-                    <td>2000/01/01</td>
-                    <td>00:00</td>
-                    <td>金沢大学自然研前</td>
-                    <td>99/東金沢金大線</td>
-                    <td>なんかの広告とか</td>
-                    <td>金沢</td>
-                    <td>インターバルううううう</td>
-                </tr>
-                <tr>
-                    <td>2000/01/01</td>
-                    <td>00:00</td>
-                    <td>金沢大学自然研前</td>
-                    <td>99/東金沢金大線</td>
-                    <td>なんかの広告とか</td>
-                    <td>金沢</td>
-                    <td>インターバルううううう</td>
-                </tr>-->
-            </table>
+            <h1>暗号化ツール</h1>
+            <div class="crypto-out">
+                <p style="font-weight: bold">[AES-GCM (256)]</p>
+                <div class="crypto-in">
+                    plainText: <input type="text" id="AES-GCM_plain" /><br />
+                    <button id="AES_GCM_encrypt">↓暗号化</button>
+                    <button id="AES_GCM_decrypt">↑復号</button><br />
+                    result:
+                    <input
+                        type="text"
+                        id="AES-GCM_result"
+                        class="input-result"
+                    />, iv: <input type="text" id="AES-GCM_iv" />, key:
+                    <input type="text" id="AES-GCM_key" />
+                </div>
+            </div>
         </main>
 
         <footer><!--/js/common.js で追加される--></footer>
-        <script src="/js/common.js"></script>
-        <script>
-            getRawData("numbers_to-ku.csv").then((rawData) => {
-                const rows = rawData.split("\n");
-                let data = rows.map((row) => row.replace("\r", "").split(","));
-                data.shift();
-                data = data.filter((row) => row.length > 1);
-                //console.log(data);
-                const groups = {};
-
-                for (const row of data) {
-                    const key = row[0];
-                    if (!groups[key]) {
-                        groups[key] = [];
-                    }
-                    groups[key].push(row);
-                }
-                const result = Object.values(groups);
-                //console.log(result);
-                const table = document.getElementById("table");
-                result.forEach((nums) => {
-                    //console.log(nums);
-                    let c = 0;
-                    nums.forEach((row) => {
-                        //console.log(row);
-                        const tr = document.createElement("tr");
-                        if (c == 0) {
-                            //console.log("c=0");
-                            const td_num = document.createElement("td");
-                            td_num.textContent = row[0];
-                            td_num.rowSpan = nums.length;
-                            tr.append(td_num);
-                        }
-                        const td_d = document.createElement("td");
-                        td_d.textContent = row[2];
-                        tr.append(td_d);
-
-                        const td_t = document.createElement("td");
-                        td_t.textContent = row[3];
-                        tr.append(td_t);
-
-                        const td_l = document.createElement("td");
-                        td_l.textContent = row[4];
-                        tr.append(td_l);
-
-                        const td_ln = document.createElement("td");
-                        td_ln.textContent = row[1];
-                        tr.append(td_ln);
-
-                        if (c == 0) {
-                            const td_p = document.createElement("td");
-                            td_p.textContent = row[5];
-                            td_p.rowSpan = nums.length;
-                            tr.append(td_p);
-
-                            const td_s = document.createElement("td");
-                            td_s.textContent = "";
-                            td_s.rowSpan = nums.length;
-                            tr.append(td_s);
-                        }
-                        const td_c = document.createElement("td");
-                        td_c.textContent = row[7];
-                        tr.append(td_c);
-
-                        table.append(tr);
-                        c++;
-                    });
-                });
-            });
-        </script>
+        <script defer src="/js/common.js"></script>
     </body>
 </html>
