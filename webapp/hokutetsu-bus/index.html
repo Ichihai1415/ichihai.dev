@@ -204,24 +204,72 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                         //console.log(row);
                         const tr = document.createElement("tr");
                         if (c == 0) {
-                            console.log("c=0");
+                            //console.log("c=0");
                             const td_num = document.createElement("td");
                             td_num.textContent = row[0];
                             td_num.rowSpan = nums.length;
                             tr.append(td_num);
                         }
-                        const td_a = document.createElement("td");
-                        td_a.textContent = "a";
-                        tr.append(td_a);
-                        const td_b = document.createElement("td");
-                        td_b.textContent = "b";
-                        tr.append(td_b);
+                        const td_d = document.createElement("td");
+                        td_d.textContent = row[2];
+                        tr.append(td_d);
+
+                        const td_t = document.createElement("td");
+                        td_t.textContent = row[3];
+                        tr.append(td_t);
+
+                        const td_l = document.createElement("td");
+                        td_l.textContent = row[4];
+                        tr.append(td_l);
+
+                        const td_ln = document.createElement("td");
+                        td_ln.textContent = row[1];
+                        tr.append(td_ln);
+
+                        if (c == 0) {
+                            const td_p = document.createElement("td");
+                            td_p.textContent = row[5];
+                            td_p.rowSpan = nums.length;
+                            tr.append(td_p);
+
+                            const td_s = document.createElement("td");
+                            td_s.textContent = "";
+                            td_s.rowSpan = nums.length;
+                            tr.append(td_s);
+                        }
+                        const td_c = document.createElement("td");
+                        td_c.textContent = row[7];
+                        tr.append(td_c);
 
                         table.append(tr);
                         c++;
                     });
                 });
             });
+        </script>
+        <script async>
+            (async () => {
+                // 鍵生成
+                const key = await generateKey();
+                // 鍵を保存用にエクスポート
+                const base64Key = await exportKey(key);
+                // 鍵をインポート（復元）
+                const importedKey = await importKey(base64Key);
+                // 暗号化
+                const encrypted = await encryptText(
+                    "https://discord.com/api/webhooks/1448528106263675073/IiUh2Okrh-jjV6oD-8ZCmeI0LskyYtZCVMcUYiG2k0knBfhs5e7zurDHAm2Ps3zqE2bp",
+                    key
+                );
+                // 復号
+                const decrypted = await decryptText(encrypted, importedKey);
+
+                const ed = await decryptWithBase64Key(
+                    "d0X5YtOR3Yc7w8k8",
+                    "NlzZXPIgZE8owjkDilRY+4ZVHnKJw3duTgOo+iES1IcPuGS0QlyXNrhQVCw1En/lEkFeEtwsZ2SMr7fOGs6KCHruWwGQdL1MIgckZ1w5gRmzP+GAtSt1dAb57dEv1N1PzCfgL9qbQKQKxOc+flVEN1fZaufTQrT+zgUY7D0qsNSv/ms0GFylZ30=",
+                    "jKI2dPKPebzmJ/lkyvaqnZn8q+eZ73/6pXnS4ojWdUE="
+                );
+                console.log("復号結果:", ed); // "秘密のメッセージ"
+            })();
         </script>
     </body>
 </html>
