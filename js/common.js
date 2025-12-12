@@ -25,3 +25,9 @@ fetch("/parts/header.html")
 fetch("/parts/footer.html")
     .then((response) => response.text())
     .then((data) => (document.querySelector("footer").innerHTML = data));
+
+fetch("/parts/common-comment.html")
+    .then((response) => response.text())
+    .then(
+        (data) => (document.querySelector("ichihai1415_common-comment").innerHTML = data)
+    );

@@ -1,10 +1,8 @@
-import * as crypto_AES_GCM from "/js/crypto/AES-GCM.js";
-
 /**
  *Cookieの配列を取得します。処理例:Object.keys(cookies).forEach((key) => { });
  * @returns {Array} Cookieの配列
  */
-function getCookies() {
+export function getCookies() {
     //https://qiita.com/mocha_xx/items/e0897e9f251da042af59
     /**
      * @type {Array} Cookieの配列
@@ -12,14 +10,14 @@ function getCookies() {
     let cookieArr = new Array();
     const cookie = decodeURIComponent(document.cookie);
     if (cookie != "") {
-        console.log("[ichihai.js/getCookies]cookie(raw): " + cookie);
+        console.log("[getCookies]cookie(raw): " + cookie);
         const cookies = document.cookie.split("; ");
         for (let i = 0; i < cookies.length; i++) {
             const cookie_ = cookies[i].split("=");
             cookieArr[cookie_[0]] = cookie_[1];
         }
     } else {
-        console.log("[ichihai.js/getCookies]cookie not found.");
+        console.log("[getCookies]cookie not found.");
     }
     return cookieArr;
 }
@@ -29,10 +27,10 @@ function getCookies() {
  * @param {*} value 保存する値("name=data"など形式(; はいらない))
  * @param {*} maxAge 有効期間(秒) 既定は30日
  */
-function setCookie(value, maxAge = 2592000) {
+export function setCookie(value, maxAge = 2592000) {
     const saveCookie = value + "; max-age=" + maxAge + "; ";
     document.cookie = saveCookie;
-    console.log("[ichihai.js/setCookie]cookie saved: " + saveCookie);
+    console.log("[setCookie]cookie saved: " + saveCookie);
 }
 
 /**
@@ -40,7 +38,7 @@ function setCookie(value, maxAge = 2592000) {
  * @param {*} name パラメータ名
  * @returns 対応するパラメータ
  */
-function getParam(name) {
+export function getParam(name) {
     const url = new URL(window.location.href);
     const params = url.searchParams;
     return params.get(name);
@@ -51,7 +49,7 @@ function getParam(name) {
  * @param {string} str 圧縮する文字列
  * @returns {Promise<string>} 圧縮されたデータ（Base64文字列）
  */
-async function gzipCompress(str) {
+export async function gzipCompress(str) {
     const encoder = new TextEncoder();
     const data = encoder.encode(str);
     const cs = new CompressionStream("gzip");
@@ -67,7 +65,7 @@ async function gzipCompress(str) {
  * @param {string} compressed 圧縮されたデータ
  * @returns {Promise<string>} 解凍された文字列
  */
-async function gzipDecompress(base64) {
+export async function gzipDecompress(base64) {
     const binaryString = atob(base64);
     const len = binaryString.length;
     const compressed = new Uint8Array(len);
@@ -106,4 +104,3 @@ export async function getRawData(url) {
         xhr.send();
     });
 }
-

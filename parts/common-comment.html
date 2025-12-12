@@ -11,7 +11,7 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
 - Data from other sources are under the license of that source.
 - Most of codes are formatted by Prettier.
 
-The template updated: 2025/12/12  https://Ichihai1415/_temp.html 
+The template updated: 2025/12/12 https://Ichihai1415/_temp.html 
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -101,96 +101,27 @@ The template updated: 2025/12/12  https://Ichihai1415/_temp.html
         <!--変えたければ変える要素-->
         <!--<link rel="icon" href="/icon/favicon.png" />-->
         <!--毎回変わる要素-->
-        <title>スロットみたいなやつ | Games | ichihai.dev</title>
+        <title>template</title>
         <meta property="og:title" content="template" />
         <meta name="description" content="[template description...]" />
         <meta property="og:description" content="[template description...]" />
         <meta property="og:type" content="website" />
         <meta property="og:image" content="" />
 
-        <script defer src="/js/common.js"></script>
-        <!--必要な場合-->
-        <link rel="stylesheet" href="style.css" />
-        <script defer type="module" src="script.js"></script>
-
         <link rel="stylesheet" href="/common.css" />
-        <style></style>
+        <style>
+            .comment-notice {
+                padding-left: 4px;
+                border: 2px solid blue;
+            }
+        </style>
     </head>
     <body>
-        <header><!--/js/common.js で追加される--></header>
-
-        <main>
-            <ichihai1415_common-comment
-                ><!--/js/common.js で追加される--></ichihai1415_common-comment
-            >
-            <!--202x/xx/xx作成 202x/xx/xx更新-->
-            <div class="gameInfo">
-                <div class="gameInfoElem">
-                    money: <span class="gameValue" id="money">500</span>
-                </div>
-                <div class="gameInfoElem">
-                    bet:
-                    <input type="number" id="bet" value="10" min="0" />
-                </div>
-                <div class="gameInfoElem">
-                    <button id="saveGame">save game</button>(Save in Cookie,
-                    valid for 30 days.)
-                </div>
-                <div class="gameInfoElem">
-                    display-update:
-                    <input type="number" id="updtMs" value="30" min="1" />ms
-                </div>
-                <div class="gameInfoElem">
-                    <button id="deleteSave">delete save</button>
-                </div>
+        <div>
+            <div class="comment-notice">
+                <span style="font-weight: bold;">[お知らせ]</span> 2025/12/12
+                <div class="comment-notice-inner">共通スクリプトの仕様を変更したので動作しないものがある可能性があります。発見した場合連絡してください。これが表示されていればたぶん大丈夫です。</div>
             </div>
-            <div class="slot-container">
-                <div class="slot-num" id="slot-num1"></div>
-                <div class="slot-num" id="slot-num2"></div>
-                <div class="slot-num" id="slot-num3"></div>
-            </div>
-            <div class="slot-container">
-                <button class="stop" id="stop-1" disabled>・</button>
-                <button class="stop" id="stop-2" disabled>・</button>
-                <button class="stop" id="stop-3" disabled>・</button>
-            </div>
-            <div class="slot-container">
-                <button class="stsp" id="start">start</button>
-                <button class="stsp" id="stop-all" disabled>stop all</button>
-                <button class="stsp" id="fastPlay">auto play</button>
-            </div>
-            <table class="result">
-                <tr>
-                    <th>x777</th>
-                    <th>x20</th>
-                    <th>x5</th>
-                    <th>x3.14</th>
-                    <th>x0</th>
-                </tr>
-                <tr>
-                    <td id="t_x777">0</td>
-                    <td id="t_x20">0</td>
-                    <td id="t_x5">0</td>
-                    <td id="t_x3-14">0</td>
-                    <td id="t_x0">0</td>
-                </tr>
-            </table>
-
-            <p>
-                仕様: <br />
-                ・777: bet*777<br />
-                ・000,111,222,333,444,555,666,888,999: bet*20<br />
-                ・012,123,234,345,456,567,678,789: bet*5<br />
-                ・314: bet*3.14<br />
-                ・それ以外: bet*0<br />
-                ・期待値: 1.00014<br />
-            </p>
-            <p>
-                裏技: F12キーの開発者モードのコンソールで<code
-                    >money=<span style="color: #888">任意の数</span>;</code
-                >を実行するとmoneyを変更可能(プレイすると表示も変わる)
-            </p>
-        </main>
-        <footer><!--/js/common.js で追加される--></footer>
+        </div>
     </body>
 </html>
