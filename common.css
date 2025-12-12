@@ -143,3 +143,11 @@ summary {
 .font-mincho {
     font-family: serif;
 }
+
+h3 > a {
+    text-decoration: none;
+}
+
+h3 > a:hover {
+    text-decoration: underline;
+}
