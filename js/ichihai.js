@@ -88,7 +88,7 @@ async function gzipDecompress(base64) {
  * @param {string} url URL
  * @returns （.thenで処理）
  */
-async function getRawData(url) {
+export async function getRawData(url) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         xhr.open("GET", url, true);
