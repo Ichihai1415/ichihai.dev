@@ -93,12 +93,17 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                 --titlebar-unfocus: #202020;
             }
 
+            html,
             body {
+                height: 100%;
                 margin: 0;
+                padding: 0;
+                overflow: hidden;
             }
 
             .cmd {
-                height: 512px;
+                height: calc(100vh - 2px);
+                max-height: calc(100vh - 2px);
                 border: 1px solid var(--titlebar);
             }
 
@@ -151,7 +156,7 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
 
             .cmd-titlebar-button {
                 width: 48px;
-                margin: -1px;
+                margin: -1px -1px 0 1px;
                 border: none;
                 font-size: 16px;
                 color: #fff;
@@ -170,17 +175,22 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                 background-color: #fff2;
             }
 
+            .cmd-titlebar-button#cmd-titlebar-min.disabled:hover,
+            .cmd-titlebar-button#cmd-titlebar-max.disabled:hover {
+                background-color: var(--titlebar);
+            }
+
             .cmd-titlebar-button#cmd-titlebar-close:hover {
                 background-color: #f00;
             }
 
             .cmd-textarea {
                 width: 100%;
+                height: calc(100% - 32px);
             }
 
             #cmd {
                 width: 100%;
-                min-height: 480px;
                 padding: 0;
                 border: none;
                 color: #c0c0c0;
@@ -202,6 +212,38 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
             #cmd::selection {
                 color: #333;
                 background-color: #f3f3f3;
+            }
+
+            .cmd-titlebar-button::after {
+                position: absolute;
+                transform: translateX(-100%);
+                border: 1px solid black;
+                background: white;
+                color: black;
+                padding: 2px 4px;
+                font-size: 12px;
+                white-space: pre;
+                opacity: 0;
+                pointer-events: none;
+                text-align: left;
+            }
+
+            .cmd-titlebar-button:hover::after {
+                opacity: 1;
+                transition: 0.1s;
+                transition-delay: 0.5s;
+            }
+
+            #cmd-titlebar-min::after {
+                content: "textarea部分の表示/非表示を切り替えます。";
+            }
+
+            #cmd-titlebar-max::after {
+                content: "新しいウィンドウで最大化して表示します。\aすでに最大化されている場合無効です。";
+            }
+
+            #cmd-titlebar-close::after {
+                content: "この要素を消します。最大化している場合タブを閉じます。\aただし戻るボタンが有効な場合は戻ります。";
             }
         </style>
     </head>
@@ -244,14 +286,66 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                     ✕
                 </button>
             </div>
-            <div class="cmd-textarea">
-                <textarea id="cmd" spellcheck="false" aria-label="cmd">
+            <textarea
+                id="cmd"
+                class="cmd-textarea"
+                spellcheck="false"
+                aria-label="cmd"
+            >
 Ichihai.dev - textarea cmd
 (c) 2024 Ichihai1415
 
 cmd@ichihai.dev&gt;</textarea
-                >
-            </div>
+            >
         </div>
+        <script>
+            let isDisplay = true;
+            function minimize() {
+                if (isDisplay) {
+                    document.querySelector(".cmd-textarea").style =
+                        "display: none;";
+                    document.querySelector(".cmd").style = "height: 32px;";
+                } else {
+                    document.querySelector(".cmd-textarea").style =
+                        "display: block;";
+                    document.querySelector(".cmd").style = "";
+                }
+                isDisplay = !isDisplay;
+            }
+
+            function maximize() {
+                if (window.top != window.self) {
+                    window.open("/parts/cmd.html");
+                }
+            }
+
+            function closeWindow() {
+                if (window.top == window.self) {
+                    if (window.history.length == 1) window.close();
+                    else window.history.back();
+
+                    //open("", "_self").close();//無理やり
+                } else {
+                    document.querySelector(".cmd").innerText = "";
+                    //document.querySelector(".cmd").style =
+                    //    "display: none; height: 0px;";
+                    document.querySelector("html").style =
+                        "display: none; height: 0px;"; //これでもiframe枠は残る
+                }
+            }
+
+            document.getElementById("cmd-titlebar-min").onclick = minimize;
+            document.getElementById("cmd-titlebar-max").onclick = maximize;
+            document.getElementById("cmd-titlebar-close").onclick = closeWindow;
+
+            if (window.top == window.self) {
+                let button_max = document.getElementById("cmd-titlebar-max");
+                button_max.style = "color: gray;";
+                button_max.disabled = true;
+                button_max.classList.add("disabled");
+
+                document.getElementById("cmd-titlebar-close").hover = "";
+            }
+        </script>
     </body>
 </html>
