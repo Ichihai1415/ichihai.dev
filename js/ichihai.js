@@ -104,3 +104,24 @@ export async function getRawData(url) {
         xhr.send();
     });
 }
+
+/**
+ * URLを指定してデータを取得します。
+ * @param {string} url URL
+ * @returns {Response} レスポンス
+ */
+export async function getData(url) {
+    console.log("[getData] GET " + url);
+    const response = await fetch(url);
+    return response;
+}
+
+/**
+ * 先頭を0埋めします。
+ * @param {number} num 数字
+ * @param {number} length 長さ
+ * @returns {string} 0埋めされた文字列
+ */
+function zeroPad(num, length) {
+    return String(num).padStart(length, "0");
+}
