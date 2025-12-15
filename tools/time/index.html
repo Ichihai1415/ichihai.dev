@@ -83,68 +83,109 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
 <!DOCTYPE html>
 <html lang="ja">
     <head>
-        <title>日付時刻表示</title>
+        <!--不変要素-->
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="theme-color" content="#1E3C5A" />
+        <meta name="author" content="Ichihai1415" />
+        <meta
+            name="copyright"
+            content="(c) 2024 Ichihai1415 All right reserved."
+        />
+        <meta property="og:site_name" content="Ichihai1415のウェブサイト" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@Ichihai1415" />
+        <meta name="twitter:creator" content="@Ichihai1415" />
+        <!--変えたければ変える要素-->
+        <!--<link rel="icon" href="/icon/favicon.png" />-->
+        <!--毎回変わる要素-->
+        <title>日時表示 | tools | ichihai.dev</title>
+        <meta property="og:title" content="日時表示 | tools | ichihai.dev" />
+        <meta name="description" content="[template description...]" />
+        <meta property="og:description" content="[template description...]" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="" />
+
+        <link rel="stylesheet" href="/common.css" />
+        <script defer src="/js/common.js"></script>
         <style>
-        @font-face {
-            font-family: DSEG7;
-            src: url("/font/DSEG/DSEG7-Classic/DSEG7Classic-Bold.woff2") format("woff2"),
-            url("/font/DSEG/DSEG7-Classic/DSEG7Classic-Bold.woff") format("woff"),
-            url("/font/DSEG/DSEG7-Classic/DSEG7Classic-Bold.ttf") format("ttf");
-        }
+            @font-face {
+                font-family: DSEG7;
+                src: url("/font/DSEG/DSEG7-Classic/DSEG7Classic-Bold.woff2")
+                        format("woff2"),
+                    url("/font/DSEG/DSEG7-Classic/DSEG7Classic-Bold.woff")
+                        format("woff"),
+                    url("/font/DSEG/DSEG7-Classic/DSEG7Classic-Bold.ttf")
+                        format("ttf");
+            }
 
-        @font-face {
-            font-family: DSEG14;
-            src: url("/font/DSEG/DSEG14-Classic/DSEG14Classic-Regular.woff2") format("woff2"),
-            url("/font/DSEG/DSEG14-Classic/DSEG14Classic-Regular.woff") format("woff"),
-            url("/font/DSEG/DSEG14-Classic/DSEG14Classic-Regular.ttf") format("ttf");
-        }
+            @font-face {
+                font-family: DSEG14;
+                src: url("/font/DSEG/DSEG14-Classic/DSEG14Classic-Regular.woff2")
+                        format("woff2"),
+                    url("/font/DSEG/DSEG14-Classic/DSEG14Classic-Regular.woff")
+                        format("woff"),
+                    url("/font/DSEG/DSEG14-Classic/DSEG14Classic-Regular.ttf")
+                        format("ttf");
+            }
 
-        .dateBack {
-            font-family: DSEG14;
-            font-size: 7.62vw;
-            color: #eee;
-            position: absolute;
-            top: 40%;
-            left: 50%;
-            transform: translate(-50%, -100%);
-        }
+            .dateBack {
+                font-family: DSEG14;
+                font-size: 7.62vw;
+                color: #eee;
+                position: absolute;
+                top: 40%;
+                left: 50%;
+                transform: translate(-50%, -100%);
+            }
 
-        .dateMain {
-            color:black;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
+            .dateMain {
+                color: black;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
 
-        .dateNum {
-            font-family: DSEG7;
-        }
+            .dateNum {
+                font-family: DSEG7;
+            }
 
-        .timeBack {
-            font-family: DSEG7;
-            font-size: 18vw;
-            color: #eee;
-            position: absolute;
-            top: 40%;
-            left: 50%;
-            transform: translate(-50%, 0%);
-        }
+            .timeBack {
+                font-family: DSEG7;
+                font-size: 18vw;
+                color: #eee;
+                position: absolute;
+                top: 40%;
+                left: 50%;
+                transform: translate(-50%, 0%);
+            }
 
-        .timeMain {
-            color:black;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
+            .timeMain {
+                color: black;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
         </style>
     </head>
     <body>
-        デバイスの時間が表示されます。<a href="https://www.keshikan.net/fonts.html">Font "DSEG" by けしかん</a>
+        <header><!--/js/common.js で追加される--></header>
+
+        <ichihai1415_common-comment
+            ><!--/js/common.js で追加される--></ichihai1415_common-comment
+        >
+        <!--202x/xx/xx作成 202x/xx/xx更新-->
+        デバイスの時間が表示されます。<a
+            href="https://www.keshikan.net/fonts.html"
+            >Font "DSEG" by けしかん</a
+        >.
         <div class="main">
             <div class="dateBack">
-                <span class="dateNum">8888</span>/<span class="dateNum">88</span>/<span class="dateNum">88</span>(~~~)
+                <span class="dateNum">8888</span>/<span class="dateNum">88</span
+                >/<span class="dateNum">88</span>(~~~)
                 <div class="dateMain" id="date"></div>
             </div>
             <div class="timeBack">
@@ -153,13 +194,16 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
             </div>
         </div>
         <noscript>
-        <span style="color:red; font-size: 20px;">JavaScriptを有効にしてください。</span>
+            <span style="color: red; font-size: 20px"
+                >JavaScriptを有効にしてください。</span
+            >
         </noscript>
+        <footer><!--/js/common.js で追加される--></footer>
     </body>
     <script>
         function plus0(num) {
             let newNum = num;
-            if(num < 10) {
+            if (num < 10) {
                 newNum = "0" + num;
             }
             return newNum;
@@ -175,17 +219,26 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
             let nowDate = plus0(nowTime.getDate());
             let nowDay = nowTime.toString().split(" ")[0];
             let nowTimeHour = plus0(nowTime.getHours());
-            let nowTimeMin  = plus0(nowTime.getMinutes());
-            let nowTimeSec  = plus0(nowTime.getSeconds());
-            let nowDateString = '<span class="dateNum">' + nowYear + '</span>/<span class="dateNum">' + nowMonth + '</span>/<span class="dateNum">' + nowDate + '</span>(' + nowDay + ')';
+            let nowTimeMin = plus0(nowTime.getMinutes());
+            let nowTimeSec = plus0(nowTime.getSeconds());
+            let nowDateString =
+                '<span class="dateNum">' +
+                nowYear +
+                '</span>/<span class="dateNum">' +
+                nowMonth +
+                '</span>/<span class="dateNum">' +
+                nowDate +
+                "</span>(" +
+                nowDay +
+                ")";
             let nowMS = nowTime.getMilliseconds();
             //let colon = nowMS < 500 ? ":" : " ";//なぜか改行される
             let colon = ":";
-            let nowTimeString = nowTimeHour + colon + nowTimeMin + colon + nowTimeSec;
+            let nowTimeString =
+                nowTimeHour + colon + nowTimeMin + colon + nowTimeSec;
             date.innerHTML = nowDateString;
             time.innerHTML = nowTimeString;
             //console.log(nowTime.getMonth());
-        
         }
 
         setInterval("showClock()", 1000);

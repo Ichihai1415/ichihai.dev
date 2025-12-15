@@ -88,13 +88,13 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
         <title>ichihai.dev header</title>
         <style>
             body {
-                margin: 0%;
-                color: white;
+                margin: 0;
             }
 
             .header {
                 height: 70px;
                 padding: 10px;
+                margin: 0%;
                 font-size: 32px;
                 color: white;
                 background-color: rgb(0, 0, 0);
@@ -199,5 +199,14 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                 <a class="header-link" href="/aboutme/links.html">Links</a>
             </div>
         </div>
+        <script>
+            /*
+            if (//styleでbodyつけない場合
+                window.location.href
+                    .split("?")[0]
+                    .endsWith("/parts/header.html")
+            )
+                document.querySelector("body").style = "margin: 0;";*/
+        </script>
     </body>
 </html>
