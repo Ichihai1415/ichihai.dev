@@ -106,17 +106,16 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
         />
         <meta
             name="description"
-            content="北陸鉄道金沢近郊バスのうち、主に金沢付近における車両の運用まとめです。"
+            content="北陸鉄道金沢近郊バスのうち、主に金沢大学付近における車両の運用まとめです。"
         />
         <meta
             property="og:description"
-            content="北陸鉄道金沢近郊バスのうち、主に金沢付近における車両の運用まとめです。"
+            content="北陸鉄道金沢近郊バスのうち、主に金沢大学付近における車両の運用まとめです。"
         />
         <meta property="og:type" content="website" />
         <meta property="og:image" content="" />
 
         <link rel="stylesheet" href="/common.css" />
-        <script type="module" src="/js/ichihai.js"></script>
         <style>
             table {
                 border-collapse: collapse;
@@ -141,8 +140,12 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
         <main>
             <h1>北鉄バス金大付近運用表</h1>
             注意:
-            私は知識がないので適当です。記録ミス等で誤りがある可能性があります。
-            <table id="table">
+            私は知識がないので適当です。記録ミス等で誤りがある可能性があります。<br />
+            <br />
+
+            <h2>金沢大学方面</h2>
+
+            <table id="table_numbers_to-ku">
                 <tr>
                     <th>番号</th>
                     <th>日付</th>
@@ -174,10 +177,99 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                     <td>インターバルううううう</td>
                 </tr>-->
             </table>
+
+            <h2>金沢駅方面</h2>
+
+            <table id="table_numbers_to-ks">
+                <tr>
+                    <th>番号</th>
+                    <th>日付</th>
+                    <th>時刻</th>
+                    <th>場所（付近）</th>
+                    <th>路線番号/路線名</th>
+                    <th>塗装</th>
+                    <th>所属？</th>
+                    <th>コメント</th>
+                </tr>
+            </table>
         </main>
 
         <footer><!--/js/common.js で追加される--></footer>
         <script src="/js/common.js"></script>
-        <script defer type="module" src="script.js"></script>
+        <script defer type="module">
+            import * as ichihai from "/js/ichihai.js";
+
+            ["numbers_to-ku", "numbers_to-ks"].forEach((file) => {
+                ichihai.getRawData(file + ".csv").then((rawData) => {
+                    const rows = rawData.split("\n");
+                    let data = rows.map((row) =>
+                        row.replace("\r", "").split(",")
+                    );
+                    data.shift();
+                    data = data.filter((row) => row.length > 1);
+                    //console.log(data);
+                    const groups = {};
+
+                    for (const row of data) {
+                        const key = row[0];
+                        if (!groups[key]) {
+                            groups[key] = [];
+                        }
+                        groups[key].push(row);
+                    }
+                    const result = Object.values(groups);
+                    //console.log(result);
+                    const table = document.getElementById("table_"+file);
+                    result.forEach((nums) => {
+                        //console.log(nums);
+                        let c = 0;
+                        nums.forEach((row) => {
+                            //console.log(row);
+                            const tr = document.createElement("tr");
+                            if (c == 0) {
+                                //console.log("c=0");
+                                const td_num = document.createElement("td");
+                                td_num.textContent = row[0];
+                                td_num.rowSpan = nums.length;
+                                tr.append(td_num);
+                            }
+                            const td_d = document.createElement("td");
+                            td_d.textContent = row[2];
+                            tr.append(td_d);
+
+                            const td_t = document.createElement("td");
+                            td_t.textContent = row[3];
+                            tr.append(td_t);
+
+                            const td_l = document.createElement("td");
+                            td_l.textContent = row[4];
+                            tr.append(td_l);
+
+                            const td_ln = document.createElement("td");
+                            td_ln.textContent = row[1];
+                            tr.append(td_ln);
+
+                            if (c == 0) {
+                                const td_p = document.createElement("td");
+                                td_p.textContent = row[5];
+                                td_p.rowSpan = nums.length;
+                                tr.append(td_p);
+
+                                const td_s = document.createElement("td");
+                                td_s.textContent = "";
+                                td_s.rowSpan = nums.length;
+                                tr.append(td_s);
+                            }
+                            const td_c = document.createElement("td");
+                            td_c.textContent = row[7];
+                            tr.append(td_c);
+
+                            table.append(tr);
+                            c++;
+                        });
+                    });
+                });
+            });
+        </script>
     </body>
 </html>
