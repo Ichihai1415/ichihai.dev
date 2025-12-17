@@ -141,10 +141,9 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
             <h1>北鉄バス金大付近運用表</h1>
             注意:
             私は知識がないので適当です。記録ミス等で誤りがある可能性があります。<br />
-            <br />
 
             <h2>金沢大学方面</h2>
-
+            <span id="dataCount-numbers_to-ku"></span><br />
             <table id="table_numbers_to-ku">
                 <tr>
                     <th>番号</th>
@@ -179,7 +178,7 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
             </table>
 
             <h2>金沢駅方面</h2>
-
+            <span id="dataCount-numbers_to-ks"></span><br />
             <table id="table_numbers_to-ks">
                 <tr>
                     <th>番号</th>
@@ -218,8 +217,14 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                         groups[key].push(row);
                     }
                     const result = Object.values(groups);
+                    document.getElementById("dataCount-" + file).innerText =
+                        "count: " +
+                        data.length +
+                        ", numCount: " +
+                        result.length;
+
                     //console.log(result);
-                    const table = document.getElementById("table_"+file);
+                    const table = document.getElementById("table_" + file);
                     result.forEach((nums) => {
                         //console.log(nums);
                         let c = 0;
