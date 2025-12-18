@@ -234,7 +234,7 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                             if (c == 0) {
                                 //console.log("c=0");
                                 const td_num = document.createElement("td");
-                                td_num.textContent = row[0];
+                                td_num.textContent = row[0].split("_")[0];
                                 td_num.rowSpan = nums.length;
                                 tr.append(td_num);
                             }
@@ -247,11 +247,17 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                             tr.append(td_t);
 
                             const td_l = document.createElement("td");
-                            td_l.textContent = row[4];
+                            td_l.textContent = row[4]
+                                .replace("Kd", "金沢大学")
+                                .replace("Kc", "金沢大学中央")
+                                .replace("Ks", "金沢大学自然研前")
+                                .replace("Kk", "金沢大学角間口")
+                                .replace("ks", "角間新町")
+                                .replace("w", "若松");
                             tr.append(td_l);
 
                             const td_ln = document.createElement("td");
-                            td_ln.textContent = row[1];
+                            td_ln.textContent = row[1] == "0" ? "(無)" : row[1];
                             tr.append(td_ln);
 
                             if (c == 0) {
