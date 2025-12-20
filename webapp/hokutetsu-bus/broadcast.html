@@ -147,6 +147,7 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
 
         <footer><!--/js/common.js で追加される--></footer>
         <script defer type="module">
+            //todo:ボタン色分け、読み上げ修正、replaceでtextareaも日本語に
             //必要な場合  使わない場合 type="module"は不要
             import * as ichihai from "/js/ichihai.js";
 
@@ -162,7 +163,9 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
 
             function preloadAudio(src) {
                 return new Promise((resolve) => {
-                    const audio = new Audio(voice.value + "/" + src + ".wav");
+                    const audio = new Audio(
+                        "broadcast.sound/" + voice.value + "/" + src + ".wav"
+                    );
                     audio.preload = "auto";
 
                     // 読み込み成功
@@ -193,7 +196,10 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
             let currentIndex = 0;
 
             function playSequential() {
-                if (currentIndex >= audios.length) return;
+                if (currentIndex >= audios.length) {
+                    processing.innerText = "再生終了";
+                    return;
+                }
 
                 const audio = audios[currentIndex];
                 audio.play();
@@ -225,6 +231,7 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                     return;
                 }
                 processing.innerText = "再生中...";
+                currentIndex = 0;
                 playSequential();
             }
 
