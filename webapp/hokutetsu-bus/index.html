@@ -138,11 +138,13 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
         <header><!--/js/common.js で追加される--></header>
 
         <main>
+            2025/12/22更新（データ除く）
             <h1>北鉄バス金大付近運用表</h1>
             注意:
-            私は知識がないので適当です。記録ミス等で誤りがある可能性があります。<br />
-            塗装、所属？は最初に記録したものが代表として出ます。<br />
-            2025/12/18以前のものは、ミスにより金沢駅と東金沢が混ざっている可能性があります。
+            私は知識がないので適当です。表現も独自のものです。記録ミス等で誤りがある可能性があります。<br />
+            塗装、所属？は最初に記録したものが代表として出ます。更新された場合、古いものは備考欄に移します。<br />
+            路線番号-は回送です。2025/12/18以前のものは、ミスで金沢駅と東金沢が混ざっている可能性があります。<br />
+            塗装の備考: 前面ノンステップは前面に白枠文字の「ノンステップバス」
 
             <h2>金沢大学方面</h2>
             <span id="dataCount-numbers_to-ku"></span><br />
@@ -152,9 +154,10 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                     <th>日付</th>
                     <th>時刻</th>
                     <th>場所（付近）</th>
-                    <th>路線番号/路線名</th>
+                    <th>路線番号</th>
+                    <th>ナンバー</th>
+                    <th>所属</th>
                     <th>塗装</th>
-                    <th>所属？</th>
                     <th>コメント</th>
                 </tr>
             </table>
@@ -167,9 +170,10 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                     <th>日付</th>
                     <th>時刻</th>
                     <th>場所（付近）</th>
-                    <th>路線番号/路線名</th>
+                    <th>路線番号</th>
+                    <th>ナンバー</th>
+                    <th>所属</th>
                     <th>塗装</th>
-                    <th>所属？</th>
                     <th>コメント</th>
                 </tr>
             </table>
@@ -188,6 +192,7 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                     );
                     data.shift();
                     data = data.filter((row) => row.length > 1);
+                    data.sort();
                     //console.log(data);
                     const groups = {};
 
@@ -221,15 +226,15 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                                 tr.append(td_num);
                             }
                             const td_d = document.createElement("td");
-                            td_d.textContent = row[2];
+                            td_d.textContent = row[3];
                             tr.append(td_d);
 
                             const td_t = document.createElement("td");
-                            td_t.textContent = row[3];
+                            td_t.textContent = row[4];
                             tr.append(td_t);
 
                             const td_l = document.createElement("td");
-                            td_l.textContent = row[4]
+                            td_l.textContent = row[5]
                                 .replace("Kd", "金沢大学")
                                 .replace("Kc", "金沢大学中央")
                                 .replace("Ks", "金沢大学自然研前")
@@ -239,38 +244,39 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                             tr.append(td_l);
 
                             const td_ln = document.createElement("td");
-                            td_ln.textContent = row[1] == "0" ? "(無)" : row[1];
+                            td_ln.textContent = row[2] == "0" ? "(無)" : row[2];
                             tr.append(td_ln);
 
                             if (c == 0) {
-                                let pi = 1;
+                                let pn = 1;
                                 nums.forEach((row_2) => {
-                                    if (pi > 0) {
+                                    if (pn > 0) {
                                         if (
-                                            row_2[5] != "" ||
-                                            pi == nums.length
+                                            row_2[1] != "" ||
+                                            pn == nums.length
                                         ) {
                                             const td_p =
                                                 document.createElement("td");
-                                            td_p.textContent = row_2[5];
+                                            td_p.textContent = row_2[1];
                                             td_p.rowSpan = nums.length;
                                             tr.append(td_p);
-                                            pi = 0;
+                                            pn = 0;
                                             return;
                                         }
-                                        pi++;
+                                        pn++;
                                     }
                                 });
+
                                 let di = 1;
                                 nums.forEach((row_2) => {
                                     if (di > 0) {
                                         if (
-                                            row_2[6] != "" ||
+                                            row_2[7] != "" ||
                                             di == nums.length
                                         ) {
                                             const td_s =
                                                 document.createElement("td");
-                                            td_s.textContent = row_2[6]
+                                            td_s.textContent = row_2[7]
                                                 .replace("k", "金沢")
                                                 .replace("h", "白山");
                                             td_s.rowSpan = nums.length;
@@ -281,9 +287,28 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                                         di++;
                                     }
                                 });
+
+                                let pi = 1;
+                                nums.forEach((row_2) => {
+                                    if (pi > 0) {
+                                        if (
+                                            row_2[6] != "" ||
+                                            pi == nums.length
+                                        ) {
+                                            const td_p =
+                                                document.createElement("td");
+                                            td_p.textContent = row_2[6];
+                                            td_p.rowSpan = nums.length;
+                                            tr.append(td_p);
+                                            pi = 0;
+                                            return;
+                                        }
+                                        pi++;
+                                    }
+                                });
                             }
                             const td_c = document.createElement("td");
-                            td_c.textContent = row[7];
+                            td_c.textContent = row[8];
                             tr.append(td_c);
 
                             table.append(tr);
