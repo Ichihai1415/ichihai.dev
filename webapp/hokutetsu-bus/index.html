@@ -138,12 +138,12 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
         <header><!--/js/common.js で追加される--></header>
 
         <main>
-            2025/12/22更新（データ除く）
+            2025/12/25更新（データ除く）
             <h1>北鉄バス金大付近運用表</h1>
             注意:
             私は知識がないので適当です。表現も独自のものです。記録ミス等で誤りがある可能性があります。<br />
             塗装、所属？は最初に記録したものが代表として出ます。更新された場合、古いものは備考欄に移します。<br />
-            路線番号-は回送です。2025/12/18以前のものは、ミスで金沢駅と東金沢が混ざっている可能性があります。<br />
+            2025/12/18以前のものは、ミスで金沢駅と東金沢が混ざっている可能性があります。<br />
             塗装の備考: 前面ノンステップは前面に白枠文字の「ノンステップバス」
 
             <h2>金沢大学方面</h2>
@@ -244,7 +244,12 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                             tr.append(td_l);
 
                             const td_ln = document.createElement("td");
-                            td_ln.textContent = row[2] == "0" ? "(無)" : row[2];
+                            td_ln.textContent =
+                                row[2] == "0"
+                                    ? "(無)"
+                                    : row[2] == "-"
+                                    ? "回送"
+                                    : row[2];
                             tr.append(td_ln);
 
                             if (c == 0) {
