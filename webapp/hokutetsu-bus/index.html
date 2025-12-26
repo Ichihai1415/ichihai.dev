@@ -196,7 +196,10 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                         if (a[0] < b[0]) return -1;
                         if (a[0] > b[0]) return 1;
                         return 0;
-                    });//こうしないと順番がおかしく
+                    }); //こうしないと順番がおかしく
+
+                    //こうすると?が最初に
+                    //data.sort((a, b) => a[0].localeCompare(b[0]));
 
                     //console.log(data);
                     const groups = {};
