@@ -138,13 +138,16 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
         <header><!--/js/common.js で追加される--></header>
 
         <main>
-            2025/12/26更新（データ除く）
+            2026/01/09更新（データ除く）
             <h1>北鉄バス金大付近運用表</h1>
             注意:
             私は知識がないので適当です。表現も独自のものです。記録ミス等で誤りがある可能性があります。<br />
-            塗装、所属？は最初に記録したものが代表として出ます。更新された場合、古いものは備考欄に移します。<br />
-            2025/12/18以前のものは、ミスで金沢駅と東金沢が混ざっている可能性があります。<br />
-            塗装の備考: 前面ノンステップは前面に白枠文字の「ノンステップバス」
+            ナンバー、塗装、所属？は異なる記録が|区切りで出ます。表記揺れで実質同じものが複数並ぶことがあります。<br />
+            <span style="color: red"
+                >2025/12/18以前のものは、ミスで金沢駅と東金沢が混ざっている可能性があります。2025/12/31以前の金沢城塗装のものは、ミスで違う可能性があります。</span
+            ><br />
+            塗装の備考:
+            記載がなければ基本通常色で、通常/[広告名]の表記もします。。前面ノンステップは前面に白枠文字の「ノンステップバス」
 
             <h2>金沢大学方面</h2>
             <span id="dataCount-numbers_to-ku"></span><br />
@@ -261,64 +264,41 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                             tr.append(td_ln);
 
                             if (c == 0) {
-                                let pn = 1;
-                                nums.forEach((row_2) => {
-                                    if (pn > 0) {
-                                        if (
-                                            row_2[1] != "" ||
-                                            pn == nums.length
-                                        ) {
-                                            const td_p =
-                                                document.createElement("td");
-                                            td_p.textContent = row_2[1];
-                                            td_p.rowSpan = nums.length;
-                                            tr.append(td_p);
-                                            pn = 0;
-                                            return;
-                                        }
-                                        pn++;
-                                    }
-                                });
+                                const values_np = nums
+                                    .map((row) => row[1])
+                                    .filter((v) => v !== "")
+                                    .filter(
+                                        (v, i, self) => self.indexOf(v) === i
+                                    );
+                                const td_np = document.createElement("td");
+                                td_np.textContent = values_np.join("|");
+                                td_np.rowSpan = nums.length;
+                                tr.append(td_np);
 
-                                let di = 1;
-                                nums.forEach((row_2) => {
-                                    if (di > 0) {
-                                        if (
-                                            row_2[7] != "" ||
-                                            di == nums.length
-                                        ) {
-                                            const td_s =
-                                                document.createElement("td");
-                                            td_s.textContent = row_2[7]
-                                                .replace("k", "金沢")
-                                                .replace("h", "白山");
-                                            td_s.rowSpan = nums.length;
-                                            tr.append(td_s);
-                                            di = 0;
-                                            return;
-                                        }
-                                        di++;
-                                    }
-                                });
+                                const values_l = nums
+                                    .map((row) => row[7])
+                                    .filter((v) => v !== "")
+                                    .filter(
+                                        (v, i, self) => self.indexOf(v) === i
+                                    );
+                                const td_l = document.createElement("td");
+                                td_l.textContent = values_l
+                                    .join("|")
+                                    .replace("k", "金沢")
+                                    .replace("h", "白山");
+                                td_l.rowSpan = nums.length;
+                                tr.append(td_l);
 
-                                let pi = 1;
-                                nums.forEach((row_2) => {
-                                    if (pi > 0) {
-                                        if (
-                                            row_2[6] != "" ||
-                                            pi == nums.length
-                                        ) {
-                                            const td_p =
-                                                document.createElement("td");
-                                            td_p.textContent = row_2[6];
-                                            td_p.rowSpan = nums.length;
-                                            tr.append(td_p);
-                                            pi = 0;
-                                            return;
-                                        }
-                                        pi++;
-                                    }
-                                });
+                                const values_p = nums
+                                    .map((row) => row[6])
+                                    .filter((v) => v !== "")
+                                    .filter(
+                                        (v, i, self) => self.indexOf(v) === i
+                                    );
+                                const td_p = document.createElement("td");
+                                td_p.textContent = values_p.join("|");
+                                td_p.rowSpan = nums.length;
+                                tr.append(td_p);
                             }
                             const td_c = document.createElement("td");
                             td_c.textContent = row[8];
