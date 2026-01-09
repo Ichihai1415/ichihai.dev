@@ -118,6 +118,7 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
         <link rel="stylesheet" href="/common.css" />
         <style>
             table {
+                width: 100%;
                 border-collapse: collapse;
                 font-size: 0.9rem;
                 border: 1px solid black;
@@ -129,6 +130,7 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                 border: 1px solid gray;
                 text-align: center;
             }
+
             th {
                 border-bottom: 2px solid black;
             }
@@ -148,38 +150,25 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
             ><br />
             塗装の備考:
             記載がなければ基本通常色で、通常/[広告名]の表記もします。。前面ノンステップは前面に白枠文字の「ノンステップバス」
+            <br /><br />
+            番号で絞り込み: <input type="text" id="numFilter" /><button
+                id="filterShow"
+            >
+                表示
+            </button>
+            (空白にすると全表示)<br />
+            <label><input id="autoShow" type="checkbox" />入力毎に表示</label>
+            <label
+                ><input id="containSearch" type="checkbox" />~を含む</label
+            >
 
             <h2>金沢大学方面</h2>
             <span id="dataCount-numbers_to-ku"></span><br />
-            <table id="table_numbers_to-ku">
-                <tr>
-                    <th>番号</th>
-                    <th>日付</th>
-                    <th>時刻</th>
-                    <th>場所（付近）</th>
-                    <th>路線番号</th>
-                    <th>ナンバー</th>
-                    <th>所属</th>
-                    <th>塗装</th>
-                    <th>コメント</th>
-                </tr>
-            </table>
+            <table id="table_numbers_to-ku"></table>
 
             <h2>金沢駅方面</h2>
             <span id="dataCount-numbers_to-ks"></span><br />
-            <table id="table_numbers_to-ks">
-                <tr>
-                    <th>番号</th>
-                    <th>日付</th>
-                    <th>時刻</th>
-                    <th>場所（付近）</th>
-                    <th>路線番号</th>
-                    <th>ナンバー</th>
-                    <th>所属</th>
-                    <th>塗装</th>
-                    <th>コメント</th>
-                </tr>
-            </table>
+            <table id="table_numbers_to-ks"></table>
         </main>
 
         <footer><!--/js/common.js で追加される--></footer>
@@ -187,42 +176,68 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
         <script defer type="module">
             import * as ichihai from "/js/ichihai.js";
 
-            ["numbers_to-ku", "numbers_to-ks"].forEach((file) => {
-                ichihai.getRawData(file + ".csv").then((rawData) => {
-                    const rows = rawData.split("\n");
-                    let data = rows.map((row) =>
-                        row.replace("\r", "").split(",")
-                    );
-                    data.shift();
-                    data = data.filter((row) => row.length > 1);
-                    data.sort((a, b) => {
-                        if (a[0] < b[0]) return -1;
-                        if (a[0] > b[0]) return 1;
-                        return 0;
-                    }); //こうしないと順番がおかしく
+            const results = {};
 
-                    //こうすると?が最初に
-                    //data.sort((a, b) => a[0].localeCompare(b[0]));
-
-                    //console.log(data);
-                    const groups = {};
-
-                    for (const row of data) {
-                        const key = row[0];
-                        if (!groups[key]) {
-                            groups[key] = [];
-                        }
-                        groups[key].push(row);
+            function countTriplets(x) {
+                if (Array.isArray(x)) {
+                    if ((x.length > 0) & x.every((v) => !Array.isArray(v))) {
+                        return 1;
                     }
-                    const result = Object.values(groups);
+                    return x.reduce((sum, v) => sum + countTriplets(v), 0);
+                }
+                return 0;
+            }
+
+            function show(filter_num = "") {
+                ["numbers_to-ku", "numbers_to-ks"].forEach((file) => {
+                    let result = results[file];
+                    //console.log(results);
+                    //console.log(result);
+
+                    if (filter_num != "") {
+                        if (document.getElementById("containSearch").checked)
+                            result = result.filter((group) =>
+                                group.some((row) =>
+                                    row[0].split("_")[0].includes(filter_num)
+                                )
+                            );
+                        else
+                            result = result.filter((group) =>
+                                group.some(
+                                    (row) => row[0].split("_")[0] === filter_num
+                                )
+                            );
+                    }
+
                     document.getElementById("dataCount-" + file).innerText =
                         "count: " +
-                        data.length +
+                        countTriplets(result) +
                         ", numCount: " +
                         result.length;
 
                     //console.log(result);
                     const table = document.getElementById("table_" + file);
+                    while (table.firstChild) {
+                        table.removeChild(table.firstChild);
+                    }
+                    const tr_h = document.createElement("tr");
+                    [
+                        "番号",
+                        "日付",
+                        "時刻",
+                        "場所（付近）",
+                        "路線番号",
+                        "ナンバー",
+                        "所属",
+                        "塗装等",
+                        "コメント",
+                    ].forEach((h) => {
+                        const th = document.createElement("th");
+                        th.textContent = h;
+                        tr_h.append(th);
+                    });
+                    table.append(tr_h);
+
                     result.forEach((nums) => {
                         //console.log(nums);
                         let c = 0;
@@ -258,6 +273,8 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                             td_ln.textContent =
                                 row[2] == "0"
                                     ? "(無)"
+                                    : row[2] == "0?"
+                                    ? "(無?)"
                                     : row[2] == "-"
                                     ? "回送"
                                     : row[2];
@@ -309,7 +326,57 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                         });
                     });
                 });
-            });
+            }
+
+            async function get() {
+                Promise.all(
+                    ["numbers_to-ku", "numbers_to-ks"].map((file) =>
+                        ichihai.getRawData(file + ".csv").then((rawData) => {
+                            const rows = rawData.split("\n");
+                            let data = rows.map((row) =>
+                                row.replace("\r", "").split(",")
+                            );
+                            data.shift();
+                            data = data.filter((row) => row.length > 1);
+                            data.sort((a, b) => {
+                                if (a[0] < b[0]) return -1;
+                                if (a[0] > b[0]) return 1;
+                                return 0;
+                            }); //こうしないと順番がおかしく
+
+                            //こうすると?が最初に
+                            //data.sort((a, b) => a[0].localeCompare(b[0]));
+
+                            //console.log(data);
+                            const groups = {};
+
+                            for (const row of data) {
+                                const key = row[0];
+                                if (!groups[key]) {
+                                    groups[key] = [];
+                                }
+                                groups[key].push(row);
+                            }
+                            results[file] = Object.values(groups);
+                        })
+                    )
+                ).then(() => {
+                    show();
+                });
+            }
+
+            function filterShow() {
+                show(document.getElementById("numFilter").value);
+            }
+
+            function autoShow() {
+                if (document.getElementById("autoShow").checked) filterShow();
+            }
+
+            document.getElementById("filterShow").onclick = filterShow;
+            document.getElementById("numFilter").oninput = autoShow;
+
+            get();
         </script>
     </body>
 </html>
