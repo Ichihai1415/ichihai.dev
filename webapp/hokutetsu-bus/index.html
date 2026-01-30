@@ -79,7 +79,7 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 -->
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja-JP">
     <head>
         <!--不変要素-->
@@ -140,16 +140,19 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
         <header><!--/js/common.js で追加される--></header>
 
         <main>
-            2026/01/09更新（データ除く）
+            2026/01/30更新（データ除く）
             <h1>北鉄バス金大付近運用表</h1>
             注意:
             私は知識がないので適当です。表現も独自のものです。記録ミス等で誤りがある可能性があります。<br />
             ナンバー、塗装、所属？は異なる記録が|区切りで出ます。表記揺れで実質同じものが複数並ぶことがあります。<br />
-            <span style="color: red"
-                >2025/12/18以前のものは、ミスで金沢駅と東金沢が混ざっている可能性があります。2025/12/31以前の金沢城塗装のものは、ミスで違う可能性があります。</span
-            ><br />
+            コメント欄の雨、雪、積雪は後で一括でやるためミス頻発です。積雪は気象台の観測データあるいは目視で5cmごと、前日比は基本24時間前です。歩道積雪・凍結時は記録できない場合があります。<br />
             塗装の備考:
-            記載がなければ基本通常色で、通常/[広告名]の表記もします。。前面ノンステップは前面に白枠文字の「ノンステップバス」
+            記載がなければ基本通常色で、通常/[広告名]の表記もします。前面ノンステップは前面に白枠文字の「ノンステップバス」<br />
+            <span style="color: red"
+                >金沢大学方面には金沢駅方面の記録が混入している可能性があります。<br />
+                2025/12/18以前のものは、ミスで金沢駅と東金沢が混ざっている可能性があります。2025/12/31以前の金沢城塗装のものは、ミスで違う可能性があります。</span
+            ><br />
+
             <br /><br />
             番号で絞り込み: <input type="text" id="numFilter" /><button
                 id="filterShow"
@@ -157,9 +160,19 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                 表示
             </button>
             (空白にすると全表示)<br />
-            <label><input id="autoShow" type="checkbox" />入力毎に表示</label>
             <label
-                ><input id="containSearch" type="checkbox" />~を含む</label
+                ><input
+                    id="autoShow"
+                    type="checkbox"
+                    checked
+                />入力毎に表示</label
+            >
+            <label
+                ><input
+                    id="containSearch"
+                    type="checkbox"
+                    checked
+                />~を含む</label
             >
 
             <h2>金沢大学方面</h2>
@@ -198,14 +211,15 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                         if (document.getElementById("containSearch").checked)
                             result = result.filter((group) =>
                                 group.some((row) =>
-                                    row[0].split("_")[0].includes(filter_num)
-                                )
+                                    row[0].split("_")[0].includes(filter_num),
+                                ),
                             );
                         else
                             result = result.filter((group) =>
                                 group.some(
-                                    (row) => row[0].split("_")[0] === filter_num
-                                )
+                                    (row) =>
+                                        row[0].split("_")[0] === filter_num,
+                                ),
                             );
                     }
 
@@ -274,10 +288,10 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                                 row[2] == "0"
                                     ? "(無)"
                                     : row[2] == "0?"
-                                    ? "(無?)"
-                                    : row[2] == "-"
-                                    ? "回送"
-                                    : row[2];
+                                      ? "(無?)"
+                                      : row[2] == "-"
+                                        ? "回送"
+                                        : row[2];
                             tr.append(td_ln);
 
                             if (c == 0) {
@@ -285,7 +299,7 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                                     .map((row) => row[1])
                                     .filter((v) => v !== "")
                                     .filter(
-                                        (v, i, self) => self.indexOf(v) === i
+                                        (v, i, self) => self.indexOf(v) === i,
                                     );
                                 const td_np = document.createElement("td");
                                 td_np.textContent = values_np.join("|");
@@ -296,13 +310,17 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                                     .map((row) => row[7])
                                     .filter((v) => v !== "")
                                     .filter(
-                                        (v, i, self) => self.indexOf(v) === i
+                                        (v, i, self) => self.indexOf(v) === i,
                                     );
                                 const td_l = document.createElement("td");
                                 td_l.textContent = values_l
                                     .join("|")
                                     .replace("k", "金沢")
-                                    .replace("h", "白山");
+                                    .replace("h", "白山")
+                                    .replace("N", "北")
+                                    .replace("E", "東")
+                                    .replace("W", "西")
+                                    .replace("S", "南");
                                 td_l.rowSpan = nums.length;
                                 tr.append(td_l);
 
@@ -310,7 +328,7 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                                     .map((row) => row[6])
                                     .filter((v) => v !== "")
                                     .filter(
-                                        (v, i, self) => self.indexOf(v) === i
+                                        (v, i, self) => self.indexOf(v) === i,
                                     );
                                 const td_p = document.createElement("td");
                                 td_p.textContent = values_p.join("|");
@@ -334,7 +352,7 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                         ichihai.getRawData(file + ".csv").then((rawData) => {
                             const rows = rawData.split("\n");
                             let data = rows.map((row) =>
-                                row.replace("\r", "").split(",")
+                                row.replace("\r", "").split(","),
                             );
                             data.shift();
                             data = data.filter((row) => row.length > 1);
@@ -358,8 +376,8 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                                 groups[key].push(row);
                             }
                             results[file] = Object.values(groups);
-                        })
-                    )
+                        }),
+                    ),
                 ).then(() => {
                     show();
                 });
