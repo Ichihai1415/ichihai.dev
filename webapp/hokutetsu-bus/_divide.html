@@ -190,9 +190,11 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                         .replace("(ks)/", "")
                         .split(",");
                     ds[0] =
-                        ds[0].length == 0 || !ds[0].conc("_")
-                            ? "?_" + ds[3] + "-" + ds[3]
-                            : ds[0].slice(0, 2) + "-" + ds[0].slice(2);
+                        ds[0].length == 0
+                            ? "?_" + ds[3] + "-" + ds[4]
+                            : !ds[0].includes("-")
+                              ? ds[0].slice(0, 2) + "-" + ds[0].slice(2)
+                              : ds[0];
                     list.push(ds_t[0] + "/" + ds.join(","));
                 }
 
