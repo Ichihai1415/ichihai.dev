@@ -113,9 +113,12 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
 
         <link rel="stylesheet" href="/common.css" />
         <style>
-            textarea,
-            button {
+            textarea {
                 width: 100%;
+                height: 100px;
+            }
+            button {
+                width: 49%;
                 height: 100px;
             }
         </style>
@@ -131,6 +134,7 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
 
             input: <br />
             <textarea id="input"></textarea><br />
+            <button onclick="addh()">-</button>
             <button onclick="conv()">↓</button><br />
             output(ku): <br />
             <textarea id="output-ku"></textarea><br />
@@ -173,6 +177,26 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
 
                 document.getElementById("output-ku").value = kuList.join("\n");
                 document.getElementById("output-ks").value = ksList.join("\n");
+            }
+
+            function addh() {
+                const input = document.getElementById("input").value;
+                const lines = input.split(/\r?\n/);
+                const list = [];
+                for (const line of lines) {
+                    const ds_t = line.split("/");
+                    const ds = line
+                        .replace("(ku)/", "")
+                        .replace("(ks)/", "")
+                        .split(",");
+                    ds[0] =
+                        ds[0].length == 0 || !ds[0].conc("_")
+                            ? "?_" + ds[3] + "-" + ds[3]
+                            : ds[0].slice(0, 2) + "-" + ds[0].slice(2);
+                    list.push(ds_t[0] + "/" + ds.join(","));
+                }
+
+                document.getElementById("input").value = list.join("\n");
             }
         </script>
     </body>
