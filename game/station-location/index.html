@@ -1,5 +1,5 @@
-<!-- This note updated: 2025/12/12
-The template (https://ichihai.dev/_temp.html) updated: 2025/12/12   
+<!-- This note was updated on 2025/12/12.
+The template (latest note): https://ichihai.dev/_temp.html
 
 ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
 - ichihai.dev is a personal static website by Ichihai1415.
@@ -80,12 +80,62 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 -->
-<!DOCTYPE html>
-<html lang="ja">
+<!doctype html>
+<html lang="ja-JP">
+    <!-- _temp.html updated: 2026/04/08 -->
     <head>
+        <!--不変要素-->
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>template - simple</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="theme-color" content="#1E3C5A" />
+        <meta name="author" content="Ichihai1415" />
+        <meta
+            name="copyright"
+            content="(c) 2024 Ichihai1415 All right reserved."
+        />
+        <meta property="og:site_name" content="Ichihai1415のウェブサイト" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@Ichihai1415" />
+        <meta name="twitter:creator" content="@Ichihai1415" />
+        <!--変えたければ変える要素-->
+        <!--<link rel="icon" href="/icon/favicon.png" />-->
+        <!--毎回変わる要素-->
+        <title>template</title>
+        <meta property="og:title" content="template" />
+        <meta name="description" content="[template description...]" />
+        <meta property="og:description" content="[template description...]" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="" />
+
+        <script defer src="/js/common.js"></script>
+        <!--必要な場合-->
+        <!--<script defer type="module" src="script.js"></script>-->
+
+        <script defer src="draw.js" type="module"></script>
+
+        <link rel="stylesheet" href="/common.css" />
+        <style>
+            canvas {
+                background: white;
+            }
+        </style>
     </head>
-    <body></body>
+    <body>
+        <header><!--/js/common.js で追加される--></header>
+        <main>
+            <ichihai1415_common-comment
+                ><!--/js/common.js で追加される--></ichihai1415_common-comment
+            >
+            <h1>title</h1>
+            <div class="update-date">xxxx/xx/xx作成 xxxx/xx/xx更新</div>
+            <canvas id="main" width="600" height="600"></canvas>
+        </main>
+        <footer><!--/js/common.js で追加される--></footer>
+        <script></script>
+        <script defer type="module">
+            //使う場合
+            //import * as ichihai from "/js/ichihai.js";
+        </script>
+    </body>
 </html>

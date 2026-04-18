@@ -82,54 +82,149 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
 -->
 <!doctype html>
 <html lang="ja-JP">
-    <!-- _temp.html updated: 2026/04/08 -->
     <head>
-        <!--不変要素-->
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="theme-color" content="#1E3C5A" />
-        <meta name="author" content="Ichihai1415" />
-        <meta
-            name="copyright"
-            content="(c) 2024 Ichihai1415 All right reserved."
-        />
-        <meta property="og:site_name" content="Ichihai1415のウェブサイト" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:site" content="@Ichihai1415" />
-        <meta name="twitter:creator" content="@Ichihai1415" />
-        <!--変えたければ変える要素-->
-        <!--<link rel="icon" href="/icon/favicon.png" />-->
-        <!--毎回変わる要素-->
-        <title>template</title>
-        <meta property="og:title" content="template" />
-        <meta name="description" content="[template description...]" />
-        <meta property="og:description" content="[template description...]" />
-        <meta property="og:type" content="website" />
-        <meta property="og:image" content="" />
-
-        <script defer src="/js/common.js"></script>
-        <!--必要な場合-->
-        <!--<script defer type="module" src="script.js"></script>-->
-
-        <link rel="stylesheet" href="/common.css" />
+        <title>共通パーツtemplate置き場</title>
         <style></style>
     </head>
     <body>
-        <header><!--/js/common.js で追加される--></header>
-        <main>
-            <ichihai1415_common-comment
-                ><!--/js/common.js で追加される--></ichihai1415_common-comment
-            >
-            <h1>title</h1>
-            <div class="update-date">xxxx/xx/xx作成 xxxx/xx/xx更新</div>
+        <template id="div.common-comment">
+            <div class="info-cyan">
+                <div class="info-cyan-head">【お知らせ（共通）】2026/04/10</div>
+                のんびり作っていっています。
+            </div>
+        </template>
+        <template id="footer">
+            <style>
+                .footer {
+                    color: black;
+                    background-color: #bbb;
+                    justify-content: center;
+                }
 
-        </main>
-        <footer><!--/js/common.js で追加される--></footer>
-        <script></script>
-        <script defer type="module">
-            //使う場合
-            //import * as ichihai from "/js/ichihai.js";
-        </script>
+                .footer-italic {
+                    font-style: italic;
+                }
+
+                .footer-link {
+                    text-decoration: none;
+                    color: black;
+                    font-weight: bold;
+                }
+
+                .footer-link:hover {
+                    color: #444;
+                }
+
+                .footer-text {
+                    text-align: center;
+                    padding: 4px;
+                }
+            </style>
+            <div class="footer">
+                <div class="footer-text">
+                    <span class="footer-italic"
+                        ><a class="footer-link" href="https://univ.ichihai.dev"
+                            >univ.ichihai.dev</a
+                        >
+                        - (c) 2024-2026 Ichihai1415 All right reserved. </span
+                    ><br />
+                    Saving, screenshots, and sharing are permitted. Please be
+                    careful when using.<br />
+                    The copyright in data created by others belongs to the
+                    owner.
+                </div>
+            </div>
+        </template>
+        <template id="nav.go2top">
+            <style>
+                /*参考: https://qiita.com/UziDeer/items/3028e44a15f2c8cd6faf*/
+                nav.go2top {
+                    position: sticky;
+                    top: -60px;
+                }
+
+                nav.go2top > a {
+                    display: block;
+                    position: absolute;
+                    top: 100vh;
+                    right: 20px;
+                    width: 40px;
+                    height: 40px;
+                    color: #fff;
+                    background-color: #0006;
+                    border-radius: 100%;
+                    text-decoration: none;
+                }
+
+                nav.go2top > a > img {
+                    border-radius: 100%;
+                }
+            </style>
+            <a href="#"
+                ><svg
+                    viewBox="0 0 64 64"
+                    xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                >
+                    <style>
+                        .move1 {
+                            transition: 0.5s;
+                            transition-delay: 0.25s;
+                        }
+
+                        svg:hover > .move1 {
+                            transition: 0.75s;
+                            transition-delay: 0s;
+                            transform: translate(0, -8px);
+                        }
+
+                        .move2 {
+                            transition: 0.75s;
+                            transition-delay: 0s;
+                        }
+
+                        svg:hover > .move2 {
+                            transition: 0.5s;
+                            transition-delay: 0.25s;
+                            transform: translate(0, 8px);
+                        }
+
+                        .change-color1 {
+                            transition: 1s;
+                        }
+
+                        svg:hover > .change-color1 {
+                            transition: 1.25s;
+                            fill: #0008;
+                        }
+                    </style>
+
+                    <circle
+                        cx="32"
+                        cy="32"
+                        r="32"
+                        fill="#0006"
+                        stroke-width="0"
+                        class="change-color1"
+                    />
+                    <path
+                        d="M 12 40 L 32 16 L 52 40"
+                        stroke="white"
+                        fill="transparent"
+                        stroke-width="4"
+                        class="move1"
+                    />
+                    <path
+                        d="M 12 40 L 32 16 L 52 40"
+                        stroke="white"
+                        fill="transparent"
+                        stroke-width="4"
+                        class="move2"
+                    />
+                </svg>
+            </a>
+        </template>
     </body>
 </html>

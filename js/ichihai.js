@@ -52,12 +52,22 @@ export function getParam(name) {
 export async function gzipCompress(str) {
     const encoder = new TextEncoder();
     const data = encoder.encode(str);
+
     const cs = new CompressionStream("gzip");
     const writer = cs.writable.getWriter();
     writer.write(data);
     writer.close();
-    const compressed = await new Response(cs.readable).arrayBuffer();
-    return btoa(String.fromCharCode(...new Uint8Array(compressed)));
+
+    const compressed = new Uint8Array(
+        await new Response(cs.readable).arrayBuffer(),
+    );
+
+    let binary = "";
+    for (let i = 0; i < compressed.length; i++) {
+        binary += String.fromCharCode(compressed[i]);
+    }
+
+    return btoa(binary);
 }
 
 /**
@@ -96,7 +106,7 @@ export async function getRawData(url) {
                     resolve(xhr.responseText);
                 } else {
                     reject(
-                        new Error(`Request failed with status: ${xhr.status}`)
+                        new Error(`Request failed with status: ${xhr.status}`),
                     );
                 }
             }

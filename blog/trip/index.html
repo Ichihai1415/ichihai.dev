@@ -121,15 +121,24 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
             <ichihai1415_common-comment
                 ><!--/js/common.js で追加される--></ichihai1415_common-comment
             >
-            <h1>title</h1>
-            <div class="update-date">xxxx/xx/xx作成 xxxx/xx/xx更新</div>
-
+            <div class="non-set-text">
+                <h1>ブログ</h1>
+                <div class="update-date">
+                    （index.html）2026/04/13作成 xxxx/xx/xx更新
+                </div>
+            </div>
+            <article><!--script で追加される--></article>
         </main>
         <footer><!--/js/common.js で追加される--></footer>
-        <script></script>
         <script defer type="module">
             //使う場合
-            //import * as ichihai from "/js/ichihai.js";
+            import * as ichihai from "/js/ichihai.js";
+            
+            function load(){
+            const d = ichihai.getParam("d");
+            const data = ichihai.getData()
+
+            }
         </script>
     </body>
 </html>

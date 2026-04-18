@@ -1,9 +1,25 @@
+/* This note was updated on 2025/12/12.
+The template (latest note): https://ichihai.dev/_temp.html
+
+ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
+- ichihai.dev is a personal static website by Ichihai1415.
+- Contact information can be found at https://ichihai.dev/aboutme/links.html. I would recommend contacting me at X (@ProjectS31415_1).
+- ichihai.dev is hosted on Cloudflare Pages. Domain was registered on Cloudflare on 2024/03/01.
+- The repository is on GitHub: https://github.com/Ichihai1415/ichihai.dev
+- This repository is licensed under the MIT License.
+- Some content includes AI-generated content.
+- Some text is machine translated. I'm not good at English so please excuse any mistakes.
+- Data from other sources are under the license of that source.
+- Most of codes are formatted by Prettier.
+*/
+
 html {
     background-color: #fff;
 }
 
 body {
     background-color: #ccc;
+    margin: 0;
 }
 
 main {
@@ -19,7 +35,7 @@ h3,
 h4,
 h5,
 h6 {
-    margin: 10px 0 10px 0;
+    margin: 1em 0 0 0;
     padding-left: 6px;
     background-color: #ddd;
 }
@@ -63,6 +79,99 @@ p {
     height: 10px;
 }
 
+.info-red {
+    background-color: #f002;
+    border-left: 4px solid #f00;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.info-red-head {
+    font-weight: bold;
+    color: #f00;
+}
+
+.info-green {
+    background-color: #0f02;
+    border-left: 4px solid #4a4;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.info-green-head {
+    font-weight: bold;
+    color: #4a4;
+}
+
+.info-blue {
+    background-color: #00f2;
+    border-left: 4px solid #00f;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.info-blue-head {
+    font-weight: bold;
+    color: #00f;
+}
+
+.info-cyan {
+    background-color: #4aa2;
+    border-left: 4px solid #4aa;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.info-cyan-head {
+    font-weight: bold;
+    color: #4aa;
+}
+
+.info-magenta {
+    background-color: #a4a2;
+    border-left: 4px solid #a4a;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.info-magenta-head {
+    font-weight: bold;
+    color: #a4a;
+}
+
+.info-yellow {
+    background-color: #ff02;
+    border-left: 4px solid #aa4;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.info-yellow-head {
+    font-weight: bold;
+    color: #aa4;
+}
+
+.info-gray {
+    background-color: #0002;
+    border-left: 4px solid #666;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.info-gray-head {
+    font-weight: bold;
+    color: #666;
+}
+
+/*----------移行前のものです。終了したら削除して下さい。*/
+
+.notice::before,
+.caution::before,
+.warning::before {
+    content: "【開発者@Ichihai1415へ：クラス名を更新してください】";
+    color: red;
+}
+
 .notice {
     background-color: #0f02;
     border-left: 4px solid #4a4;
@@ -74,6 +183,7 @@ p {
     font-weight: bold;
     color: #4a4;
 }
+
 .caution {
     background-color: #ff02;
     border-left: 4px solid #aa4;
@@ -97,6 +207,8 @@ p {
     font-weight: bold;
     color: #a44;
 }
+
+/*----------*/
 
 code {
     padding: 0 4px;
@@ -150,4 +262,12 @@ h3 > a {
 
 h3 > a:hover {
     text-decoration: underline;
+}
+
+.underline {
+    border-bottom: 1px solid black;
+}
+
+.serif {
+    font-family: serif;
 }
