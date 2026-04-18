@@ -1,0 +1,33 @@
+<svg viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&family=WDXL+Lubrifont+JP+N&display=swap');
+        
+        .round{
+            font-family: "M PLUS Rounded 1c";
+        }
+        
+        .lubri{
+            font-family: "WDXL Lubrifont JP N";
+            font-weight: 100;
+        }
+    </style>
+
+    <circle cx="500" cy="500" r="499" fill="#f43" stroke-width="0" />
+    <circle cx="500" cy="500" r="250" fill="#fff" stroke-width="0" />
+
+    <rect x="50" y="295" width="900" height="410"  fill="#fff" stroke-width="0" />
+    <rect x="40" y="300" width="920" height="400"  fill="#226" stroke-width="0" />
+    <circle cx="500" cy="500" r="480" stroke="#fff" fill="transparent" stroke-width="40" />
+
+    <text x="80" y="540" class="round" font-size="210px" fill="#fff" font-weight="bold">金沢大学</text>
+    <text x="220" y="620" class="round" font-size="70px" fill="#fff">Kanazawa Univ.</text>
+
+    <path id="curve" fill="none"
+        d="M 300 270 Q 500 120 700 270" />
+    <text font-size="140px" fill="#fff" stroke="#f43" stroke-width="2" class="lubri">
+        <textPath href="#curve">
+            北鉄バス
+        </textPath>
+    </text>
+
+</svg>
