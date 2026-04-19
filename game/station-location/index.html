@@ -112,7 +112,7 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
         <!--必要な場合-->
         <!--<script defer type="module" src="script.js"></script>-->
 
-        <script defer src="draw.js" type="module"></script>
+        <script defer src="script.js" type="module"></script>
 
         <link rel="stylesheet" href="/common.css" />
         <style>
@@ -130,14 +130,223 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                 display: block;
                 background-color: white;
             }
+
+            .on {
+                position: absolute;
+                top: 0;
+                left: 0;
+                padding: 0 10px;
+                background-color: #ddd;
+            }
+
+            .on * {
+                margin: 5px;
+            }
+
+            .setting-appear{
+                position: absolute;
+                top: 0;
+                right: 0;
+            }
+
+            .setting-out {
+                display: flex;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                justify-content: center; 
+                align-items: center; 
+                background-color: #0018;
+            
+                display: none;
+            }
+
+            .setting {
+                background-color: #aab;
+                min-width: 400px;
+                margin: 10px;
+                padding: 6px;
+                border-radius: 10px;
+            }
+
+            .setting-head {
+                margin-left: 10px;
+                font-size: 1.5em;
+                font-weight: bold;
+            }
+
+            .setting-close {
+                margin: 4px;
+                float: right;
+                border: 1px solid #444;
+                padding: 2px;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+
+            .setting-close:hover {
+                background-color: #888;
+            }
+
+            hr {
+                height: 2px;
+                border: 0px;
+                background-color: black;
+            }
+
+            hr.l2 {
+                height: 1px;
+                border: 0px;
+                background-color: #444;
+            }
         </style>
     </head>
     <body>
         <canvas id="main"></canvas>
-        <script></script>
-        <script defer type="module">
-            //使う場合
-            //import * as ichihai from "/js/ichihai.js";
-        </script>
+        <div class="on">
+            <button id="st">st</button>
+            <div>
+                <span id="company-name">[会社名]</span>
+                <span id="railroad-name">[路線名]</span>
+                <span id="station-name">[駅名]</span>
+            </div>
+        </div>
+        <div class="setting-out">
+            <div class="setting">
+                <span class="setting-head">設定</span>
+                <span class="setting-close">閉じる</span>
+                <hr />
+                <b>事業者種別:</b><br />
+                <label
+                    ><input
+                        type="checkbox"
+                        id="company-type-1"
+                        checked
+                    />新幹線</label
+                >
+                <label
+                    ><input
+                        type="checkbox"
+                        id="company-type-2"
+                        checked
+                    />JR在来線</label
+                >
+                <label
+                    ><input
+                        type="checkbox"
+                        id="company-type-3"
+                        checked
+                    />公営鉄道</label
+                >
+                <label
+                    ><input
+                        type="checkbox"
+                        id="company-type-4"
+                        checked
+                    />民営鉄道</label
+                >
+                <label
+                    ><input
+                        type="checkbox"
+                        id="company-type-5"
+                        checked
+                    />第三セクター</label
+                >
+                <hr />
+                <b>鉄道区分:</b><br />
+                <hr class="l2" />
+                <b>鉄道:</b><br />
+                <label
+                    ><input
+                        type="checkbox"
+                        id="railroad-type-11"
+                        checked
+                    />普通鉄道JR</label
+                >
+                <label
+                    ><input
+                        type="checkbox"
+                        id="railroad-type-12"
+                        checked
+                    />普通鉄道</label
+                >
+                <label
+                    ><input
+                        type="checkbox"
+                        id="railroad-type-13"
+                        checked
+                    />鋼索鉄道</label
+                >
+                <label
+                    ><input
+                        type="checkbox"
+                        id="railroad-type-14"
+                        checked
+                    />懸垂式鉄道</label
+                >
+                <label
+                    ><input
+                        type="checkbox"
+                        id="railroad-type-15"
+                        checked
+                    />跨座式鉄道</label
+                >
+                <label
+                    ><input
+                        type="checkbox"
+                        id="railroad-type-16"
+                        checked
+                    />案内軌条式鉄道</label
+                >
+                <label
+                    ><input
+                        type="checkbox"
+                        id="railroad-type-17"
+                        checked
+                    />無軌条鉄道</label
+                >
+                <hr class="l2" />
+
+                <b>軌道:</b><br />
+                <label
+                    ><input
+                        type="checkbox"
+                        id="railroad-type-21"
+                        checked
+                    />軌道</label
+                >
+                <label
+                    ><input
+                        type="checkbox"
+                        id="railroad-type-22"
+                        checked
+                    />懸垂式モノレール</label
+                >
+                <label
+                    ><input
+                        type="checkbox"
+                        id="railroad-type-23"
+                        checked
+                    />跨座式モノレール</label
+                >
+                <label
+                    ><input
+                        type="checkbox"
+                        id="railroad-type-24"
+                        checked
+                    />案内軌条式</label
+                >
+                <label
+                    ><input
+                        type="checkbox"
+                        id="railroad-type-25"
+                        checked
+                    />浮上式</label
+                >
+                <hr />
+            </div>
+        </div>
     </body>
 </html>

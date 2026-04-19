@@ -3,17 +3,17 @@ import * as ichihai from "/js/ichihai.js";
 const canvas = document.getElementById("main");
 const ctx = canvas.getContext("2d");
 
-let latSta = 36;
-let latEnd = 37;
-let lonSta = 138;
-let lonEnd = 139;
+let latSta = 33;
+let latEnd = 38;
+let lonSta = 135;
+let lonEnd = 140;
 let size = [1, 1];
 let zoomW = size[0] / (lonEnd - lonSta);
 let zoomH = size[1] / (latEnd - latSta);
 
 let map_data = null;
 let railroad_data = null;
-let station_data = null;
+export let station_data = null;
 
 // スクリーン → 地理座標
 function screenToGeo(sx, sy) {
@@ -108,6 +108,8 @@ function updateWindowSize() {
     draw();
 }
 
+let station_prop = [];
+
 window.addEventListener("resize", updateWindowSize);
 
 ichihai
@@ -128,14 +130,60 @@ ichihai
                     .then((txt) => ichihai.gzipDecompress(txt))
                     .then((res2) => {
                         station_data = JSON.parse(res2);
+
+                        station_data.features.forEach((feature) => {
+                            const newD = [
+                                feature.properties.N02_001,
+                                feature.properties.N02_002,
+                                feature.properties.N02_003,
+                                feature.properties.N02_004,
+                                feature.properties.N02_005,
+                                feature.properties.N02_005c,
+                                feature.properties.N02_005g,
+                            ];
+                            station_prop.push(newD);
+                        });
+
+                        document.getElementById("st").onclick = setStation;
                         updateWindowSize();
                     });
             });
     });
 
+function setStation() {
+    let i;
+    let c = 100000;
+    let flg = false;
+    while (!flg) {
+        i = Math.floor(Math.random() * station_prop.length);
+
+        flg = document.getElementById("company-type-" + station_prop[i][1]);
+        if (flg)
+            flg = document.getElementById(
+                "railroad-type-" + station_prop[i][0],
+            );
+        c--;
+        if (c == 0) {
+            alert(
+                "駅抽出試行回数の上限を超えました。条件に合う駅がない可能性があります。",
+            );
+            console.log(
+                "駅抽出試行回数の上限を超えました。条件に合う駅がない可能性があります。",
+            );
+            flg = true;
+        }
+    }
+
+    document.getElementById("company-name").innerText = station_prop[i][3];
+    document.getElementById("railroad-name").innerText = station_prop[i][2];
+    document.getElementById("station-name").innerText = station_prop[i][4];
+}
+
 function draw() {
     ctx.clearRect(0, 0, size[0], size[1]);
     ctx.strokeStyle = "#888";
+    ctx.lineWidth = 1;
+
     map_data.features.forEach((feature) => {
         if (feature.geometry) {
             const geoType = feature.geometry.type;
@@ -162,13 +210,43 @@ function draw() {
         }
     });
 
-    ctx.strokeStyle = "#000";
-
     railroad_data.features.forEach((feature) => {
         if (feature.geometry) {
             const geoType = feature.geometry.type;
             ctx.beginPath();
             let isF = true;
+            const typeCode = feature.properties.N02_001;
+            const companyTypeCode = feature.properties.N02_002;
+            const lineName = feature.properties.N02_003;
+            const company = feature.properties.N02_004;
+            //const stationName = feature.properties.N02_005;
+            //const stationCode1 = feature.properties.N02_005c;
+            //const stationCode2 = feature.properties.N02_005g;
+
+            if (companyTypeCode == 1) {
+                ctx.strokeStyle = "#f00";
+                ctx.lineWidth = 2;
+            } else if (companyTypeCode == 2) {
+                ctx.strokeStyle = "#00f";
+                ctx.lineWidth = 1;
+            } else if (companyTypeCode == 3) {
+                ctx.strokeStyle = "#0f0";
+                ctx.lineWidth = 1;
+            } else if (companyTypeCode == 4) {
+                ctx.strokeStyle = "#f0f";
+                ctx.lineWidth = 1;
+            } else if (companyTypeCode == 5) {
+                ctx.strokeStyle = "#0ff";
+                ctx.lineWidth = 1;
+            } else if (typeCode > 12) {
+                ctx.strokeStyle = "#ff0";
+                ctx.lineWidth = 1;
+            } else {
+                //ないはず
+                ctx.strokeStyle = "#000";
+                ctx.lineWidth = 1;
+            }
+
             feature.geometry.coordinates.forEach((coordinate) => {
                 if (isF) {
                     ctx.moveTo(
@@ -187,7 +265,7 @@ function draw() {
         }
     });
 
-    ctx.strokeStyle = "#f00";
+    ctx.strokeStyle = "#000";
     ctx.lineWidth = 2;
 
     station_data.features.forEach((feature) => {
