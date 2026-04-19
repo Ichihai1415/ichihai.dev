@@ -213,3 +213,89 @@ function draw() {
         }
     });
 }
+
+let lastTouches = null;
+
+function getTouchDistance(touches) {
+    const dx = touches[0].clientX - touches[1].clientX;
+    const dy = touches[0].clientY - touches[1].clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+}
+
+function getTouchCenter(touches) {
+    return {
+        x: (touches[0].offsetX + touches[1].offsetX) / 2,
+        y: (touches[0].offsetY + touches[1].offsetY) / 2,
+    };
+}
+
+canvas.addEventListener(
+    "touchstart",
+    (e) => {
+        e.preventDefault();
+        lastTouches = e.touches;
+    },
+    { passive: false },
+);
+
+canvas.addEventListener(
+    "touchmove",
+    (e) => {
+        e.preventDefault();
+        const touches = e.touches;
+
+        if (touches.length === 1 && lastTouches?.length === 1) {
+            // 1本指：ドラッグ
+            const rect = canvas.getBoundingClientRect();
+            const prevGeo = screenToGeo(
+                lastTouches[0].clientX - rect.left,
+                lastTouches[0].clientY - rect.top,
+            );
+            const curGeo = screenToGeo(
+                touches[0].clientX - rect.left,
+                touches[0].clientY - rect.top,
+            );
+            const dLon = prevGeo.lon - curGeo.lon;
+            const dLat = prevGeo.lat - curGeo.lat;
+
+            lonSta += dLon;
+            lonEnd += dLon;
+            latSta += dLat;
+            latEnd += dLat;
+        } else if (touches.length === 2 && lastTouches?.length === 2) {
+            // 2本指：ピンチズーム
+            const rect = canvas.getBoundingClientRect();
+
+            const prevDist = getTouchDistance(lastTouches);
+            const curDist = getTouchDistance(touches);
+            const scale = prevDist / curDist; // 縮小>1, 拡大<1
+
+            // ピンチ中心点（地理座標）を固定点にする
+            const cx =
+                (touches[0].clientX + touches[1].clientX) / 2 - rect.left;
+            const cy = (touches[0].clientY + touches[1].clientY) / 2 - rect.top;
+            const pivot = screenToGeo(cx, cy);
+
+            const newW = (lonEnd - lonSta) * scale;
+            const newH = (latEnd - latSta) * scale;
+            const rx = cx / size[0];
+            const ry = cy / size[1];
+
+            lonSta = pivot.lon - newW * rx;
+            lonEnd = pivot.lon + newW * (1 - rx);
+            latEnd = pivot.lat + newH * ry;
+            latSta = pivot.lat - newH * (1 - ry);
+
+            zoomW = size[0] / (lonEnd - lonSta);
+            zoomH = size[1] / (latEnd - latSta);
+        }
+
+        lastTouches = touches;
+        draw();
+    },
+    { passive: false },
+);
+
+canvas.addEventListener("touchend", (e) => {
+    lastTouches = e.touches; // 残った指を記録
+});
