@@ -116,22 +116,24 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
 
         <link rel="stylesheet" href="/common.css" />
         <style>
+            html,
+            body {
+                height: 100%;
+                padding: 0;
+                margin: 0;
+            }
+
             canvas {
-                background: white;
+                width: 100%;
+                height: 100%;
+                overflow: unset;
+                display: block;
+                background-color: white;
             }
         </style>
     </head>
     <body>
-        <header><!--/js/common.js で追加される--></header>
-        <main>
-            <ichihai1415_common-comment
-                ><!--/js/common.js で追加される--></ichihai1415_common-comment
-            >
-            <h1>title</h1>
-            <div class="update-date">xxxx/xx/xx作成 xxxx/xx/xx更新</div>
-            <canvas id="main" width="600" height="600"></canvas>
-        </main>
-        <footer><!--/js/common.js で追加される--></footer>
+        <canvas id="main"></canvas>
         <script></script>
         <script defer type="module">
             //使う場合
