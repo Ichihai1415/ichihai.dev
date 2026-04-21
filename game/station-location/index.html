@@ -101,10 +101,16 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
         <!--変えたければ変える要素-->
         <!--<link rel="icon" href="/icon/favicon.png" />-->
         <!--毎回変わる要素-->
-        <title>template</title>
-        <meta property="og:title" content="template" />
-        <meta name="description" content="[template description...]" />
-        <meta property="og:description" content="[template description...]" />
+        <title>駅位置Guesser | game | ichihai.dev</title>
+        <meta
+            property="og:title"
+            content="駅位置Guesser | game | ichihai.dev"
+        />
+        <meta name="description" content="駅の位置を当てるゲームです。" />
+        <meta
+            property="og:description"
+            content="駅の位置を当てるゲームです。"
+        />
         <meta property="og:type" content="website" />
         <meta property="og:image" content="" />
 
@@ -143,12 +149,13 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                 margin: 5px;
             }
 
-            .setting-appear{
+            .setting-appear {
                 position: absolute;
                 top: 0;
                 right: 0;
             }
 
+            .init-info-out,
             .setting-out {
                 display: flex;
                 position: absolute;
@@ -156,15 +163,19 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                 left: 0;
                 width: 100%;
                 height: 100%;
-                justify-content: center; 
-                align-items: center; 
+                justify-content: center;
+                align-items: center;
                 background-color: #0018;
-            
+                z-index: 5;
+            }
+
+            .setting-out {
                 display: none;
             }
 
+            .init-info,
             .setting {
-                background-color: #aab;
+                background-color: #eef;
                 min-width: 400px;
                 margin: 10px;
                 padding: 6px;
@@ -172,11 +183,15 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
             }
 
             .setting-head {
-                margin-left: 10px;
+                margin-left: 4px;
+                border-left: 4px solid gray;
+                padding: 0 6px;
                 font-size: 1.5em;
                 font-weight: bold;
+                background-color: #0001;
             }
 
+            .setting-open,
             .setting-close {
                 margin: 4px;
                 float: right;
@@ -184,167 +199,151 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                 padding: 2px;
                 border-radius: 4px;
                 cursor: pointer;
+                background-color: #ddd;
             }
 
+            .setting-open {
+                position: absolute;
+                left: 8px;
+                bottom: 8px;
+            }
+
+            .setting-open:hover,
             .setting-close:hover {
-                background-color: #888;
+                background-color: #ccc;
             }
 
             hr {
                 height: 2px;
-                border: 0px;
+                border: none;
                 background-color: black;
             }
 
             hr.l2 {
                 height: 1px;
-                border: 0px;
+                border: none;
                 background-color: #444;
             }
         </style>
     </head>
     <body>
+        <div class="init-info-out">
+            <div class="init-info">
+                <h1 style="margin-top: 0">駅位置Guesser</h1>
+                <div>2026/04/21更新 v0.3.1</div>
+
+                <p class="init-info-main">
+                    駅の位置を当てるゲームです。
+                    <span style="color: gray; font-size: 0.9em"
+                        >（ゲッサーというわけでもないですが...）</span
+                    ><br />
+                </p>
+                <p class="info-blue">
+                    データ：国土数値情報<br />
+                    ・<a
+                        href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N03-2025.html"
+                        target="_blank"
+                        >行政区域データ（KsjTmplt-N03-2025）</a
+                    >※加工して使用<br />
+                    ・<a
+                        href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N02-2024.html"
+                        target="_blank"
+                        >鉄道データ（KsjTmplt-N02-2024）</a
+                    ><br />
+                </p>
+                <p>どこかクリックするとこの表示を閉じます。</p>
+            </div>
+        </div>
         <canvas id="main"></canvas>
         <div class="on">
-            <button id="st">st</button>
+            <button id="setStation">start</button>
             <div>
                 <span id="company-name">[会社名]</span>
                 <span id="railroad-name">[路線名]</span>
                 <span id="station-name">[駅名]</span>
             </div>
         </div>
+        <span class="setting-open" id="setting-open">setting</span>
+
         <div class="setting-out">
             <div class="setting">
-                <span class="setting-head">設定</span>
-                <span class="setting-close">閉じる</span>
-                <hr />
-                <b>事業者種別:</b><br />
-                <label
-                    ><input
-                        type="checkbox"
-                        id="company-type-1"
-                        checked
-                    />新幹線</label
-                >
-                <label
-                    ><input
-                        type="checkbox"
-                        id="company-type-2"
-                        checked
-                    />JR在来線</label
-                >
-                <label
-                    ><input
-                        type="checkbox"
-                        id="company-type-3"
-                        checked
-                    />公営鉄道</label
-                >
-                <label
-                    ><input
-                        type="checkbox"
-                        id="company-type-4"
-                        checked
-                    />民営鉄道</label
-                >
-                <label
-                    ><input
-                        type="checkbox"
-                        id="company-type-5"
-                        checked
-                    />第三セクター</label
-                >
-                <hr />
-                <b>鉄道区分:</b><br />
-                <hr class="l2" />
-                <b>鉄道:</b><br />
-                <label
-                    ><input
-                        type="checkbox"
-                        id="railroad-type-11"
-                        checked
-                    />普通鉄道JR</label
-                >
-                <label
-                    ><input
-                        type="checkbox"
-                        id="railroad-type-12"
-                        checked
-                    />普通鉄道</label
-                >
-                <label
-                    ><input
-                        type="checkbox"
-                        id="railroad-type-13"
-                        checked
-                    />鋼索鉄道</label
-                >
-                <label
-                    ><input
-                        type="checkbox"
-                        id="railroad-type-14"
-                        checked
-                    />懸垂式鉄道</label
-                >
-                <label
-                    ><input
-                        type="checkbox"
-                        id="railroad-type-15"
-                        checked
-                    />跨座式鉄道</label
-                >
-                <label
-                    ><input
-                        type="checkbox"
-                        id="railroad-type-16"
-                        checked
-                    />案内軌条式鉄道</label
-                >
-                <label
-                    ><input
-                        type="checkbox"
-                        id="railroad-type-17"
-                        checked
-                    />無軌条鉄道</label
-                >
-                <hr class="l2" />
+                <span class="setting-head">⚙設定</span>
 
-                <b>軌道:</b><br />
-                <label
-                    ><input
-                        type="checkbox"
-                        id="railroad-type-21"
-                        checked
-                    />軌道</label
-                >
-                <label
-                    ><input
-                        type="checkbox"
-                        id="railroad-type-22"
-                        checked
-                    />懸垂式モノレール</label
-                >
-                <label
-                    ><input
-                        type="checkbox"
-                        id="railroad-type-23"
-                        checked
-                    />跨座式モノレール</label
-                >
-                <label
-                    ><input
-                        type="checkbox"
-                        id="railroad-type-24"
-                        checked
-                    />案内軌条式</label
-                >
-                <label
-                    ><input
-                        type="checkbox"
-                        id="railroad-type-25"
-                        checked
-                    />浮上式</label
-                >
+                <span class="setting-close" id="setting-close">閉じる</span>
+                <hr />
+                <div>
+                    <b style="font-size: 1.25em">絞り込み:</b>
+                    （選択は無選択で全部、AND判定）<br />
+                    <hr class="l2" />
+
+                    <div>
+                        <b>事業者種別:</b><br />
+                        <select id="company-type-select" multiple size="1">
+                            <option value="1" id="company-type-select-1">
+                                新幹線
+                            </option>
+                            <option value="2" id="company-type-select-2">
+                                JR在来線
+                            </option>
+                            <option value="3" id="company-type-select-3">
+                                公営鉄道
+                            </option>
+                            <option value="4" id="company-type-select-4">
+                                民営鉄道
+                            </option>
+                            <option value="5" id="company-type-select-5">
+                                第三セクター
+                            </option>
+                        </select>
+                    </div>
+                    <hr class="l2" />
+                    <b>鉄道区分:</b><br />
+                    <div>
+                        <select id="railroad-type-select" multiple size="1">
+                            <option value="11" id="railroad-type-select-11">
+                                [鉄道] 普通鉄道JR
+                            </option>
+                            <option value="12" id="railroad-type-select-12">
+                                [鉄道] 普通鉄道
+                            </option>
+                            <option value="13" id="railroad-type-select-13">
+                                [鉄道] 鋼索鉄道
+                            </option>
+                            <option value="14" id="railroad-type-select-14">
+                                [鉄道] 懸垂式鉄道
+                            </option>
+                            <option value="15" id="railroad-type-select-15">
+                                [鉄道] 跨座式鉄道
+                            </option>
+                            <option value="16" id="railroad-type-select-16">
+                                [鉄道] 案内軌条式鉄道
+                            </option>
+                            <option value="17" id="railroad-type-select-17">
+                                [鉄道] 無軌条鉄道
+                            </option>
+                            <option value="21" id="railroad-type-select-21">
+                                [軌道] 軌道
+                            </option>
+                            <option value="22" id="railroad-type-select-22">
+                                [軌道] 懸垂式モノレール
+                            </option>
+                            <option value="23" id="railroad-type-select-23">
+                                [軌道] 跨座式モノレール
+                            </option>
+                            <option value="24" id="railroad-type-select-24">
+                                [軌道] 案内軌条式
+                            </option>
+                            <option value="25" id="railroad-type-select-25">
+                                [軌道] 浮上式
+                            </option>
+                        </select>
+                    </div>
+                    <hr class="l2" />
+                    <div>
+                        <b>運営会社:</b><br />
+                        <select id="company-select" multiple size="1"></select>
+                    </div>
+                </div>
                 <hr />
             </div>
         </div>
