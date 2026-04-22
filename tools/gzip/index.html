@@ -133,6 +133,9 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
             <button id="comp">圧縮</button>
             <button id="decomp">展開</button>
             <button id="spacedel">空白削除</button>
+            <button id="spacedelcomp">空白削除+圧縮</button>
+            <button id="geonullrm">geojson null del</button>
+            <button id="geoall">geojson一括</button>
             <br />
             <textarea id="out"></textarea>
         </main>
@@ -160,6 +163,32 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                 document.getElementById("out").value = document
                     .getElementById("in")
                     .value.replace(/\s+/g, "");
+            };
+
+            document.getElementById("spacedelcomp").onclick = async () => {
+                document.getElementById("out").value =
+                    await ichihai.gzipCompress(
+                        document.getElementById("in").value.replace(/\s+/g, ""),
+                    );
+            };
+
+            document.getElementById("geonullrm").onclick = () => {
+                let json = JSON.parse(document.getElementById("in").value);
+                json.features = json.features.filter(
+                    (f) => f.geometry !== null,
+                );
+                document.getElementById("out").value = JSON.stringify(json);
+            };
+
+            document.getElementById("geoall").onclick = async () => {
+                let json = JSON.parse(
+                    document.getElementById("in").value.replace(/\s+/g, ""),
+                );
+                json.features = json.features.filter(
+                    (f) => f.geometry !== null,
+                );
+                document.getElementById("out").value =
+                    await ichihai.gzipCompress(JSON.stringify(json));
             };
         </script>
     </body>

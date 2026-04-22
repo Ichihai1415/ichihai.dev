@@ -3,62 +3,63 @@ import * as ichihai from "/js/ichihai.js";
 const canvas = document.getElementById("main");
 const ctx = canvas.getContext("2d");
 
-let latSta = 33;
-let latEnd = 38;
-let lonSta = 135;
-let lonEnd = 140;
+let latSta = 20;
+let latEnd = 50;
+let lonSta = 120;
+let lonEnd = 150;
 let size = [1, 1];
-let zoomW = size[0] / (lonEnd - lonSta);
-let zoomH = size[1] / (latEnd - latSta);
+let zoom = 1;
+let zoom_factor = 1.2;
+let zoom_min = 20;
+let zoom_max = 50000;
 
-let map_data = null;
-let map_pref_data = null;
+let map_data_01 = null;
+let map_data_1 = null;
+let map_data_5 = null;
+let map_pref_data_01 = null;
+let map_pref_data_1 = null;
+let map_pref_data_5 = null;
 let railroad_data = null;
 let station_data = null;
 
 let s_railroad = true;
 
-// スクリーン → 地理座標
 function screenToGeo(sx, sy) {
-    const lon = lonSta + sx / zoomW;
-    const lat = latEnd - sy / zoomH; // Y軸反転（北が上）
+    const lon = lonSta + sx / zoom;
+    const lat = latEnd - sy / zoom;
     return { lat, lon };
 }
 
-// 地理座標 → スクリーン
 function geoToScreen(lat, lon) {
-    const sx = (lon - lonSta) * zoomW;
-    const sy = (latEnd - lat) * zoomH;
+    const sx = (lon - lonSta) * zoom;
+    const sy = (latEnd - lat) * zoom;
     return { sx, sy };
 }
-
-const ZOOM_FACTOR = 1.2;
 
 canvas.addEventListener(
     "wheel",
     (e) => {
         e.preventDefault();
 
-        // ① マウス位置の地理座標を記録（この点を固定する）
         const pivot = screenToGeo(e.offsetX, e.offsetY);
 
-        // ② 範囲をスケール
-        const scale = e.deltaY < 0 ? 1 / ZOOM_FACTOR : ZOOM_FACTOR;
-        const newW = (lonEnd - lonSta) * scale;
-        const newH = (latEnd - latSta) * scale;
+        const scale = e.deltaY < 0 ? 1 / zoom_factor : zoom_factor;
 
-        // ③ pivot点がマウス位置に来るよう範囲を再計算
-        const rx = e.offsetX / size[0]; // canvas内の相対位置 (0〜1)
+        const rx = e.offsetX / size[0];
         const ry = e.offsetY / size[1];
 
-        lonSta = pivot.lon - newW * rx;
-        lonEnd = pivot.lon + newW * (1 - rx);
+        const newZoom = Math.min(Math.max(zoom / scale, zoom_min), zoom_max);
+        const effectiveScale = zoom / newZoom;
+
+        zoom = newZoom;
+
+        const newH = size[1] / zoom;
+        const newW = (lonEnd - lonSta) * effectiveScale;
+
         latEnd = pivot.lat + newH * ry;
         latSta = pivot.lat - newH * (1 - ry);
-
-        // ④ zoom再計算
-        zoomW = size[0] / (lonEnd - lonSta);
-        zoomH = size[1] / (latEnd - latSta);
+        lonSta = pivot.lon - newW * rx;
+        lonEnd = pivot.lon + newW * (1 - rx);
 
         draw();
     },
@@ -100,13 +101,16 @@ function updateWindowSize() {
     canvas.width = size[0];
     canvas.height = size[1];
 
-    // 経度範囲を基準に zoom を決め、緯度範囲をアスペクト比から逆算
-    zoomW = size[0] / (lonEnd - lonSta);
+    const zoomX = size[0] / (lonEnd - lonSta);
+    const zoomY = size[1] / (latEnd - latSta);
+    zoom = Math.max(Math.min(zoomX, zoomY, zoom_max), zoom_min);
+
+    const lonCenter = (lonSta + lonEnd) / 2;
     const latCenter = (latSta + latEnd) / 2;
-    const latHalf = size[1] / zoomW / 2; // 同じ zoom を使う
-    latSta = latCenter - latHalf;
-    latEnd = latCenter + latHalf;
-    zoomH = zoomW; // 縦横同じ倍率
+    lonSta = lonCenter - size[0] / zoom / 2;
+    lonEnd = lonCenter + size[0] / zoom / 2;
+    latSta = latCenter - size[1] / zoom / 2;
+    latEnd = latCenter + size[1] / zoom / 2;
 
     draw();
 }
@@ -116,88 +120,6 @@ let companyList = [];
 let companyRailroadList = [[]];
 
 window.addEventListener("resize", updateWindowSize);
-
-ichihai
-    .getData("data/N03-20250101.geojson.gzip")
-    .then((res) => res.text())
-    .then((txt) => ichihai.gzipDecompress(txt))
-    .then((res2) => {
-        map_data = JSON.parse(res2);
-
-        ichihai
-            .getData("data/N03-20250101_prefecture.geojson.gzip")
-            .then((res) => res.text())
-            .then((txt) => ichihai.gzipDecompress(txt))
-            .then((res2) => {
-                map_pref_data = JSON.parse(res2);
-
-                ichihai
-                    .getData("data/N02-24_RailroadSection.geojson.gzip")
-                    .then((res) => res.text())
-                    .then((txt) => ichihai.gzipDecompress(txt))
-                    .then((res2) => {
-                        railroad_data = JSON.parse(res2);
-                        ichihai
-                            .getData("data/N02-24_Station.geojson.gzip")
-                            .then((res) => res.text())
-                            .then((txt) => ichihai.gzipDecompress(txt))
-                            .then((res2) => {
-                                station_data = JSON.parse(res2);
-
-                                station_data.features.forEach((feature) => {
-                                    const p1 = feature.geometry.coordinates[0];
-                                    const p2 =
-                                        feature.geometry.coordinates[
-                                            feature.geometry.coordinates
-                                                .length - 1
-                                        ];
-
-                                    const newD = [
-                                        feature.properties.N02_001,
-                                        feature.properties.N02_002,
-                                        feature.properties.N02_003,
-                                        feature.properties.N02_004,
-                                        feature.properties.N02_005,
-                                        feature.properties.N02_005c,
-                                        feature.properties.N02_005g,
-                                        (p1[0] + p2[0]) / 2,
-                                        (p1[1] + p2[1]) / 2,
-                                    ];
-                                    station_prop.push(newD);
-
-                                    if (!companyList.includes(newD[3]))
-                                        companyList.push(newD[3]);
-
-                                    let row = companyRailroadList.find(
-                                        (r) => r[0] == newD[3],
-                                    );
-                                    if (!row) {
-                                        row = [newD[3], []];
-                                        companyRailroadList.push(row);
-                                    } else if (!row[1].includes(newD[2]))
-                                        row[1].push(newD[2]);
-                                });
-
-                                //console.log(companyRailroadList);
-                                document.getElementById("setStation").onclick =
-                                    setStation;
-                                companyList.sort();
-                                let compEle =
-                                    document.getElementById("company-select");
-                                let i = 0;
-                                companyList.forEach((comp) => {
-                                    //console.log(comp);
-                                    let opt = document.createElement("option");
-                                    opt.value = i;
-                                    opt.textContent = comp;
-                                    compEle.appendChild(opt);
-                                    i++;
-                                });
-                                updateWindowSize();
-                            });
-                    });
-            });
-    });
 
 function setStation() {
     const shuffled = [...station_prop];
@@ -249,36 +171,60 @@ function mapDraw_feature(feature) {
             coordinate.forEach((coordinate2) => {
                 if (isF) {
                     ctx.moveTo(
-                        (coordinate2[0] - lonSta) * zoomW,
-                        (latEnd - coordinate2[1]) * zoomH,
+                        (coordinate2[0] - lonSta) * zoom,
+                        (latEnd - coordinate2[1]) * zoom,
                     );
                 } else {
                     ctx.lineTo(
-                        (coordinate2[0] - lonSta) * zoomW,
-                        (latEnd - coordinate2[1]) * zoomH,
+                        (coordinate2[0] - lonSta) * zoom,
+                        (latEnd - coordinate2[1]) * zoom,
                     );
                 }
                 isF = false;
             });
-            //ctx.closePath();
             ctx.stroke();
         });
     }
 }
 
 function draw() {
+    //console.log(zoom);
+
     ctx.clearRect(0, 0, size[0], size[1]);
 
     ctx.strokeStyle = "#888";
     ctx.lineWidth = 1;
-    map_data.features.forEach((feature) => {
-        mapDraw_feature(feature);
-    });
+    if (document.getElementById("drawMap-city").checked)
+        if (zoom < 50) {
+        } else if (zoom < 200) {
+            map_data_01.features.forEach((feature) => {
+                mapDraw_feature(feature);
+            });
+        } else if (zoom < 1000) {
+            map_data_1.features.forEach((feature) => {
+                mapDraw_feature(feature);
+            });
+        } else {
+            map_data_5.features.forEach((feature) => {
+                mapDraw_feature(feature);
+            });
+        }
 
     ctx.strokeStyle = "#000";
-    map_pref_data.features.forEach((feature) => {
-        mapDraw_feature(feature);
-    });
+    if (zoom > 500) ctx.lineWidth = 2;
+    if (zoom < 50) {
+        map_pref_data_01.features.forEach((feature) => {
+            mapDraw_feature(feature);
+        });
+    } else if (zoom < 1000) {
+        map_pref_data_1.features.forEach((feature) => {
+            mapDraw_feature(feature);
+        });
+    } else {
+        map_pref_data_5.features.forEach((feature) => {
+            mapDraw_feature(feature);
+        });
+    }
 
     if (document.getElementById("drawRailroad").checked)
         railroad_data.features.forEach((feature) => {
@@ -342,13 +288,13 @@ function draw() {
                     feature.geometry.coordinates.forEach((coordinate) => {
                         if (isF) {
                             ctx.moveTo(
-                                (coordinate[0] - lonSta) * zoomW,
-                                (latEnd - coordinate[1]) * zoomH,
+                                (coordinate[0] - lonSta) * zoom,
+                                (latEnd - coordinate[1]) * zoom,
                             );
                         } else {
                             ctx.lineTo(
-                                (coordinate[0] - lonSta) * zoomW,
-                                (latEnd - coordinate[1]) * zoomH,
+                                (coordinate[0] - lonSta) * zoom,
+                                (latEnd - coordinate[1]) * zoom,
                             );
                         }
                         isF = false;
@@ -358,47 +304,63 @@ function draw() {
             }
         });
 
-    ctx.strokeStyle = "#000";
-    ctx.fillStyle = "#ff0";
+    ctx.strokeStyle = "#0008";
     ctx.lineWidth = 2;
 
-    if (document.getElementById("drawStation").checked)
+    if (
+        document.getElementById("drawStation").checked ||
+        document.getElementById("drawStationCenter").checked
+    )
         station_data.features.forEach((feature) => {
             if (feature.geometry) {
                 const geoType = feature.geometry.type;
-                ctx.beginPath();
-                let isF = true;
-                feature.geometry.coordinates.forEach((coordinate) => {
-                    if (isF) {
-                        ctx.moveTo(
-                            (coordinate[0] - lonSta) * zoomW,
-                            (latEnd - coordinate[1]) * zoomH,
-                        );
-                    } else {
-                        ctx.lineTo(
-                            (coordinate[0] - lonSta) * zoomW,
-                            (latEnd - coordinate[1]) * zoomH,
-                        );
-                    }
-                    isF = false;
-                });
+                const companyTypeCode = feature.properties.N02_002;
 
-                ctx.stroke();
-                ctx.beginPath();
-                const p1 = feature.geometry.coordinates[0];
-                const p2 =
-                    feature.geometry.coordinates[
-                        feature.geometry.coordinates.length - 1
-                    ];
-                    
-                ctx.arc(
-                    (Math.abs(p2[0] - p1[0]) / 2 - lonSta) * zoomW,
-                    (latEnd - Math.abs(p2[1] - p1[1]) / 2) * zoomH,
-                    3,
-                    0,
-                    2 * Math.PI,
-                );
-                ctx.fill();
+                if (document.getElementById("drawStation").checked) {
+                    ctx.beginPath();
+                    let isF = true;
+                    feature.geometry.coordinates.forEach((coordinate) => {
+                        if (isF) {
+                            ctx.moveTo(
+                                (coordinate[0] - lonSta) * zoom,
+                                (latEnd - coordinate[1]) * zoom,
+                            );
+                        } else {
+                            ctx.lineTo(
+                                (coordinate[0] - lonSta) * zoom,
+                                (latEnd - coordinate[1]) * zoom,
+                            );
+                        }
+                        isF = false;
+                    });
+
+                    ctx.stroke();
+                }
+
+                if (document.getElementById("drawStationCenter").checked) {
+                    if (companyTypeCode == 1) ctx.fillStyle = "#f00";
+                    else if (companyTypeCode == 2) ctx.fillStyle = "#00f";
+                    else if (companyTypeCode == 3) ctx.fillStyle = "#0f0";
+                    else if (companyTypeCode == 4) ctx.fillStyle = "#f0f";
+                    else if (companyTypeCode == 5) ctx.fillStyle = "#0ff";
+                    else ctx.fillStyle = "#0ff";
+
+                    ctx.beginPath();
+                    const p1 = feature.geometry.coordinates[0];
+                    const p2 =
+                        feature.geometry.coordinates[
+                            feature.geometry.coordinates.length - 1
+                        ];
+
+                    ctx.arc(
+                        ((p2[0] + p1[0]) / 2 - lonSta) * zoom,
+                        (latEnd - (p2[1] + p1[1]) / 2) * zoom,
+                        3,
+                        0,
+                        2 * Math.PI,
+                    );
+                    ctx.fill();
+                }
             }
         });
 }
@@ -452,14 +414,12 @@ canvas.addEventListener(
             latSta += dLat;
             latEnd += dLat;
         } else if (touches.length === 2 && lastTouches?.length === 2) {
-            // 2本指：ピンチズーム
             const rect = canvas.getBoundingClientRect();
 
             const prevDist = getTouchDistance(lastTouches);
             const curDist = getTouchDistance(touches);
             const scale = prevDist / curDist; // 縮小>1, 拡大<1
 
-            // ピンチ中心点（地理座標）を固定点にする
             const cx =
                 (touches[0].clientX + touches[1].clientX) / 2 - rect.left;
             const cy = (touches[0].clientY + touches[1].clientY) / 2 - rect.top;
@@ -475,8 +435,7 @@ canvas.addEventListener(
             latEnd = pivot.lat + newH * ry;
             latSta = pivot.lat - newH * (1 - ry);
 
-            zoomW = size[0] / (lonEnd - lonSta);
-            zoomH = size[1] / (latEnd - latSta);
+            zoom = size[1] / (latEnd - latSta);
         }
 
         lastTouches = touches;
@@ -486,7 +445,7 @@ canvas.addEventListener(
 );
 
 canvas.addEventListener("touchend", (e) => {
-    lastTouches = e.touches; // 残った指を記録
+    lastTouches = e.touches;
 });
 
 document.getElementById("setting-open").onclick = () => {
@@ -512,4 +471,228 @@ document.querySelector(".init-info-out").onclick = () => {
 
 document.querySelector(".init-info-out a").onclick = (e) => {
     e.stopPropagation();
+};
+
+window.onload = () => {
+    ichihai
+        .getData("data/N03-20250101_0.1.gzgj")
+        .then((res) => res.text())
+        .then((txt) => ichihai.gzipDecompress(txt))
+        .then((res2) => {
+            map_data_01 = JSON.parse(res2);
+
+            ichihai
+                .getData("data/N03-20250101_1.gzgj")
+                .then((res) => res.text())
+                .then((txt) => ichihai.gzipDecompress(txt))
+                .then((res2) => {
+                    map_data_1 = JSON.parse(res2);
+
+                    ichihai
+                        .getData("data/N03-20250101_5.gzgj")
+                        .then((res) => res.text())
+                        .then((txt) => ichihai.gzipDecompress(txt))
+                        .then((res2) => {
+                            map_data_5 = JSON.parse(res2);
+
+                            ichihai
+                                .getData(
+                                    "data/N03-20250101_prefecture_0.1.gzgj",
+                                )
+                                .then((res) => res.text())
+                                .then((txt) => ichihai.gzipDecompress(txt))
+                                .then((res2) => {
+                                    map_pref_data_01 = JSON.parse(res2);
+
+                                    ichihai
+                                        .getData(
+                                            "data/N03-20250101_prefecture_1.gzgj",
+                                        )
+                                        .then((res) => res.text())
+                                        .then((txt) =>
+                                            ichihai.gzipDecompress(txt),
+                                        )
+                                        .then((res2) => {
+                                            map_pref_data_1 = JSON.parse(res2);
+
+                                            ichihai
+                                                .getData(
+                                                    "data/N03-20250101_prefecture_5.gzgj",
+                                                )
+                                                .then((res) => res.text())
+                                                .then((txt) =>
+                                                    ichihai.gzipDecompress(txt),
+                                                )
+                                                .then((res2) => {
+                                                    map_pref_data_5 =
+                                                        JSON.parse(res2);
+
+                                                    ichihai
+                                                        .getData(
+                                                            "data/N02-24_RailroadSection.geojson.gzip",
+                                                        )
+                                                        .then((res) =>
+                                                            res.text(),
+                                                        )
+                                                        .then((txt) =>
+                                                            ichihai.gzipDecompress(
+                                                                txt,
+                                                            ),
+                                                        )
+                                                        .then((res2) => {
+                                                            railroad_data =
+                                                                JSON.parse(
+                                                                    res2,
+                                                                );
+                                                            ichihai
+                                                                .getData(
+                                                                    "data/N02-24_Station.geojson.gzip",
+                                                                )
+                                                                .then((res) =>
+                                                                    res.text(),
+                                                                )
+                                                                .then((txt) =>
+                                                                    ichihai.gzipDecompress(
+                                                                        txt,
+                                                                    ),
+                                                                )
+                                                                .then(
+                                                                    (res2) => {
+                                                                        station_data =
+                                                                            JSON.parse(
+                                                                                res2,
+                                                                            );
+
+                                                                        station_data.features.forEach(
+                                                                            (
+                                                                                feature,
+                                                                            ) => {
+                                                                                const p1 =
+                                                                                    feature
+                                                                                        .geometry
+                                                                                        .coordinates[0];
+                                                                                const p2 =
+                                                                                    feature
+                                                                                        .geometry
+                                                                                        .coordinates[
+                                                                                        feature
+                                                                                            .geometry
+                                                                                            .coordinates
+                                                                                            .length -
+                                                                                            1
+                                                                                    ];
+
+                                                                                const newD =
+                                                                                    [
+                                                                                        feature
+                                                                                            .properties
+                                                                                            .N02_001,
+                                                                                        feature
+                                                                                            .properties
+                                                                                            .N02_002,
+                                                                                        feature
+                                                                                            .properties
+                                                                                            .N02_003,
+                                                                                        feature
+                                                                                            .properties
+                                                                                            .N02_004,
+                                                                                        feature
+                                                                                            .properties
+                                                                                            .N02_005,
+                                                                                        feature
+                                                                                            .properties
+                                                                                            .N02_005c,
+                                                                                        feature
+                                                                                            .properties
+                                                                                            .N02_005g,
+                                                                                        (p1[0] +
+                                                                                            p2[0]) /
+                                                                                            2,
+                                                                                        (p1[1] +
+                                                                                            p2[1]) /
+                                                                                            2,
+                                                                                    ];
+                                                                                station_prop.push(
+                                                                                    newD,
+                                                                                );
+
+                                                                                if (
+                                                                                    !companyList.includes(
+                                                                                        newD[3],
+                                                                                    )
+                                                                                )
+                                                                                    companyList.push(
+                                                                                        newD[3],
+                                                                                    );
+
+                                                                                let row =
+                                                                                    companyRailroadList.find(
+                                                                                        (
+                                                                                            r,
+                                                                                        ) =>
+                                                                                            r[0] ==
+                                                                                            newD[3],
+                                                                                    );
+                                                                                if (
+                                                                                    !row
+                                                                                ) {
+                                                                                    row =
+                                                                                        [
+                                                                                            newD[3],
+                                                                                            [],
+                                                                                        ];
+                                                                                    companyRailroadList.push(
+                                                                                        row,
+                                                                                    );
+                                                                                } else if (
+                                                                                    !row[1].includes(
+                                                                                        newD[2],
+                                                                                    )
+                                                                                )
+                                                                                    row[1].push(
+                                                                                        newD[2],
+                                                                                    );
+                                                                            },
+                                                                        );
+
+                                                                        //console.log(companyRailroadList);
+                                                                        document.getElementById(
+                                                                            "setStation",
+                                                                        ).onclick =
+                                                                            setStation;
+                                                                        companyList.sort();
+                                                                        let compEle =
+                                                                            document.getElementById(
+                                                                                "company-select",
+                                                                            );
+                                                                        let i = 0;
+                                                                        companyList.forEach(
+                                                                            (
+                                                                                comp,
+                                                                            ) => {
+                                                                                //console.log(comp);
+                                                                                let opt =
+                                                                                    document.createElement(
+                                                                                        "option",
+                                                                                    );
+                                                                                opt.value =
+                                                                                    i;
+                                                                                opt.textContent =
+                                                                                    comp;
+                                                                                compEle.appendChild(
+                                                                                    opt,
+                                                                                );
+                                                                                i++;
+                                                                            },
+                                                                        );
+                                                                        updateWindowSize();
+                                                                    },
+                                                                );
+                                                        });
+                                                });
+                                        });
+                                });
+                        });
+                });
+        });
 };

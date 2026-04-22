@@ -230,26 +230,12 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
         <div class="init-info-out">
             <div class="init-info">
                 <h1 style="margin-top: 0">駅位置Guesser</h1>
-                <div>2026/04/21更新 v0.3.1</div>
+                <div>2026/04/22更新 v0.4.1</div>
 
                 <p class="init-info-main">
                     駅の位置を当てるゲームです。
                     <span style="color: gray; font-size: 0.9em"
                         >（ゲッサーというわけでもないですが...）</span
-                    ><br />
-                    なお、駅の位置は路線での駅の中心です（カーブしている駅、複数路線ある駅で注意）。会社名などはデータそのままです。
-                </p>
-                <p class="info-blue">
-                    データ：国土数値情報<br />
-                    ・<a
-                        href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N03-2025.html"
-                        target="_blank"
-                        >行政区域データ（KsjTmplt-N03-2025）</a
-                    >※加工して使用<br />
-                    ・<a
-                        href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N02-2024.html"
-                        target="_blank"
-                        >鉄道データ（KsjTmplt-N02-2024）</a
                     ><br />
                 </p>
                 <p>
@@ -269,6 +255,23 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                     <span style="color: #0ff; text-decoration: underline"
                         >第三セクター</span
                     >
+                    <span style="text-decoration: underline">駅</span>
+                </p>
+                <p class="info-green">
+                    なお、駅の位置は路線での駅の中心（ラインの始点と終点の中点）です。複数路線ある駅やカーブしている駅で注意。会社名などはデータそのままです。
+                </p>
+                <p class="info-gray">
+                    データ：国土数値情報<br />
+                    ・<a
+                        href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N03-2025.html"
+                        target="_blank"
+                        >行政区域データ（KsjTmplt-N03-2025）</a
+                    >※加工して使用<br />
+                    ・<a
+                        href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N02-2024.html"
+                        target="_blank"
+                        >鉄道データ（KsjTmplt-N02-2024）</a
+                    ><br />
                 </p>
                 <p>どこかクリックするとこの表示を閉じます。</p>
             </div>
@@ -291,12 +294,10 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                 <span class="setting-close" id="setting-close">閉じる</span>
                 <hr />
                 <div>
-                    <b style="font-size: 1.25em">絞り込み:</b>
+                    <b style="font-size: 1.25em">絞り込み</b>
                     （選択は無選択で全部、AND判定）<br />
-                    <hr class="l2" />
-
                     <div>
-                        <b>事業者種別:</b><br />
+                        事業者種別:
                         <select id="company-type-select" multiple size="1">
                             <option value="1" id="company-type-select-1">
                                 新幹線
@@ -315,9 +316,8 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                             </option>
                         </select>
                     </div>
-                    <hr class="l2" />
-                    <b>鉄道区分:</b><br />
                     <div>
+                        鉄道区分:
                         <select id="railroad-type-select" multiple size="1">
                             <option value="11" id="railroad-type-select-11">
                                 [鉄道] 普通鉄道JR
@@ -357,15 +357,21 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                             </option>
                         </select>
                     </div>
-                    <hr class="l2" />
                     <div>
-                        <b>運営会社:</b><br />
+                        運営会社:
                         <select id="company-select" multiple size="1"></select>
                     </div>
                 </div>
                 <hr />
                 <div>
                     <b style="font-size: 1.25em">描画設定</b><br />
+                    <label
+                        ><input
+                            type="checkbox"
+                            id="drawMap-city"
+                            checked
+                        />行政区域（市区町村）を描画する</label
+                    >
                     <label
                         ><input
                             type="checkbox"
@@ -377,7 +383,14 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                         ><input
                             type="checkbox"
                             id="drawStation"
-                        />駅を描画する</label
+                        />駅（ライン）を描画する</label
+                    >
+
+                    <label
+                        ><input
+                            type="checkbox"
+                            id="drawStationCenter"
+                        />駅中心（判定場所）を描画する</label
                     >
                 </div>
                 <hr />
