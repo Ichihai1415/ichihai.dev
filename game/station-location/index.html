@@ -237,6 +237,7 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                     <span style="color: gray; font-size: 0.9em"
                         >（ゲッサーというわけでもないですが...）</span
                     ><br />
+                    なお、駅の位置は路線での駅の中心です（カーブしている駅、複数路線ある駅で注意）。会社名などはデータそのままです。
                 </p>
                 <p class="info-blue">
                     データ：国土数値情報<br />
@@ -250,6 +251,24 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                         target="_blank"
                         >鉄道データ（KsjTmplt-N02-2024）</a
                     ><br />
+                </p>
+                <p>
+                    路線配色:
+                    <span style="color: #f00; text-decoration: underline"
+                        >新幹線</span
+                    >
+                    <span style="color: #00f; text-decoration: underline"
+                        >JR在来線</span
+                    >
+                    <span style="color: #0f0; text-decoration: underline"
+                        >公営鉄道</span
+                    >
+                    <span style="color: #f0f; text-decoration: underline"
+                        >民営鉄道</span
+                    >
+                    <span style="color: #0ff; text-decoration: underline"
+                        >第三セクター</span
+                    >
                 </p>
                 <p>どこかクリックするとこの表示を閉じます。</p>
             </div>
@@ -343,6 +362,23 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                         <b>運営会社:</b><br />
                         <select id="company-select" multiple size="1"></select>
                     </div>
+                </div>
+                <hr />
+                <div>
+                    <b style="font-size: 1.25em">描画設定</b><br />
+                    <label
+                        ><input
+                            type="checkbox"
+                            id="drawRailroad"
+                            checked
+                        />路線図を描画する</label
+                    >
+                    <label
+                        ><input
+                            type="checkbox"
+                            id="drawStation"
+                        />駅を描画する</label
+                    >
                 </div>
                 <hr />
             </div>

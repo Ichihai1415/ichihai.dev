@@ -280,62 +280,94 @@ function draw() {
         mapDraw_feature(feature);
     });
 
-    railroad_data.features.forEach((feature) => {
-        if (feature.geometry) {
-            const geoType = feature.geometry.type;
-            ctx.beginPath();
-            let isF = true;
-            const typeCode = feature.properties.N02_001;
-            const companyTypeCode = feature.properties.N02_002;
-            const lineName = feature.properties.N02_003;
-            const company = feature.properties.N02_004;
-            //const stationName = feature.properties.N02_005;
-            //const stationCode1 = feature.properties.N02_005c;
-            //const stationCode2 = feature.properties.N02_005g;
+    if (document.getElementById("drawRailroad").checked)
+        railroad_data.features.forEach((feature) => {
+            if (feature.geometry) {
+                const geoType = feature.geometry.type;
+                ctx.beginPath();
+                let isF = true;
+                const typeCode = feature.properties.N02_001;
+                const companyTypeCode = feature.properties.N02_002;
+                const lineName = feature.properties.N02_003;
+                const company = feature.properties.N02_004;
+                //const stationName = feature.properties.N02_005;
+                //const stationCode1 = feature.properties.N02_005c;
+                //const stationCode2 = feature.properties.N02_005g;
 
-            if (
-                (document.getElementById("company-type-select").selectedOptions
-                    .length == 0 ||
-                    document.getElementById(
-                        "company-type-select-" + companyTypeCode,
-                    ).selected) &&
-                (document.getElementById("railroad-type-select").selectedOptions
-                    .length == 0 ||
-                    document.getElementById("railroad-type-select-" + typeCode)
-                        .selected) &&
-                (document.getElementById("company-select").selectedOptions
-                    .length == 0 ||
-                    Array.from(
-                        document.getElementById("company-select")
-                            .selectedOptions,
-                    )
-                        .map((o) => o.innerText)
-                        .includes(company))
-            ) {
-                if (companyTypeCode == 1) {
-                    ctx.strokeStyle = "#f00";
-                    ctx.lineWidth = 2;
-                } else if (companyTypeCode == 2) {
-                    ctx.strokeStyle = "#00f";
-                    ctx.lineWidth = 1;
-                } else if (companyTypeCode == 3) {
-                    ctx.strokeStyle = "#0f0";
-                    ctx.lineWidth = 1;
-                } else if (companyTypeCode == 4) {
-                    ctx.strokeStyle = "#f0f";
-                    ctx.lineWidth = 1;
-                } else if (companyTypeCode == 5) {
-                    ctx.strokeStyle = "#0ff";
-                    ctx.lineWidth = 1;
-                } else if (typeCode > 12) {
-                    ctx.strokeStyle = "#ff0";
-                    ctx.lineWidth = 1;
-                } else {
-                    //ないはず
-                    ctx.strokeStyle = "#000";
-                    ctx.lineWidth = 1;
+                if (
+                    (document.getElementById("company-type-select")
+                        .selectedOptions.length == 0 ||
+                        document.getElementById(
+                            "company-type-select-" + companyTypeCode,
+                        ).selected) &&
+                    (document.getElementById("railroad-type-select")
+                        .selectedOptions.length == 0 ||
+                        document.getElementById(
+                            "railroad-type-select-" + typeCode,
+                        ).selected) &&
+                    (document.getElementById("company-select").selectedOptions
+                        .length == 0 ||
+                        Array.from(
+                            document.getElementById("company-select")
+                                .selectedOptions,
+                        )
+                            .map((o) => o.innerText)
+                            .includes(company))
+                ) {
+                    if (companyTypeCode == 1) {
+                        ctx.strokeStyle = "#f00";
+                        ctx.lineWidth = 2;
+                    } else if (companyTypeCode == 2) {
+                        ctx.strokeStyle = "#00f";
+                        ctx.lineWidth = 1;
+                    } else if (companyTypeCode == 3) {
+                        ctx.strokeStyle = "#0f0";
+                        ctx.lineWidth = 1;
+                    } else if (companyTypeCode == 4) {
+                        ctx.strokeStyle = "#f0f";
+                        ctx.lineWidth = 1;
+                    } else if (companyTypeCode == 5) {
+                        ctx.strokeStyle = "#0ff";
+                        ctx.lineWidth = 1;
+                    } else if (typeCode > 12) {
+                        //こないはず
+                        ctx.strokeStyle = "#ff0";
+                        ctx.lineWidth = 1;
+                    } else {
+                        //ないはず
+                        ctx.strokeStyle = "#000";
+                        ctx.lineWidth = 1;
+                    }
+
+                    feature.geometry.coordinates.forEach((coordinate) => {
+                        if (isF) {
+                            ctx.moveTo(
+                                (coordinate[0] - lonSta) * zoomW,
+                                (latEnd - coordinate[1]) * zoomH,
+                            );
+                        } else {
+                            ctx.lineTo(
+                                (coordinate[0] - lonSta) * zoomW,
+                                (latEnd - coordinate[1]) * zoomH,
+                            );
+                        }
+                        isF = false;
+                    });
+                    ctx.stroke();
                 }
+            }
+        });
 
+    ctx.strokeStyle = "#000";
+    ctx.fillStyle = "#ff0";
+    ctx.lineWidth = 2;
+
+    if (document.getElementById("drawStation").checked)
+        station_data.features.forEach((feature) => {
+            if (feature.geometry) {
+                const geoType = feature.geometry.type;
+                ctx.beginPath();
+                let isF = true;
                 feature.geometry.coordinates.forEach((coordinate) => {
                     if (isF) {
                         ctx.moveTo(
@@ -350,38 +382,25 @@ function draw() {
                     }
                     isF = false;
                 });
+
                 ctx.stroke();
+                ctx.beginPath();
+                const p1 = feature.geometry.coordinates[0];
+                const p2 =
+                    feature.geometry.coordinates[
+                        feature.geometry.coordinates.length - 1
+                    ];
+                    
+                ctx.arc(
+                    (Math.abs(p2[0] - p1[0]) / 2 - lonSta) * zoomW,
+                    (latEnd - Math.abs(p2[1] - p1[1]) / 2) * zoomH,
+                    3,
+                    0,
+                    2 * Math.PI,
+                );
+                ctx.fill();
             }
-        }
-    });
-
-    return;
-
-    ctx.strokeStyle = "#000";
-    ctx.lineWidth = 2;
-
-    station_data.features.forEach((feature) => {
-        if (feature.geometry) {
-            const geoType = feature.geometry.type;
-            ctx.beginPath();
-            let isF = true;
-            feature.geometry.coordinates.forEach((coordinate) => {
-                if (isF) {
-                    ctx.moveTo(
-                        (coordinate[0] - lonSta) * zoomW,
-                        (latEnd - coordinate[1]) * zoomH,
-                    );
-                } else {
-                    ctx.lineTo(
-                        (coordinate[0] - lonSta) * zoomW,
-                        (latEnd - coordinate[1]) * zoomH,
-                    );
-                }
-                isF = false;
-            });
-            ctx.stroke();
-        }
-    });
+        });
 }
 
 let lastTouches = null;
