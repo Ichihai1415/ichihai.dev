@@ -1,5 +1,7 @@
 import * as ichihai from "/js/ichihai.js";
 
+const VERSION = "v0.4.3";
+
 const canvas = document.getElementById("main");
 const ctx = canvas.getContext("2d");
 
@@ -479,6 +481,15 @@ document.getElementById("home-pos").onclick = () => {
     lonEnd = 150;
     updateWindowSize();
 };
+
+{
+    const v = document.getElementById("version").innerText;
+    if (v != VERSION) {
+        document.getElementById("version").innerText =
+            `注意：スクリプトが最新でない可能性があります（HTML: ${document.getElementById("version").innerText} / JS: ${VERSION}）。`;
+        document.getElementById("version").style.color = "red";
+    }
+}
 
 window.onload = async () => {
     document.getElementById("init-message").textContent =
