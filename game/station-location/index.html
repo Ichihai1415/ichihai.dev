@@ -170,7 +170,7 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
             }
 
             .setting-out {
-                display: none;
+                visibility: hidden;
             }
 
             .init-info,
@@ -191,24 +191,24 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                 background-color: #0001;
             }
 
-            .setting-open,
+            .home-pos,
             .setting-close {
                 margin: 4px;
                 float: right;
                 border: 1px solid #444;
                 padding: 2px;
                 border-radius: 4px;
-                cursor: pointer;
+                cursor: default;
                 background-color: #ddd;
             }
 
-            .setting-open {
+            .home-pos {
                 position: absolute;
                 left: 8px;
                 bottom: 8px;
             }
 
-            .setting-open:hover,
+            .home-pos:hover,
             .setting-close:hover {
                 background-color: #ccc;
             }
@@ -230,7 +230,7 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
         <div class="init-info-out">
             <div class="init-info">
                 <h1 style="margin-top: 0">駅位置Guesser</h1>
-                <div>2026/04/22更新 v0.4.1</div>
+                <div>2026/04/22更新 v0.4.2</div>
 
                 <p class="init-info-main">
                     駅の位置を当てるゲームです。
@@ -240,7 +240,12 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                 </p>
                 <p>
                     路線配色:
-                    <span style="color: #f00; text-decoration: underline"
+                    <span
+                        style="
+                            color: #f00;
+                            text-decoration: underline;
+                            font-weight: bold;
+                        "
                         >新幹線</span
                     >
                     <span style="color: #00f; text-decoration: underline"
@@ -255,7 +260,10 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                     <span style="color: #0ff; text-decoration: underline"
                         >第三セクター</span
                     >
-                    <span style="text-decoration: underline">駅</span>
+                    <span
+                        style="text-decoration: underline; font-weight: bolder"
+                        >駅</span
+                    >
                 </p>
                 <p class="info-green">
                     なお、駅の位置は路線での駅の中心（ラインの始点と終点の中点）です。複数路線ある駅やカーブしている駅で注意。会社名などはデータそのままです。
@@ -278,14 +286,22 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
         </div>
         <canvas id="main"></canvas>
         <div class="on">
-            <button id="setStation">start</button>
+            <button id="setting-open">設定</button>
+            <button id="setStation">駅の抽選</button>
+            <button id="answerLocation">位置の決定</button>
             <div>
-                <span id="company-name">[会社名]</span>
-                <span id="railroad-name">[路線名]</span>
-                <span id="station-name">[駅名]</span>
+                <span id="company-name"
+                    ><span style="color: gray">[会社名]</span></span
+                >
+                <span id="railroad-name"
+                    ><span style="color: gray">[路線名]</span></span
+                >
+                <span id="station-name"
+                    ><span style="color: gray">[駅名]</span></span
+                >
             </div>
         </div>
-        <span class="setting-open" id="setting-open">setting</span>
+        <span class="home-pos" id="home-pos">全体表示</span>
 
         <div class="setting-out">
             <div class="setting">

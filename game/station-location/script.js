@@ -9,6 +9,7 @@ let lonSta = 120;
 let lonEnd = 150;
 let size = [1, 1];
 let zoom = 1;
+
 let zoom_factor = 1.2;
 let zoom_min = 20;
 let zoom_max = 50000;
@@ -23,6 +24,7 @@ let railroad_data = null;
 let station_data = null;
 
 let s_railroad = true;
+let answerPos = null;
 
 function screenToGeo(sx, sy) {
     const lon = lonSta + sx / zoom;
@@ -70,6 +72,7 @@ let dragging = false;
 let dragStart = null;
 
 canvas.addEventListener("mousedown", (e) => {
+    if (!dragging) answerPos = screenToGeo(e.offsetX, e.offsetY);
     dragging = true;
     dragStart = screenToGeo(e.offsetX, e.offsetY);
 });
@@ -78,7 +81,7 @@ canvas.addEventListener("mousemove", (e) => {
     if (!dragging) return;
 
     const cur = screenToGeo(e.offsetX, e.offsetY);
-    const dLon = dragStart.lon - cur.lon; // ドラッグ差分
+    const dLon = dragStart.lon - cur.lon;
     const dLat = dragStart.lat - cur.lat;
 
     lonSta += dLon;
@@ -86,7 +89,6 @@ canvas.addEventListener("mousemove", (e) => {
     latSta += dLat;
     latEnd += dLat;
 
-    // dragStartを更新しないとラグが出る
     dragStart = screenToGeo(e.offsetX, e.offsetY);
 
     draw();
@@ -260,30 +262,17 @@ function draw() {
                             .map((o) => o.innerText)
                             .includes(company))
                 ) {
+                    ctx.lineWidth = 1;
                     if (companyTypeCode == 1) {
                         ctx.strokeStyle = "#f00";
                         ctx.lineWidth = 2;
-                    } else if (companyTypeCode == 2) {
-                        ctx.strokeStyle = "#00f";
-                        ctx.lineWidth = 1;
-                    } else if (companyTypeCode == 3) {
-                        ctx.strokeStyle = "#0f0";
-                        ctx.lineWidth = 1;
-                    } else if (companyTypeCode == 4) {
-                        ctx.strokeStyle = "#f0f";
-                        ctx.lineWidth = 1;
-                    } else if (companyTypeCode == 5) {
-                        ctx.strokeStyle = "#0ff";
-                        ctx.lineWidth = 1;
-                    } else if (typeCode > 12) {
-                        //こないはず
-                        ctx.strokeStyle = "#ff0";
-                        ctx.lineWidth = 1;
-                    } else {
-                        //ないはず
-                        ctx.strokeStyle = "#000";
-                        ctx.lineWidth = 1;
-                    }
+                    } else if (companyTypeCode == 2) ctx.strokeStyle = "#00f";
+                    else if (companyTypeCode == 3) ctx.strokeStyle = "#0f0";
+                    else if (companyTypeCode == 4) ctx.strokeStyle = "#f0f";
+                    else if (companyTypeCode == 5) ctx.strokeStyle = "#0ff";
+                    //以降ないはず
+                    else if (typeCode > 12) ctx.strokeStyle = "#ff0";
+                    else ctx.strokeStyle = "#000";
 
                     feature.geometry.coordinates.forEach((coordinate) => {
                         if (isF) {
@@ -363,6 +352,20 @@ function draw() {
                 }
             }
         });
+
+    if (answerPos) {
+        const cx = (answerPos.lon - lonSta) * zoom;
+        const cy = (latEnd - answerPos.lat) * zoom;
+
+        ctx.lineWidth = 6;
+        ctx.strokeStyle = "#0008";
+        ctx.beginPath();
+        ctx.moveTo(cx + 20, cy);
+        ctx.lineTo(cx - 20, cy);
+        ctx.moveTo(cx, cy + 20);
+        ctx.lineTo(cx, cy - 20);
+        ctx.stroke();
+    }
 }
 
 let lastTouches = null;
@@ -385,6 +388,11 @@ canvas.addEventListener(
     (e) => {
         e.preventDefault();
         lastTouches = e.touches;
+        const rect = canvas.getBoundingClientRect();
+        answerPos = screenToGeo(
+            lastTouches[0].clientX - rect.left,
+            lastTouches[0].clientY - rect.top,
+        );
     },
     { passive: false },
 );
@@ -396,7 +404,6 @@ canvas.addEventListener(
         const touches = e.touches;
 
         if (touches.length === 1 && lastTouches?.length === 1) {
-            // 1本指：ドラッグ
             const rect = canvas.getBoundingClientRect();
             const prevGeo = screenToGeo(
                 lastTouches[0].clientX - rect.left,
@@ -449,15 +456,15 @@ canvas.addEventListener("touchend", (e) => {
 });
 
 document.getElementById("setting-open").onclick = () => {
-    document.querySelector(".setting-out").style.display = "inherit";
+    document.querySelector(".setting-out").style.visibility = "visible";
 };
 
 document.getElementById("setting-close").onclick = () => {
-    document.querySelector(".setting-out").style.display = "none";
+    document.querySelector(".setting-out").style.visibility = "hidden";
 };
 
 document.querySelector(".setting-out").onclick = () => {
-    document.querySelector(".setting-out").style.display = "none";
+    document.querySelector(".setting-out").style.visibility = "hidden";
     draw();
 };
 
@@ -471,6 +478,14 @@ document.querySelector(".init-info-out").onclick = () => {
 
 document.querySelector(".init-info-out a").onclick = (e) => {
     e.stopPropagation();
+};
+
+document.getElementById("home-pos").onclick = () => {
+    latSta = 20;
+    latEnd = 50;
+    lonSta = 120;
+    lonEnd = 150;
+    updateWindowSize();
 };
 
 window.onload = () => {
