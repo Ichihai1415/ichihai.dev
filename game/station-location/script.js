@@ -1,6 +1,6 @@
 import * as ichihai from "/js/ichihai.js";
 
-const VERSION = "v0.4.3";
+const VERSION = "v0.4.4";
 
 const canvas = document.getElementById("main");
 const ctx = canvas.getContext("2d");
@@ -26,6 +26,8 @@ let railroad_data = null;
 let station_data = null;
 
 let s_railroad = true;
+
+let answer = [];
 let answerPos = null;
 
 function screenToGeo(sx, sy) {
@@ -122,6 +124,7 @@ function updateWindowSize() {
 let station_prop = [];
 let companyList = [];
 let companyRailroadList = [[]];
+let answerLocation = [];
 
 window.addEventListener("resize", updateWindowSize);
 
@@ -153,6 +156,7 @@ function setStation() {
                     .map((o) => o.innerText)
                     .includes(st[3]))
         ) {
+            answer = st;
             document.getElementById("company-name").innerText = st[3];
             document.getElementById("railroad-name").innerText = st[2];
             document.getElementById("station-name").innerText = st[4];
@@ -491,6 +495,20 @@ document.getElementById("home-pos").onclick = () => {
     }
 }
 
+document.getElementById("answerLocation").onclick = () => {
+    if (!answerPos) {
+        alert(
+            "解答の位置が設定されていません。クリック・タッチで設定されます（十字印が付きます）。",
+        );
+        return;
+    }
+    alert(`【　結　果　発　表　（　仮　）　】
+問題: ${answer[3]} ${answer[2]} ${answer[4]}駅  
+正解: 北緯${answer[8]}度, 東経${answer[7]}度 
+指定: 北緯${answerPos.lat}度, 東経${answerPos.lon}度 
+距離: （未実装）`);
+};
+
 window.onload = async () => {
     document.getElementById("init-message").textContent =
         "取得中... data/N03-20250101_0.1.gzgj";
@@ -573,6 +591,7 @@ window.onload = async () => {
             ];
 
         const newD = [
+            //"properties": { "N02_001": "11", "N02_002": "2", "N02_003": "指宿枕崎線", "N02_004": "九州旅客鉄道", "N02_005": "二月田", "N02_005c": "010112", "N02_005g": "010112" }
             feature.properties.N02_001,
             feature.properties.N02_002,
             feature.properties.N02_003,
@@ -620,4 +639,5 @@ window.onload = async () => {
     };
     document.getElementById("init-message").textContent =
         "初期化が完了しました。どこかクリックするとこの表示を閉じます。";
+    document.getElementById("init-message").style.fontWeight = "bold";
 };

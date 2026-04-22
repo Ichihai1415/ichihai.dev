@@ -176,7 +176,6 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
             .init-info,
             .setting {
                 background-color: #eef;
-                min-width: 400px;
                 margin: 10px;
                 padding: 6px;
                 border-radius: 10px;
@@ -230,7 +229,7 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
         <div class="init-info-out">
             <div class="init-info">
                 <h1 style="margin-top: 0">駅位置Guesser</h1>
-                <div>2026/04/22更新 <span id="version">v0.4.3</span></div>
+                <div>2026/04/22更新 <span id="version">v0.4.4</span></div>
 
                 <p class="init-info-main">
                     駅の位置を当てるゲームです。
@@ -267,6 +266,9 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                 </p>
                 <p class="info-green">
                     なお、駅の位置は路線での駅の中心（ラインの始点と終点の中点）です。複数路線ある駅やカーブしている駅で注意。会社名などはデータそのままです。
+                </p>
+                <p class="info-green">
+                    現在開発中です。スマートフォン等では特に動作に不具合がある可能性があります。
                 </p>
                 <p class="info-gray">
                     データ：国土数値情報<br />
@@ -389,21 +391,20 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                             id="drawMap-city"
                             checked
                         />行政区域（市区町村）を描画する</label
-                    >
+                    ><br />
                     <label
                         ><input
                             type="checkbox"
                             id="drawRailroad"
                             checked
                         />路線図を描画する</label
-                    >
+                    ><br />
                     <label
                         ><input
                             type="checkbox"
                             id="drawStation"
                         />駅（ライン）を描画する</label
-                    >
-
+                    ><br />
                     <label
                         ><input
                             type="checkbox"
