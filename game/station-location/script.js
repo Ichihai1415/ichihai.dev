@@ -472,14 +472,6 @@ document.querySelector(".setting-out *").onclick = (e) => {
     e.stopPropagation();
 };
 
-document.querySelector(".init-info-out").onclick = () => {
-    document.querySelector(".init-info-out").style.display = "none";
-};
-
-document.querySelector(".init-info-out a").onclick = (e) => {
-    e.stopPropagation();
-};
-
 document.getElementById("home-pos").onclick = () => {
     latSta = 20;
     latEnd = 50;
@@ -488,226 +480,133 @@ document.getElementById("home-pos").onclick = () => {
     updateWindowSize();
 };
 
-window.onload = () => {
-    ichihai
-        .getData("data/N03-20250101_0.1.gzgj")
-        .then((res) => res.text())
-        .then((txt) => ichihai.gzipDecompress(txt))
-        .then((res2) => {
-            map_data_01 = JSON.parse(res2);
+window.onload = async () => {
+    document.getElementById("init-message").textContent =
+        "取得中... data/N03-20250101_0.1.gzgj";
+    map_data_01 = JSON.parse(
+        await ichihai.gzipDecompress(
+            await (await ichihai.getData("data/N03-20250101_0.1.gzgj")).text(),
+        ),
+    );
 
-            ichihai
-                .getData("data/N03-20250101_1.gzgj")
-                .then((res) => res.text())
-                .then((txt) => ichihai.gzipDecompress(txt))
-                .then((res2) => {
-                    map_data_1 = JSON.parse(res2);
+    document.getElementById("init-message").textContent =
+        "取得中... data/N03-20250101_1.gzgj";
+    map_data_1 = JSON.parse(
+        await ichihai.gzipDecompress(
+            await (await ichihai.getData("data/N03-20250101_1.gzgj")).text(),
+        ),
+    );
 
-                    ichihai
-                        .getData("data/N03-20250101_5.gzgj")
-                        .then((res) => res.text())
-                        .then((txt) => ichihai.gzipDecompress(txt))
-                        .then((res2) => {
-                            map_data_5 = JSON.parse(res2);
+    document.getElementById("init-message").textContent =
+        "取得中... data/N03-20250101_5.gzgj";
+    map_data_5 = JSON.parse(
+        await ichihai.gzipDecompress(
+            await (await ichihai.getData("data/N03-20250101_5.gzgj")).text(),
+        ),
+    );
 
-                            ichihai
-                                .getData(
-                                    "data/N03-20250101_prefecture_0.1.gzgj",
-                                )
-                                .then((res) => res.text())
-                                .then((txt) => ichihai.gzipDecompress(txt))
-                                .then((res2) => {
-                                    map_pref_data_01 = JSON.parse(res2);
+    document.getElementById("init-message").textContent =
+        "取得中... data/N03-20250101_prefecture_0.1.gzgj";
+    map_pref_data_01 = JSON.parse(
+        await ichihai.gzipDecompress(
+            await (
+                await ichihai.getData("data/N03-20250101_prefecture_0.1.gzgj")
+            ).text(),
+        ),
+    );
 
-                                    ichihai
-                                        .getData(
-                                            "data/N03-20250101_prefecture_1.gzgj",
-                                        )
-                                        .then((res) => res.text())
-                                        .then((txt) =>
-                                            ichihai.gzipDecompress(txt),
-                                        )
-                                        .then((res2) => {
-                                            map_pref_data_1 = JSON.parse(res2);
+    document.getElementById("init-message").textContent =
+        "取得中... data/N03-20250101_prefecture_1.gzgj";
+    map_pref_data_1 = JSON.parse(
+        await ichihai.gzipDecompress(
+            await (
+                await ichihai.getData("data/N03-20250101_prefecture_1.gzgj")
+            ).text(),
+        ),
+    );
 
-                                            ichihai
-                                                .getData(
-                                                    "data/N03-20250101_prefecture_5.gzgj",
-                                                )
-                                                .then((res) => res.text())
-                                                .then((txt) =>
-                                                    ichihai.gzipDecompress(txt),
-                                                )
-                                                .then((res2) => {
-                                                    map_pref_data_5 =
-                                                        JSON.parse(res2);
+    document.getElementById("init-message").textContent =
+        "取得中... data/N03-20250101_prefecture_5.gzgj";
+    map_pref_data_5 = JSON.parse(
+        await ichihai.gzipDecompress(
+            await (
+                await ichihai.getData("data/N03-20250101_prefecture_5.gzgj")
+            ).text(),
+        ),
+    );
 
-                                                    ichihai
-                                                        .getData(
-                                                            "data/N02-24_RailroadSection.geojson.gzip",
-                                                        )
-                                                        .then((res) =>
-                                                            res.text(),
-                                                        )
-                                                        .then((txt) =>
-                                                            ichihai.gzipDecompress(
-                                                                txt,
-                                                            ),
-                                                        )
-                                                        .then((res2) => {
-                                                            railroad_data =
-                                                                JSON.parse(
-                                                                    res2,
-                                                                );
-                                                            ichihai
-                                                                .getData(
-                                                                    "data/N02-24_Station.geojson.gzip",
-                                                                )
-                                                                .then((res) =>
-                                                                    res.text(),
-                                                                )
-                                                                .then((txt) =>
-                                                                    ichihai.gzipDecompress(
-                                                                        txt,
-                                                                    ),
-                                                                )
-                                                                .then(
-                                                                    (res2) => {
-                                                                        station_data =
-                                                                            JSON.parse(
-                                                                                res2,
-                                                                            );
+    document.getElementById("init-message").textContent =
+        "取得中... data/N02-24_RailroadSection.gzgj";
+    railroad_data = JSON.parse(
+        await ichihai.gzipDecompress(
+            await (
+                await ichihai.getData("data/N02-24_RailroadSection.gzgj")
+            ).text(),
+        ),
+    );
 
-                                                                        station_data.features.forEach(
-                                                                            (
-                                                                                feature,
-                                                                            ) => {
-                                                                                const p1 =
-                                                                                    feature
-                                                                                        .geometry
-                                                                                        .coordinates[0];
-                                                                                const p2 =
-                                                                                    feature
-                                                                                        .geometry
-                                                                                        .coordinates[
-                                                                                        feature
-                                                                                            .geometry
-                                                                                            .coordinates
-                                                                                            .length -
-                                                                                            1
-                                                                                    ];
+    document.getElementById("init-message").textContent =
+        "取得中... data/N02-24_Station.gzgj";
+    station_data = JSON.parse(
+        await ichihai.gzipDecompress(
+            await (await ichihai.getData("data/N02-24_Station.gzgj")).text(),
+        ),
+    );
 
-                                                                                const newD =
-                                                                                    [
-                                                                                        feature
-                                                                                            .properties
-                                                                                            .N02_001,
-                                                                                        feature
-                                                                                            .properties
-                                                                                            .N02_002,
-                                                                                        feature
-                                                                                            .properties
-                                                                                            .N02_003,
-                                                                                        feature
-                                                                                            .properties
-                                                                                            .N02_004,
-                                                                                        feature
-                                                                                            .properties
-                                                                                            .N02_005,
-                                                                                        feature
-                                                                                            .properties
-                                                                                            .N02_005c,
-                                                                                        feature
-                                                                                            .properties
-                                                                                            .N02_005g,
-                                                                                        (p1[0] +
-                                                                                            p2[0]) /
-                                                                                            2,
-                                                                                        (p1[1] +
-                                                                                            p2[1]) /
-                                                                                            2,
-                                                                                    ];
-                                                                                station_prop.push(
-                                                                                    newD,
-                                                                                );
+    document.getElementById("init-message").textContent = "データ処理中...";
+    station_data.features.forEach((feature) => {
+        const p1 = feature.geometry.coordinates[0];
+        const p2 =
+            feature.geometry.coordinates[
+                feature.geometry.coordinates.length - 1
+            ];
 
-                                                                                if (
-                                                                                    !companyList.includes(
-                                                                                        newD[3],
-                                                                                    )
-                                                                                )
-                                                                                    companyList.push(
-                                                                                        newD[3],
-                                                                                    );
+        const newD = [
+            feature.properties.N02_001,
+            feature.properties.N02_002,
+            feature.properties.N02_003,
+            feature.properties.N02_004,
+            feature.properties.N02_005,
+            feature.properties.N02_005c,
+            feature.properties.N02_005g,
+            (p1[0] + p2[0]) / 2,
+            (p1[1] + p2[1]) / 2,
+        ];
+        station_prop.push(newD);
 
-                                                                                let row =
-                                                                                    companyRailroadList.find(
-                                                                                        (
-                                                                                            r,
-                                                                                        ) =>
-                                                                                            r[0] ==
-                                                                                            newD[3],
-                                                                                    );
-                                                                                if (
-                                                                                    !row
-                                                                                ) {
-                                                                                    row =
-                                                                                        [
-                                                                                            newD[3],
-                                                                                            [],
-                                                                                        ];
-                                                                                    companyRailroadList.push(
-                                                                                        row,
-                                                                                    );
-                                                                                } else if (
-                                                                                    !row[1].includes(
-                                                                                        newD[2],
-                                                                                    )
-                                                                                )
-                                                                                    row[1].push(
-                                                                                        newD[2],
-                                                                                    );
-                                                                            },
-                                                                        );
+        if (!companyList.includes(newD[3])) companyList.push(newD[3]);
 
-                                                                        //console.log(companyRailroadList);
-                                                                        document.getElementById(
-                                                                            "setStation",
-                                                                        ).onclick =
-                                                                            setStation;
-                                                                        companyList.sort();
-                                                                        let compEle =
-                                                                            document.getElementById(
-                                                                                "company-select",
-                                                                            );
-                                                                        let i = 0;
-                                                                        companyList.forEach(
-                                                                            (
-                                                                                comp,
-                                                                            ) => {
-                                                                                //console.log(comp);
-                                                                                let opt =
-                                                                                    document.createElement(
-                                                                                        "option",
-                                                                                    );
-                                                                                opt.value =
-                                                                                    i;
-                                                                                opt.textContent =
-                                                                                    comp;
-                                                                                compEle.appendChild(
-                                                                                    opt,
-                                                                                );
-                                                                                i++;
-                                                                            },
-                                                                        );
-                                                                        updateWindowSize();
-                                                                    },
-                                                                );
-                                                        });
-                                                });
-                                        });
-                                });
-                        });
-                });
-        });
+        let row = companyRailroadList.find((r) => r[0] == newD[3]);
+        if (!row) {
+            row = [newD[3], []];
+            companyRailroadList.push(row);
+        } else if (!row[1].includes(newD[2])) row[1].push(newD[2]);
+    });
+
+    //console.log(companyRailroadList);
+    document.getElementById("setStation").onclick = setStation;
+    companyList.sort();
+    let compEle = document.getElementById("company-select");
+    let i = 0;
+    companyList.forEach((comp) => {
+        //console.log(comp);
+        let opt = document.createElement("option");
+        opt.value = i;
+        opt.textContent = comp;
+        compEle.appendChild(opt);
+        i++;
+    });
+
+    document.getElementById("init-message").textContent = "初期描画中...";
+    updateWindowSize();
+
+    document.querySelector(".init-info-out").onclick = () => {
+        document.querySelector(".init-info-out").style.display = "none";
+    };
+
+    document.querySelector(".init-info-out a").onclick = (e) => {
+        e.stopPropagation();
+    };
+    document.getElementById("init-message").textContent =
+        "初期化が完了しました。どこかクリックするとこの表示を閉じます。";
 };
