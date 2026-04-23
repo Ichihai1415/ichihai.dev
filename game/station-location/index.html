@@ -166,7 +166,7 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                 align-items: center;
                 background-color: #0018;
                 z-index: 5;
-                
+
                 visibility: hidden;
             }
 
@@ -223,13 +223,26 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                 border: none;
                 background-color: #444;
             }
+
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6 {
+                margin-top: 0;
+            }
+
+            .result-station {
+                font-weight: bold;
+            }
         </style>
     </head>
     <body>
         <div class="darkBack init-info-out">
             <div class="init-info">
-                <h1 style="margin-top: 0">駅位置Guesser</h1>
-                <div>2026/04/22更新 <span id="version">v0.4.4</span></div>
+                <h1>駅位置Guesser</h1>
+                <div>2026/04/23更新 <span id="version">v0.5.0</span></div>
 
                 <p class="init-info-main">
                     駅の位置を当てるゲームです。
@@ -261,7 +274,10 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                     >
                     <span
                         style="text-decoration: underline; font-weight: bolder"
-                        >駅</span
+                        >駅（ライン）</span
+                    >　
+                    <span style="color: #00f; text-decoration: underline"
+                        >（単色）</span
                     >
                 </p>
                 <p class="info-green">
@@ -290,9 +306,14 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
         </div>
         <canvas id="main"></canvas>
         <div class="on">
-            <button id="setting-open">設定</button>
-            <button id="setStation">駅の抽選</button>
-            <button id="answerLocation">位置の決定</button>
+            <button
+                id="setting-open"
+                style="background-color: #ccc; border-radius: 4px"
+            >
+                設定</button
+            >　 <button id="setStation">駅の再抽選/次の問題</button>　
+            <button id="answerLocation">答え合わせ</button>　
+            <button id="rememberStation">駅の位置を覚えよう</button>
             <div>
                 <span id="company-name"
                     ><span style="color: gray">[会社名]</span></span
@@ -402,6 +423,13 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                     <label
                         ><input
                             type="checkbox"
+                            id="drawColorByCompanyType"
+                            checked
+                        />事業者種別で色を分ける</label
+                    ><br />
+                    <label
+                        ><input
+                            type="checkbox"
                             id="drawStation"
                         />駅（ライン）を描画する</label
                     ><br />
@@ -410,28 +438,37 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                             type="checkbox"
                             id="drawStationCenter"
                         />駅中心（判定場所）を描画する</label
-                    >
+                    ><br />
+                    <label
+                        ><input
+                            type="checkbox"
+                            id="drawAllEvenIfFilter"
+                        />絞り込み時、対象外のものも描画する</label
+                    ><br />
                 </div>
                 <hr />
             </div>
         </div>
         <div class="darkBack result-out">
             <div class="result">
+                <h2>Result</h2>
                 <div class="result-station">
-                    
-                <span id="company-name-res"
-                    ><span style="color: gray">[会社名]</span></span
-                >
-                <span id="railroad-name-res"
-                    ><span style="color: gray">[路線名]</span></span
-                >
-                <span id="station-name-res"
-                    ><span style="color: gray">[駅名]</span></span
-                >
+                    <span id="company-name-res"
+                        ><span style="color: gray">[会社名]</span></span
+                    >
+                    <span id="railroad-name-res"
+                        ><span style="color: gray">[路線名]</span></span
+                    >
+                    <span id="station-name-res"
+                        ><span style="color: gray">[駅名]</span></span
+                    >
                 </div>
-                <div class="result-correct"></div>
-                <div class="result-answer"></div>
-                <div class="result-dist"></div>
+                <div id="result-correct">北緯...</div>
+                <div id="result-answer">北緯...</div>
+                <div id="result-dist">0km</div>
+                <br />
+                <button id="result-close-ck">閉じる（位置を確認する）</button>
+                <button id="result-close-new">閉じる（次の問題）</button>
             </div>
         </div>
     </body>

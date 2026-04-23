@@ -1,7 +1,7 @@
 import * as ichihai from "/js/ichihai.js";
 import { getDist } from "/js/cal-dist.js";
 
-const VERSION = "v0.4.4";
+const VERSION = "v0.5.0";
 
 const canvas = document.getElementById("main");
 const ctx = canvas.getContext("2d");
@@ -30,6 +30,7 @@ let s_railroad = true;
 
 let answer = [];
 let answerPos = null;
+let showingCorrect = false;
 
 function screenToGeo(sx, sy) {
     const lon = lonSta + sx / zoom;
@@ -77,7 +78,8 @@ let dragging = false;
 let dragStart = null;
 
 canvas.addEventListener("mousedown", (e) => {
-    if (!dragging) answerPos = screenToGeo(e.offsetX, e.offsetY);
+    if (!showingCorrect)
+        if (!dragging) answerPos = screenToGeo(e.offsetX, e.offsetY);
     dragging = true;
     dragStart = screenToGeo(e.offsetX, e.offsetY);
 });
@@ -129,7 +131,13 @@ let answerLocation = [];
 
 window.addEventListener("resize", updateWindowSize);
 
-function setStation() {
+function setStation(showAns = false) {
+    if (typeof showAns !== "boolean") {
+        showAns = false;
+    }
+    showingCorrect = showAns;
+    answerPos = null;
+
     const shuffled = [...station_prop];
     for (let i = shuffled.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -161,6 +169,7 @@ function setStation() {
             document.getElementById("company-name").innerText = st[3];
             document.getElementById("railroad-name").innerText = st[2];
             document.getElementById("station-name").innerText = st[4];
+            draw();
             return;
         }
     }
@@ -169,6 +178,7 @@ function setStation() {
         "条件に合う駅がありません。";
     document.getElementById("railroad-name").innerText = "";
     document.getElementById("station-name").innerText = "";
+    draw();
 }
 
 function mapDraw_feature(feature) {
@@ -250,27 +260,33 @@ function draw() {
                 //const stationCode2 = feature.properties.N02_005g;
 
                 if (
-                    (document.getElementById("company-type-select")
+                    document.getElementById("drawAllEvenIfFilter").checked ||
+                    ((document.getElementById("company-type-select")
                         .selectedOptions.length == 0 ||
                         document.getElementById(
                             "company-type-select-" + companyTypeCode,
                         ).selected) &&
-                    (document.getElementById("railroad-type-select")
-                        .selectedOptions.length == 0 ||
-                        document.getElementById(
-                            "railroad-type-select-" + typeCode,
-                        ).selected) &&
-                    (document.getElementById("company-select").selectedOptions
-                        .length == 0 ||
-                        Array.from(
-                            document.getElementById("company-select")
-                                .selectedOptions,
-                        )
-                            .map((o) => o.innerText)
-                            .includes(company))
+                        (document.getElementById("railroad-type-select")
+                            .selectedOptions.length == 0 ||
+                            document.getElementById(
+                                "railroad-type-select-" + typeCode,
+                            ).selected) &&
+                        (document.getElementById("company-select")
+                            .selectedOptions.length == 0 ||
+                            Array.from(
+                                document.getElementById("company-select")
+                                    .selectedOptions,
+                            )
+                                .map((o) => o.innerText)
+                                .includes(company)))
                 ) {
                     ctx.lineWidth = 1;
-                    if (companyTypeCode == 1) {
+                    if (
+                        !document.getElementById("drawColorByCompanyType")
+                            .checked
+                    )
+                        ctx.strokeStyle = "#00f";
+                    else if (companyTypeCode == 1) {
                         ctx.strokeStyle = "#f00";
                         ctx.lineWidth = 2;
                     } else if (companyTypeCode == 2) ctx.strokeStyle = "#00f";
@@ -300,7 +316,7 @@ function draw() {
             }
         });
 
-    ctx.strokeStyle = "#0008";
+    ctx.strokeStyle = "#000c";
     ctx.lineWidth = 2;
 
     if (
@@ -308,57 +324,103 @@ function draw() {
         document.getElementById("drawStationCenter").checked
     )
         station_data.features.forEach((feature) => {
+            const geoType = feature.geometry.type;
+            const typeCode = feature.properties.N02_001;
+            const companyTypeCode = feature.properties.N02_002;
+            const lineName = feature.properties.N02_003;
+            const company = feature.properties.N02_004;
+            const stationName = feature.properties.N02_005;
+            const stationCode1 = feature.properties.N02_005c;
+            const stationCode2 = feature.properties.N02_005g;
+
             if (feature.geometry) {
-                const geoType = feature.geometry.type;
-                const companyTypeCode = feature.properties.N02_002;
+                if (document.getElementById("drawAllEvenIfFilter").checked ||
+                    ((document.getElementById("company-type-select")
+                        .selectedOptions.length == 0 ||
+                        document.getElementById(
+                            "company-type-select-" + companyTypeCode,
+                        ).selected) &&
+                    (document.getElementById("railroad-type-select")
+                        .selectedOptions.length == 0 ||
+                        document.getElementById(
+                            "railroad-type-select-" + typeCode,
+                        ).selected) &&
+                    (document.getElementById("company-select").selectedOptions
+                        .length == 0 ||
+                        Array.from(
+                            document.getElementById("company-select")
+                                .selectedOptions,
+                        )
+                            .map((o) => o.innerText)
+                            .includes(company)))
+                ) {
+                    if (document.getElementById("drawStation").checked) {
+                        ctx.beginPath();
+                        let isF = true;
+                        feature.geometry.coordinates.forEach((coordinate) => {
+                            if (isF) {
+                                ctx.moveTo(
+                                    (coordinate[0] - lonSta) * zoom,
+                                    (latEnd - coordinate[1]) * zoom,
+                                );
+                            } else {
+                                ctx.lineTo(
+                                    (coordinate[0] - lonSta) * zoom,
+                                    (latEnd - coordinate[1]) * zoom,
+                                );
+                            }
+                            isF = false;
+                        });
 
-                if (document.getElementById("drawStation").checked) {
-                    ctx.beginPath();
-                    let isF = true;
-                    feature.geometry.coordinates.forEach((coordinate) => {
-                        if (isF) {
-                            ctx.moveTo(
-                                (coordinate[0] - lonSta) * zoom,
-                                (latEnd - coordinate[1]) * zoom,
-                            );
-                        } else {
-                            ctx.lineTo(
-                                (coordinate[0] - lonSta) * zoom,
-                                (latEnd - coordinate[1]) * zoom,
-                            );
-                        }
-                        isF = false;
-                    });
+                        ctx.stroke();
+                    }
 
-                    ctx.stroke();
-                }
+                    if (document.getElementById("drawStationCenter").checked) {
+                        if (
+                            !document.getElementById("drawColorByCompanyType")
+                                .checked
+                        )
+                            ctx.fillStyle = "#00f";
+                        else if (companyTypeCode == 1) ctx.fillStyle = "#f00";
+                        else if (companyTypeCode == 2) ctx.fillStyle = "#00f";
+                        else if (companyTypeCode == 3) ctx.fillStyle = "#0f0";
+                        else if (companyTypeCode == 4) ctx.fillStyle = "#f0f";
+                        else if (companyTypeCode == 5) ctx.fillStyle = "#0ff";
+                        else ctx.fillStyle = "#0ff";
 
-                if (document.getElementById("drawStationCenter").checked) {
-                    if (companyTypeCode == 1) ctx.fillStyle = "#f00";
-                    else if (companyTypeCode == 2) ctx.fillStyle = "#00f";
-                    else if (companyTypeCode == 3) ctx.fillStyle = "#0f0";
-                    else if (companyTypeCode == 4) ctx.fillStyle = "#f0f";
-                    else if (companyTypeCode == 5) ctx.fillStyle = "#0ff";
-                    else ctx.fillStyle = "#0ff";
+                        ctx.beginPath();
+                        const p1 = feature.geometry.coordinates[0];
+                        const p2 =
+                            feature.geometry.coordinates[
+                                feature.geometry.coordinates.length - 1
+                            ];
 
-                    ctx.beginPath();
-                    const p1 = feature.geometry.coordinates[0];
-                    const p2 =
-                        feature.geometry.coordinates[
-                            feature.geometry.coordinates.length - 1
-                        ];
-
-                    ctx.arc(
-                        ((p2[0] + p1[0]) / 2 - lonSta) * zoom,
-                        (latEnd - (p2[1] + p1[1]) / 2) * zoom,
-                        3,
-                        0,
-                        2 * Math.PI,
-                    );
-                    ctx.fill();
+                        ctx.arc(
+                            ((p2[0] + p1[0]) / 2 - lonSta) * zoom,
+                            (latEnd - (p2[1] + p1[1]) / 2) * zoom,
+                            3,
+                            0,
+                            2 * Math.PI,
+                        );
+                        ctx.fill();
+                    }
                 }
             }
         });
+
+    if (showingCorrect) {
+        const cx = (answer[7] - lonSta) * zoom;
+        const cy = (latEnd - answer[8]) * zoom;
+
+        ctx.lineWidth = 6;
+        ctx.strokeStyle = "#f00c";
+        ctx.beginPath();
+        ctx.moveTo(cx + 20, cy);
+        ctx.lineTo(cx - 20, cy);
+        ctx.moveTo(cx, cy + 20);
+        ctx.lineTo(cx, cy - 20);
+        ctx.stroke();
+    }
 
     if (answerPos) {
         const cx = (answerPos.lon - lonSta) * zoom;
@@ -396,10 +458,11 @@ canvas.addEventListener(
         e.preventDefault();
         lastTouches = e.touches;
         const rect = canvas.getBoundingClientRect();
-        answerPos = screenToGeo(
-            lastTouches[0].clientX - rect.left,
-            lastTouches[0].clientY - rect.top,
-        );
+        if (!showingCorrect)
+            answerPos = screenToGeo(
+                lastTouches[0].clientX - rect.left,
+                lastTouches[0].clientY - rect.top,
+            );
     },
     { passive: false },
 );
@@ -491,10 +554,23 @@ document.getElementById("home-pos").onclick = () => {
     const v = document.getElementById("version").innerText;
     if (v != VERSION) {
         document.getElementById("version").innerText =
-            `注意：スクリプトが最新でない可能性があります（HTML: ${document.getElementById("version").innerText} / JS: ${VERSION}）。`;
+            `注意：スクリプトが最新でない可能性があります（HTML: ${document.getElementById("version").innerText} / JS: ${VERSION}）。キャッシュの削除をお試しください。`;
         document.getElementById("version").style.color = "red";
     }
 }
+
+document.querySelector(".result-out").onclick = () => {
+    document.querySelector(".result-out").style.visibility = "hidden";
+};
+
+document.getElementById("result-close-ck").onclick = () => {
+    document.querySelector(".result-out").style.visibility = "hidden";
+};
+
+document.getElementById("result-close-new").onclick = () => {
+    document.querySelector(".result-out").style.visibility = "hidden";
+    setStation();
+};
 
 document.getElementById("answerLocation").onclick = () => {
     if (!answerPos) {
@@ -503,11 +579,25 @@ document.getElementById("answerLocation").onclick = () => {
         );
         return;
     }
-    alert(`【　結　果　発　表　（　仮　）　】
-問題: ${answer[3]} ${answer[2]} ${answer[4]}駅  
-正解: 北緯${answer[8]}度, 東経${answer[7]}度 
-指定: 北緯${answerPos.lat}度, 東経${answerPos.lon}度 
-距離: ${getDist(answer[8], answer[7], answerPos.lat, answerPos.lon)}m`);
+
+    showingCorrect = true;
+    draw();
+
+    document.getElementById("company-name-res").innerText = answer[3];
+    document.getElementById("railroad-name-res").innerText = answer[2];
+    document.getElementById("station-name-res").innerText = answer[4] + "駅";
+    document.getElementById("result-correct").innerText =
+        `正解：北緯${answer[8]}度, 東経${answer[7]}度`;
+    document.getElementById("result-answer").innerText =
+        `指定：北緯${answerPos.lat}度, 東経${answerPos.lon}度`;
+    document.getElementById("result-dist").innerText =
+        `距離：${getDist(answer[8], answer[7], answerPos.lat, answerPos.lon) / 1000} km`;
+
+    document.querySelector(".result-out").style.visibility = "visible";
+};
+
+document.getElementById("rememberStation").onclick = () => {
+    setStation(true);
 };
 
 window.onload = async () => {
@@ -641,4 +731,6 @@ window.onload = async () => {
     document.getElementById("init-message").textContent =
         "初期化が完了しました。どこかクリックするとこの表示を閉じます。";
     document.getElementById("init-message").style.fontWeight = "bold";
+
+    setStation();
 };
