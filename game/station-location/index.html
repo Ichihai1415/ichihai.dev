@@ -155,8 +155,7 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                 right: 0;
             }
 
-            .init-info-out,
-            .setting-out {
+            .darkBack {
                 display: flex;
                 position: absolute;
                 top: 0;
@@ -167,14 +166,15 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                 align-items: center;
                 background-color: #0018;
                 z-index: 5;
-            }
-
-            .setting-out {
+                
                 visibility: hidden;
             }
 
-            .init-info,
-            .setting {
+            .init-info-out {
+                visibility: visible;
+            }
+
+            .darkBack > * {
                 background-color: #eef;
                 margin: 10px;
                 padding: 6px;
@@ -226,7 +226,7 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
         </style>
     </head>
     <body>
-        <div class="init-info-out">
+        <div class="darkBack init-info-out">
             <div class="init-info">
                 <h1 style="margin-top: 0">駅位置Guesser</h1>
                 <div>2026/04/22更新 <span id="version">v0.4.4</span></div>
@@ -307,7 +307,7 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
         </div>
         <span class="home-pos" id="home-pos">全体表示</span>
 
-        <div class="setting-out">
+        <div class="darkBack setting-out">
             <div class="setting">
                 <span class="setting-head">⚙設定</span>
 
@@ -413,6 +413,25 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                     >
                 </div>
                 <hr />
+            </div>
+        </div>
+        <div class="darkBack result-out">
+            <div class="result">
+                <div class="result-station">
+                    
+                <span id="company-name-res"
+                    ><span style="color: gray">[会社名]</span></span
+                >
+                <span id="railroad-name-res"
+                    ><span style="color: gray">[路線名]</span></span
+                >
+                <span id="station-name-res"
+                    ><span style="color: gray">[駅名]</span></span
+                >
+                </div>
+                <div class="result-correct"></div>
+                <div class="result-answer"></div>
+                <div class="result-dist"></div>
             </div>
         </div>
     </body>

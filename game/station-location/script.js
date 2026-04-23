@@ -1,4 +1,5 @@
 import * as ichihai from "/js/ichihai.js";
+import { getDist } from "/js/cal-dist.js";
 
 const VERSION = "v0.4.4";
 
@@ -506,7 +507,7 @@ document.getElementById("answerLocation").onclick = () => {
 問題: ${answer[3]} ${answer[2]} ${answer[4]}駅  
 正解: 北緯${answer[8]}度, 東経${answer[7]}度 
 指定: 北緯${answerPos.lat}度, 東経${answerPos.lon}度 
-距離: （未実装）`);
+距離: ${getDist(answer[8], answer[7], answerPos.lat, answerPos.lon)}m`);
 };
 
 window.onload = async () => {
