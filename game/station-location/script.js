@@ -1,7 +1,7 @@
 import * as ichihai from "/js/ichihai.js";
 import { getDist } from "/js/cal-dist.js";
 
-const VERSION = "v0.5.0";
+const VERSION = "v0.5.0.1";
 
 const canvas = document.getElementById("main");
 const ctx = canvas.getContext("2d");
@@ -79,7 +79,10 @@ let dragStart = null;
 
 canvas.addEventListener("mousedown", (e) => {
     if (!showingCorrect)
-        if (!dragging) answerPos = screenToGeo(e.offsetX, e.offsetY);
+        if (!dragging) {
+            answerPos = screenToGeo(e.offsetX, e.offsetY);
+            draw();
+        }
     dragging = true;
     dragStart = screenToGeo(e.offsetX, e.offsetY);
 });
@@ -334,25 +337,26 @@ function draw() {
             const stationCode2 = feature.properties.N02_005g;
 
             if (feature.geometry) {
-                if (document.getElementById("drawAllEvenIfFilter").checked ||
+                if (
+                    document.getElementById("drawAllEvenIfFilter").checked ||
                     ((document.getElementById("company-type-select")
                         .selectedOptions.length == 0 ||
                         document.getElementById(
                             "company-type-select-" + companyTypeCode,
                         ).selected) &&
-                    (document.getElementById("railroad-type-select")
-                        .selectedOptions.length == 0 ||
-                        document.getElementById(
-                            "railroad-type-select-" + typeCode,
-                        ).selected) &&
-                    (document.getElementById("company-select").selectedOptions
-                        .length == 0 ||
-                        Array.from(
-                            document.getElementById("company-select")
-                                .selectedOptions,
-                        )
-                            .map((o) => o.innerText)
-                            .includes(company)))
+                        (document.getElementById("railroad-type-select")
+                            .selectedOptions.length == 0 ||
+                            document.getElementById(
+                                "railroad-type-select-" + typeCode,
+                            ).selected) &&
+                        (document.getElementById("company-select")
+                            .selectedOptions.length == 0 ||
+                            Array.from(
+                                document.getElementById("company-select")
+                                    .selectedOptions,
+                            )
+                                .map((o) => o.innerText)
+                                .includes(company)))
                 ) {
                     if (document.getElementById("drawStation").checked) {
                         ctx.beginPath();
