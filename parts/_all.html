@@ -91,8 +91,121 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
     <body>
         <template id="div.common-comment">
             <div class="info-cyan">
-                <div class="info-cyan-head">【お知らせ（共通）】2026/04/10</div>
-                のんびり作っていっています。
+                <div class="info-cyan-head">【お知らせ（共通）】2026/04/27</div>
+                共通部分の処理を仮調整したため不具合がある可能性があります。
+            </div>
+        </template>
+        <template id="header">
+            <style>
+                body {
+                    margin: 0;
+                }
+
+                .header {
+                    height: 70px;
+                    padding: 10px;
+                    margin: 0%;
+                    font-size: 32px;
+                    color: white;
+                    background-color: rgb(0, 0, 0);
+                    display: flex;
+                }
+
+                .icon {
+                    font-size: 16px;
+                }
+
+                .header-main {
+                    padding: 0 10px 0 0;
+                    font-size: 48px;
+                }
+
+                .header-tab {
+                    height: 70px;
+                    padding: 10px;
+                    margin-top: 4px;
+                    text-decoration: underline;
+                }
+
+                .header-link {
+                    text-decoration: none;
+                    color: white;
+                }
+
+                .header-tab:hover {
+                    background-color: #444;
+                }
+
+                .header-menu-icon-wrap {
+                    margin-left: auto;
+                }
+
+                @media screen and (max-width: 410px) {
+                    .header-main {
+                        height: 100%;
+                        padding-top: 12px;
+                        font-size: 30px;
+                    }
+                }
+
+                @media screen and (max-width: 320px) {
+                    .header-main {
+                        display: none;
+                    }
+                }
+
+                .header-sub {
+                    display: none; /*通常none、テスト時flex*/
+                    background-color: #222;
+                }
+
+                .header-sub-link-wrap {
+                    padding: 0 10px;
+                    transition: 0.2s;
+                }
+
+                .header-sub-link-wrap:hover {
+                    background-color: #444;
+                }
+            </style>
+            <div class="header">
+                <a class="header-link" href="/game/icon.html"
+                    ><img
+                        class="icon"
+                        src="/icon/new_main.png"
+                        width="70px"
+                        height="70px"
+                        alt="icon"
+                /></a>
+                <a class="header-link" href="/index.html"
+                    ><div class="header-main">ichihai.dev</div></a
+                >
+                <div class="header-menu-icon-wrap">
+                    <img
+                        class="header-menu-icon"
+                        src="/parts/sansen.svg"
+                        width="70px"
+                        height="70px"
+                        alt="menu"
+                    />
+                </div>
+            </div>
+            <div class="header-sub">
+                <div class="header-sub-link-wrap">
+                    <a class="header-link" href="/tools/index.html">Tools</a>
+                </div>
+                <div class="header-sub-link-wrap">
+                    <a class="header-link" href="/webapp/index.html">WebApps</a>
+                </div>
+                <div class="header-sub-link-wrap">
+                    <a class="header-link" href="/game/index.html">Games</a>
+                </div>
+                <div class="header-sub-link-wrap">
+                    <a class="header-link" href="/sitemap.html">Sitemap</a>
+                </div>
+                <div class="header-sub-link-wrap">
+                    <a class="header-link" href="/aboutme/links.html">Links</a>
+                </div>
             </div>
         </template>
         <template id="footer">
@@ -124,16 +237,10 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
             </style>
             <div class="footer">
                 <div class="footer-text">
-                    <span class="footer-italic"
-                        ><a class="footer-link" href="https://univ.ichihai.dev"
-                            >univ.ichihai.dev</a
-                        >
-                        - (c) 2024-2026 Ichihai1415 All right reserved. </span
-                    ><br />
-                    Saving, screenshots, and sharing are permitted. Please be
-                    careful when using.<br />
-                    The copyright in data created by others belongs to the
-                    owner.
+                    <a class="footer-link" href="https://ichihai.dev"
+                        >ichihai.dev</a
+                    >
+                    - (c) 2024 Ichihai1415 All right reserved.
                 </div>
             </div>
         </template>

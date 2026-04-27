@@ -15,7 +15,7 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
 
 const inserts = ["header", "footer", "nav.go2top", "div.common-comment"];
 
-fetch("/parts/parts.html")
+fetch("/parts/_all.html")
     .then((response) => response.text())
     .then((html) => {
         const parser = new DOMParser();
@@ -41,7 +41,6 @@ fetch("/parts/parts.html")
                             document
                                 .querySelector(".header-menu-icon-wrap")
                                 .addEventListener("click", function () {
-                                    console.log(headerSub.style.display);
                                     if (headerSub.style.display == "flex") {
                                         headerSub.style.display = "none";
                                         document.querySelector(
@@ -53,7 +52,6 @@ fetch("/parts/parts.html")
                                             ".header-menu-icon",
                                         ).src = "/parts/sansen_sub.svg";
                                     }
-                                    //console.log(headerSub.style.display);
                                 });
                         }
                     }
