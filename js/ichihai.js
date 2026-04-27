@@ -127,6 +127,18 @@ export async function getData(url) {
 }
 
 /**
+ * URLを指定してデータを取得します。
+ * @param {string} url URL
+ * @returns {Response} レスポンス
+ */
+export async function getText(url) {
+    console.log("[getData] GET " + url);
+    const response = await fetch(url);
+    const text = await response.text();
+    return text;
+}
+
+/**
  * 先頭を0埋めします。
  * @param {number} num 数字
  * @param {number} length 長さ
