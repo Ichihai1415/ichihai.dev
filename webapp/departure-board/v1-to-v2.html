@@ -101,10 +101,16 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
         <!--変えたければ変える要素-->
         <!--<link rel="icon" href="/icon/favicon.png" />-->
         <!--毎回変わる要素-->
-        <title>template</title>
-        <meta property="og:title" content="template" />
-        <meta name="description" content="[template description...]" />
-        <meta property="og:description" content="[template description...]" />
+        <title>発車標ドットデータ移行ツール | webapp | ichihai.dev</title>
+        <meta
+            property="og:title"
+            content="発車標ドットデータ移行ツール | webapp | ichihai.dev"
+        />
+        <meta name="description" content="発車標ドットデータ移行ツール" />
+        <meta
+            property="og:description"
+            content="発車標ドットデータ移行ツール"
+        />
         <meta property="og:type" content="website" />
         <meta property="og:image" content="" />
 
@@ -114,45 +120,10 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
 
         <link rel="stylesheet" href="/common.css" />
         <style>
-            .ss {
-                width: 1000px;
-
-                padding: 3px;
-                color: white;
-                background-color: #222;
-            }
-
-            .ss-displays {
-                display: flex;
-                flex-direction: column;
-                gap: 3px;
-                padding: 3px;
-                background-color: #333;
-            }
-
-            .ss-display {
-                display: flex;
-                gap: 1px;
-                padding: 1px;
-                background-color: #000;
-            }
-
-            .ss-display-column {
-                display: flex;
-                flex-direction: column;
-                gap: 1px;
-            }
-
-            .ss-display-column-row {
-                width: 2px;
-                height: 2px;
-                gap: 1px;
-                background-color: #633;
-                border-radius: 100%;
-            }
-
-            .ss-display-column:last-child > * {
-                margin-right: 1px;
+            textarea {
+                display: block;
+                height: 200px;
+                width: 100%;
             }
         </style>
     </head>
@@ -162,91 +133,35 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
             <ichihai1415_common-comment
                 ><!--/js/common.js で追加される--></ichihai1415_common-comment
             >
-            <h1>aa</h1>
-            <div class="update-date">xxxx/xx/xx作成 xxxx/xx/xx更新</div>
-
-            <div class="ss" id="ss">
-                aaaa
-                <div class="ss-displays" id="ss-displays"></div>
-            </div>
+            <h1>発車標ドットデータ移行ツール</h1>
+            <div class="update-date">2026/04/27作成 2026/04/27更新</div>
+            <textarea id="in"></textarea>
+            <button onclick="conv()">conv</button>
+            <textarea id="out"></textarea>
         </main>
         <footer><!--/js/common.js で追加される--></footer>
         <script>
-            display_init();
+            function conv() {
+                const data = document.getElementById("in").value;
 
-            function display_init() {
-                const rows = 16;
-                const columns = 16 * 20;
-
-                let displays = 2;
-
-                for (let d = 0; d < displays; d++) {
-                    let div_display = document.createElement("div");
-                    div_display.classList.add("ss-display");
-                    div_display.id = "d" + d;
-                    //console.log("d" + d);
-
-                    for (let c = 0; c < columns; c++) {
-                        let div_display_column = document.createElement("div");
-                        div_display_column.classList.add("ss-display-column");
-                        div_display_column.id = "d" + d + "-c" + c;
-
-                        for (let r = 0; r < rows; r++) {
-                            let div_display_column_row =
-                                document.createElement("div");
-                            div_display_column_row.classList.add(
-                                "ss-display-column-row",
-                            );
-                            div_display_column_row.id =
-                                "d" + d + "-c" + c + "-r" + r;
-
-                            div_display_column.appendChild(
-                                div_display_column_row,
-                            );
-                        }
-                        div_display.appendChild(div_display_column);
+                const rows = data.split("\n");
+                const h = rows.length;
+                const w = rows[0].length;
+                const transposed = [];
+                for (let x = 0; x < w; x++) {
+                    let line = "";
+                    for (let y = 0; y < h; y++) {
+                        line += rows[y][x];
                     }
-                    document
-                        .getElementById("ss-displays")
-                        .appendChild(div_display);
+                    transposed.push(line);
                 }
+
+                document.getElementById("out").value = transposed.join("\n");
             }
         </script>
         <script defer type="module">
             //使う場合
-            import * as ichihai from "/js/ichihai.js";
-
-            const colors = { 1: "#f00", 2: "0f0", 3: "00f", a: "" };
-
-            async function color() {
-                let data = await ichihai.getText("data/dot/_temp.ssdp");
-
-                const lines = data.split(/\r?\n/);
-                const firstLine = lines[0];
-
-                const nonEmptyLines = lines.filter(
-                    (line) => line.trim() !== "",
-                );
-
-                const rest = nonEmptyLines.slice(1);
-
-                let displays = 1;
-                let columns = rest[0].length;
-                let rows = rest.length;
-
-                for (let d = 0; d < displays; d++) {
-                    for (let c = 0; c < columns; c++) {
-                        for (let r = 0; r < rows; r++) {
-                            const char = rest[r].charAt(c + 1);
-                            if (char != 0)
-                                document.getElementById(
-                                    `d${d}-c${c}-r${r}`,
-                                ).style.backgroundColor = "red";
-                        }
-                    }
-                }
-            }
-            color();
+            //import * as ichihai from "/js/ichihai.js";
         </script>
     </body>
 </html>
