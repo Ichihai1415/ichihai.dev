@@ -1,4 +1,4 @@
-title=template of station sign dot data (parts);
+template of departure board dot data (parts);
 0000000000000000
 0100000000000050
 0120000000000050
