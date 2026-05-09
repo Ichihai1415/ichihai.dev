@@ -1,0 +1,219 @@
+<!--AI generated (Copilot)-->
+<!doctype html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8" />
+        <title>MS Gothic Text to Dot Data</title>
+        <style>
+            body {
+                font-family: sans-serif;
+                padding: 16px;
+                max-width: 900px;
+            }
+            canvas {
+                border: 1px solid #ccc;
+                image-rendering: pixelated;
+                display: block;
+                margin: 8px 0;
+            }
+            textarea {
+                width: 100%;
+                height: 160px;
+            }
+            .controls {
+                display: flex;
+                gap: 8px;
+                flex-wrap: wrap;
+                align-items: center;
+                margin-bottom: 8px;
+            }
+            label {
+                font-size: 0.95rem;
+            }
+            input[type="number"] {
+                width: 80px;
+            }
+            .small {
+                font-size: 0.9rem;
+                color: #555;
+            }
+        </style>
+    </head>
+    <body>
+        <h3>MS ゴシックで文字を描画してドットデータ化</h3>
+
+        <div class="controls">
+            <label
+                >テキスト:
+                <input
+                    id="text"
+                    type="text"
+                    value="テスト"
+                    style="width: 220px"
+            /></label>
+            <label
+                ><input id="autoWidth" type="checkbox" checked />
+                自動幅設定（半角の場合オフに）</label
+            >
+            <label
+                >フォントサイズ(pt):
+                <input id="fontSize" type="number" value="12" min="4"
+            /></label>
+            <label
+                >出力幅(px): <input id="outW" type="number" value="64" min="1"
+            /></label>
+            <label
+                >出力高さ(px):
+                <input id="outH" type="number" value="16" min="1"
+            /></label>
+            <label
+                >閾値:
+                <input id="th" type="number" value="128" min="0" max="255"
+            /></label>
+            <label><input id="invert" type="checkbox" /> 反転（黒を1）</label>
+            <button id="render">描画して変換</button>
+        </div>
+
+        <div class="small">
+            **フォント指定**:
+            <code>"MS Gothic", "MS PGothic", monospace</code>。環境に MS
+            ゴシックが無い場合は代替フォントで描画されます。
+        </div>
+
+        <canvas id="preview" width="640" height="160"></canvas>
+
+        <h4>ドットデータ（行ごと 0/1）</h4>
+        <textarea id="output" readonly></textarea>
+
+        <script>
+            const textInput = document.getElementById("text");
+            const autoWidth = document.getElementById("autoWidth");
+            const fontSizeInput = document.getElementById("fontSize");
+            const outW = document.getElementById("outW");
+            const outH = document.getElementById("outH");
+            const thInput = document.getElementById("th");
+            const invertBox = document.getElementById("invert");
+            const renderBtn = document.getElementById("render");
+            const preview = document.getElementById("preview");
+            const pctx = preview.getContext("2d");
+            const output = document.getElementById("output");
+
+            function renderAndConvert() {
+                const text = textInput.value || "";
+                if (autoWidth.checked) outW.value = text.length * outH.value;
+                const fontSize = Math.max(
+                    4,
+                    parseInt(fontSizeInput.value, 10) || 48,
+                );
+                const W = Math.max(1, parseInt(outW.value, 10) || 64);
+                const H = Math.max(1, parseInt(outH.value, 10) || 16);
+                const threshold = Math.max(
+                    0,
+                    Math.min(255, parseInt(thInput.value, 10) || 128),
+                );
+                const invert = !!invertBox.checked;
+
+                // 一時キャンバスにテキストを描画（高解像度で描画してから縮小サンプリング）
+                const tmp = document.createElement("canvas");
+                // 描画解像度は出力サイズの数倍にしてアンチエイリアスを抑えつつ文字形状を保持
+                const scale = 1;
+                tmp.width = W * scale;
+                tmp.height = H * scale;
+                const tctx = tmp.getContext("2d");
+                tctx.fillStyle = "#ffffff";
+                tctx.fillRect(0, 0, tmp.width, tmp.height);
+
+                // フォント指定 MS Gothic 優先
+                tctx.fillStyle = "#000000";
+                tctx.textBaseline = "middle";
+                tctx.textAlign = "center";
+                tctx.font = `${fontSize * scale}pt "MS Gothic", "MS PGothic", monospace`;
+
+                // テキストをキャンバス中央に描画
+                tctx.fillText(text, tmp.width / 2, tmp.height / 2);
+
+                // サンプリングして二値化
+                const imgd = tctx.getImageData(0, 0, tmp.width, tmp.height);
+                const data = imgd.data;
+                // サンプリングブロックごとに平均輝度を計算して出力ピクセルを決定
+                const blockW = scale;
+                const blockH = scale;
+                const lines = [];
+                const arr = [];
+
+                for (let y = 0; y < H; y++) {
+                    let row = "";
+                    const rowArr = [];
+                    for (let x = 0; x < W; x++) {
+                        // ブロック内平均輝度
+                        let sum = 0;
+                        let count = 0;
+                        const sx = x * blockW;
+                        const sy = y * blockH;
+                        for (let by = 0; by < blockH; by++) {
+                            for (let bx = 0; bx < blockW; bx++) {
+                                const i =
+                                    ((sy + by) * tmp.width + (sx + bx)) * 4;
+                                const r = data[i],
+                                    g = data[i + 1],
+                                    b = data[i + 2],
+                                    a = data[i + 3];
+                                const alpha = a / 255;
+                                const rr = r * alpha + 255 * (1 - alpha);
+                                const gg = g * alpha + 255 * (1 - alpha);
+                                const bb = b * alpha + 255 * (1 - alpha);
+                                const lum =
+                                    0.299 * rr + 0.587 * gg + 0.114 * bb;
+                                sum += lum;
+                                count++;
+                            }
+                        }
+                        const avg = sum / count;
+                        let bit = avg < threshold ? 1 : 0; // 黒を1にする基準
+                        if (invert) bit = 1 - bit;
+                        row += bit.toString();
+                        rowArr.push(bit);
+                    }
+                    lines.push(row);
+                    arr.push(rowArr);
+                }
+
+                // プレビュー表示を作る（拡大して見やすく）
+                const scalePreview = Math.max(4, Math.floor(640 / W));
+                preview.width = W * scalePreview;
+                preview.height = H * scalePreview;
+                pctx.imageSmoothingEnabled = false;
+                // 背景白
+                pctx.fillStyle = "#fff";
+                pctx.fillRect(0, 0, preview.width, preview.height);
+                for (let y = 0; y < H; y++) {
+                    for (let x = 0; x < W; x++) {
+                        const bit = lines[y][x] === "1" ? "#000" : "#fff";
+                        pctx.fillStyle = bit;
+                        pctx.fillRect(
+                            x * scalePreview,
+                            y * scalePreview,
+                            scalePreview,
+                            scalePreview,
+                        );
+                    }
+                }
+
+                output.value = lines.join("\n");
+            }
+
+            renderBtn.addEventListener("click", renderAndConvert);
+
+            // Enter で実行
+            textInput.addEventListener("keydown", (e) => {
+                if (e.key === "Enter") {
+                    e.preventDefault();
+                    renderAndConvert();
+                }
+            });
+
+            // 初回描画
+            renderAndConvert();
+        </script>
+    </body>
+</html>
