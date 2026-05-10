@@ -168,6 +168,7 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                 <div class="ss-displays" id="ss-displays"></div>
             </div>
         </div>
+
         <footer><!--/js/common.js で追加される--></footer>
         <script>
             display_init();
@@ -232,6 +233,16 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                 //let data = await ichihai.getText(
                 //    "data/dot/full/_tmp-akansasu.txt",
                 //);
+
+                const data_ex = [
+                    [
+                        ["text:普通", "1"],
+                        ["dotId:space16", "1"],
+                    ], //テキスト指定
+                    [["dotId:rapid.2", "2"]], //ID指定
+                    [["dot:00000000\n00000000", "3"]], //01データそのまま
+                    [["dotC:0,59,5", "4"]], //[実装未定]columnでxx bitで10進数化したもの
+                ];
 
                 const datas = [
                     [
@@ -362,14 +373,94 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                     ],
                 ];
 
-                for (let d = 0; d < datas.length; d++) {
-                    const datas_d = datas[d];
+                //for (let d = 0; d < datas.length; d++) {
+                //    const datas_d = datas[d];
+                //    let cp = 0;
+                //    for (let ps = 0; ps < datas_d.length; ps++) {
+                //        const data = (
+                //            await ichihai.getText(datas_d[ps][0])
+                //        ).replaceAll("1", datas_d[ps][1]);
+                //        if (data.includes("html")) continue;
+                //        const lines = data.split(/\r?\n/);
+                //        const title = lines[0];
+                //
+                //        const rest = lines
+                //            .slice(1)
+                //            .filter((line) => line.trim() !== "");
+                //
+                //        let columns = rest[0].length;
+                //        let rows = rest.length;
+                //
+                //        for (let _c = 0; _c < columns; _c++) {
+                //            const c = cp + _c;
+                //            for (let r = 0; r < rows; r++) {
+                //                const char = rest[r].charAt(_c);
+                //                if (char != 0)
+                //                    if (Object.hasOwn(colors, char)) {
+                //                        document.getElementById(
+                //                            `d${d}-c${c}-r${r}`,
+                //                        ).style.backgroundColor = colors[char];
+                //                    }
+                //            }
+                //        }
+                //        cp += columns;
+                //    }
+                //}
+
+                const data_all =
+                    "dotId:arrow-left-B,2|text:特急,3;北越　99@4,2;号,3\n" +
+                    "text:　普通黄,1|dotId:position/arrow,1";
+                //dot ex:  |dot:01\\00\\01\\00\\01\\00\\01\\00\\01\\00\\01\\00\\01\\00\\12\\34,3
+                const data_lines = data_all.split("\n");
+
+                for (let d = 0; d < data_lines.length; d++) {
+                    const datas_d = data_lines[d].split("|");
                     let cp = 0;
                     for (let ps = 0; ps < datas_d.length; ps++) {
-                        const data = (
-                            await ichihai.getText(datas_d[ps][0])
-                        ).replaceAll("1", datas_d[ps][1]);
-                        if (data.includes("html")) continue;
+                        const data_tn = datas_d[ps].split(":");
+                        let data = null;
+                        switch (data_tn[0]) {
+                            case "text":
+                                const tx_tcs = data_tn[1].split(";");
+                                for (let ti = 0; ti < tx_tcs.length; ti++) {
+                                    const tx_tc = tx_tcs[ti].split(",");
+                                    let data_t = text2dot(tx_tc[0]).replaceAll(
+                                        "1",
+                                        tx_tc[1],
+                                    );
+                                    if (data == null) {
+                                        data = "text2dot\n" + data_t;
+                                    } else {
+                                        const data_t_l = data_t.split(/\r?\n/);
+                                        const d_l = data.split(/\r?\n/);
+                                        for (
+                                            let li = 1;
+                                            li < d_l.length;
+                                            li++
+                                        ) {
+                                            d_l[li] += data_t_l[li - 1];
+                                        }
+                                        data = d_l.join("\n");
+                                    }
+                                }
+                                break;
+                            case "dotId":
+                                const data_dIc = data_tn[1].split(",");
+                                data = await ichihai.getText(
+                                    "data/dot/16/parts/" + data_dIc[0] + ".txt",
+                                );
+                                if (data.includes("html")) continue;
+                                data = data.replaceAll("1", data_dIc[1]);
+                                break;
+                            case "dot":
+                                const data_dc = data_tn[1].split(",");
+                                data =
+                                    "userInput\n" +
+                                    data_dc[0].replaceAll("\\", "\n");
+                                data = data.replaceAll("1", data_dc[1]);
+                                break;
+                        }
+
                         const lines = data.split(/\r?\n/);
                         const title = lines[0];
 
@@ -397,6 +488,51 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                 }
             }
             color();
+
+            function text2dot(text) {
+                const texts = text.split("@");
+                text = texts[0];
+                const textLength =
+                    texts.length == 2 ? Number(texts[1]) : text.length;
+
+                const H = 16;
+                const W = H * textLength;
+                const fontSize = 16;
+
+                const cv = document.createElement("canvas");
+                const ctx = cv.getContext("2d");
+
+                // 背景白
+                ctx.fillStyle = "#fff";
+                ctx.fillRect(0, 0, W, H);
+
+                // 黒で MS ゴシック描画
+                ctx.fillStyle = "#000";
+                ctx.font = `${fontSize}px "MS Gothic"`;
+                ctx.textBaseline = "top";
+                ctx.fillText(text, 0, 0);
+
+                // ピクセル取得
+                const img = ctx.getImageData(0, 0, W, H).data;
+
+                let lines = [];
+                for (let y = 0; y < H; y++) {
+                    let row = "";
+                    for (let x = 0; x < W; x++) {
+                        const i = (y * W + x) * 4;
+                        const r = img[i],
+                            g = img[i + 1],
+                            b = img[i + 2];
+
+                        // 完全黒なら 1
+                        const bit = r === 0 && g === 0 && b === 0 ? 1 : 0;
+                        row += bit;
+                    }
+                    lines.push(row);
+                }
+
+                return lines.join("\n");
+            }
         </script>
     </body>
 </html>
