@@ -620,7 +620,7 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                     "5$text:北陸特快@5,3;△1～6@5,1;20：05@4,2;米　原@4,1\n" +
                     "6$text:急行@5,3;☐1～9@5,1; 0：45@3,2;大阪・姫路@5,1\n" +
                     "0$text:特急ｻﾝﾀﾞｰﾊﾞｰﾄﾞ@7,3|dotId:num-k/1,1|dotId:num-k/7,1|text:号@2,1|dotId:num-k/1,2|dotId:num-k/3,2|text:：,2|dotId:num-k/2,2|dotId:num-k/7,2|text: 和倉温泉,1\n" +
-                    "2$text:普通　　黄,1|dotId:position/arrow,1|text:1～20,1; 3：33@4,2;直江津,1\n" +
+                    "2$text:普通　　,1;黄,1|dotId:position/arrow,1|text:1～20,1; 3：33@4,2;直江津,1\n" +
                     "3$text:☆☆☆,2;本日の運転は終了しました,1;☆☆☆,2";
                 //dot ex:  |dot:01\\00\\01\\00\\01\\00\\01\\00\\01\\00\\01\\00\\01\\00\\12\\34,3
                 const data_raw_lines = data_all_raw.split("\n");
@@ -647,10 +647,28 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                                 const tx_tcs = data_tn[1].split(";");
                                 for (let ti = 0; ti < tx_tcs.length; ti++) {
                                     const tx_tc = tx_tcs[ti].split(",");
-                                    let data_t = text2dot(tx_tc[0]).replaceAll(
-                                        "1",
-                                        tx_tc[1],
-                                    );
+                                    let data_t = text2dot(tx_tc[0]);
+                                    if (tx_tc.length > 1) {
+                                        if (tx_tc.length > 2) {
+                                            //01反転用一時置換
+                                            data_t = data_t.replaceAll(
+                                                "0",
+                                                "/",
+                                            );
+                                        }
+
+                                        data_t = data_t.replaceAll(
+                                            "1",
+                                            tx_tc[1],
+                                        );
+
+                                        if (tx_tc.length > 2) {
+                                            data_t = data_t.replaceAll(
+                                                "/",
+                                                tx_tc[2],
+                                            );
+                                        }
+                                    }
                                     if (data == null) {
                                         data = "text2dot\n" + data_t;
                                     } else {
@@ -673,14 +691,20 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                                     "data/dot/16/parts/" + data_dIc[0] + ".txt",
                                 );
                                 if (data.includes("html")) continue;
-                                data = data.replaceAll("1", data_dIc[1]);
+                                if (data_dIc.length > 1)
+                                    data = data.replaceAll("1", data_dIc[1]);
+                                if (data_dIc.length > 2)
+                                    data = data.replaceAll("0", data_dIc[2]);
                                 break;
                             case "dot":
                                 const data_dc = data_tn[1].split(",");
                                 data =
                                     "userInput\n" +
                                     data_dc[0].replaceAll("\\", "\n");
-                                data = data.replaceAll("1", data_dc[1]);
+                                if (data_dc.length > 1)
+                                    data = data.replaceAll("1", data_dc[1]);
+                                if (data_dc.length > 2)
+                                    data = data.replaceAll("0", data_dc[2]);
                                 break;
                         }
 
