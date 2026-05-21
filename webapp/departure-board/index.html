@@ -729,6 +729,301 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                         margin-left: 220px;
                     }
                 </style>
+                <script type="module">
+                    import * as ichihai from "/js/ichihai.js";
+
+                    let isWeekDay = true;
+                    let isSchoolSemester = true;
+
+                    const timeTable = JSON.parse(
+                        await ichihai.getText("../hokutetsu-bus/bus_data.json"),
+                    );
+
+                    let data_dr1da1 = [];
+                    let data_dr2da1 = [];
+                    let data_dr1da2 = [];
+                    let data_dr2da2 = [];
+                    timeTable.Routes.forEach((rt) => {
+                        if (
+                            rt.Number == "93" ||
+                            rt.Number == "94" ||
+                            rt.Number == "0_Kanazawa-Univ" ||
+                            rt.Number == "97" ||
+                            rt.Number == "99"
+                        ) {
+                            data_dr1da1.push(
+                                ...dia2simple(rt.Buses_Dir1_Dia1, rt.Number),
+                            );
+                            data_dr2da1.push(
+                                ...dia2simple(rt.Buses_Dir2_Dia1, rt.Number),
+                            );
+                            data_dr1da2.push(
+                                ...dia2simple(rt.Buses_Dir1_Dia2, rt.Number),
+                            );
+                            data_dr2da2.push(
+                                ...dia2simple(rt.Buses_Dir2_Dia2, rt.Number),
+                            );
+                        } else {
+                            data_dr1da1.push(
+                                ...dia2simple(
+                                    rt.Buses_Dir2_Dia1,
+                                    rt.Number,
+                                    "C",
+                                ),
+                            );
+                            data_dr2da1.push(
+                                ...dia2simple(
+                                    rt.Buses_Dir1_Dia1,
+                                    rt.Number,
+                                    "D",
+                                ),
+                            );
+                            data_dr1da2.push(
+                                ...dia2simple(
+                                    rt.Buses_Dir2_Dia2,
+                                    rt.Number,
+                                    "C",
+                                ),
+                            );
+                            data_dr2da2.push(
+                                ...dia2simple(
+                                    rt.Buses_Dir1_Dia2,
+                                    rt.Number,
+                                    "D",
+                                ),
+                            );
+                        }
+                    });
+
+                    //console.log(data_dr1da1);
+                    //console.log(data_dr2da1);
+                    //console.log(data_dr1da2);
+                    //console.log(data_dr2da2);
+
+                    let displayData_dr1 = [];
+                    let displayData_dr2 = [];
+
+                    function displayDataReset() {
+                        displayData_dr1 = [];
+                        displayData_dr2 = [];
+
+                        if (isWeekDay) {
+                            displayData_dr1 = isSchoolSemester
+                                ? data_dr1da1
+                                : data_dr1da1.filter(
+                                      (row) => row[1] != "学期期間のみ",
+                                  );
+                            displayData_dr2 = isSchoolSemester
+                                ? data_dr2da1
+                                : data_dr2da1.filter(
+                                      (row) => row[1] != "学期期間のみ",
+                                  );
+                        } else {
+                            displayData_dr1 = isSchoolSemester
+                                ? data_dr1da2
+                                : data_dr1da2.filter(
+                                      (row) => row[1] != "学期期間のみ",
+                                  );
+                            displayData_dr2 = isSchoolSemester
+                                ? data_dr2da2
+                                : data_dr2da2.filter(
+                                      (row) => row[1] != "学期期間のみ",
+                                  );
+                        }
+                        //console.log(displayData_dr1);
+                        //console.log(displayData_dr2);
+
+                        displayData_dr1.sort((a, b) => {
+                            const toMinutes = (t) => {
+                                const [h, m] = t.split(":").map(Number);
+                                return h * 60 + m;
+                            };
+                            return toMinutes(a[2]) - toMinutes(b[2]);
+                        });
+                        displayData_dr2.sort((a, b) => {
+                            const toMinutes = (t) => {
+                                const [h, m] = t.split(":").map(Number);
+                                return h * 60 + m;
+                            };
+                            return toMinutes(a[2]) - toMinutes(b[2]);
+                        });
+                    }
+
+                    displayDataReset();
+
+                    function getComeMinutes(timeStr) {
+                        const now = new Date();
+                        //now.setHours(0, 0, 0, 0); //任意時刻
+                        const [h, m] = timeStr.split(":").map(Number);
+                        return (
+                            h * 60 +
+                            m -
+                            (now.getHours() * 60 + now.getMinutes())
+                        );
+                    }
+
+                    function data_array2text(i, data, min) {
+                        //console.log(data);
+                        let st = `${i}$text:`;
+                        switch (data[0]) {
+                            case "92":
+                            case "93":
+                            case "94":
+                            case "95":
+                            case "96":
+                            case "97":
+                            case "99":
+                                st += `${data[0]}@1,6;`;
+                                break;
+                            case "53":
+                                st += `${data[0]}@1,7;`;
+                                break;
+                            default:
+                                st += `@1;`;
+                                break;
+                        }
+
+                        switch (data[1]) {
+                            case "":
+                            case "学期期間のみ":
+                                if (min == 0) st += `まもなく到着,3;`;
+                                else if (min < 10)
+                                    st += ` 到着@2.5,4;約 ${min}分@3.5,1;`;
+                                else if (min < 100)
+                                    st += ` 到着@2.5,4;約${min}分@3.5,1;`;
+                                else st += `@0.25;到着,4;約${min}分@3.75,1;`;
+                                break;
+                            case "快速":
+                                if (min == 0) st += `快速,2;すぐ到着,3;`;
+                                else if (min < 10)
+                                    st += ` 快速@2.5,2;約 ${min}分@3.5,1;`;
+                                else if (min < 100)
+                                    st += ` 快速@2.5,2;約${min}分@3.5,1;`;
+                                else st += `@0.25;快速@2,2;約${min}分@3.75,1;`;
+                                break;
+                            case "当バス停始発":
+                                st += "当バス停始発,4;";
+                                break;
+                            default:
+                                st += `@6;`;
+                                break;
+                        }
+                        if (data[2].length == 4)
+                            st += ` ${data[2].replace(":", "：")}@3,2;`;
+                        else st += `${data[2].replace(":", "：")}@3,2;`;
+
+                        let via = "";
+                        switch (data[0]) {
+                            case "92":
+                            case "93":
+                            case "97":
+                            case "99":
+                                via = "鈴見";
+                                break;
+                            case "94":
+                            case "95":
+                            case "96":
+                            case "53":
+                            case "0_Shiritsubyoin":
+                                via = "旭町";
+                                break;
+                            default:
+                                via = "";
+                                break;
+                        }
+
+                        if (data[3] == "若松") st += "当バス停止まり,4;";
+                        else if (via == "")
+                            //
+                            st += `@${(7 - data[3].length) / 2};${data[3]};@${(7 - data[3].length) / 2};`;
+                        else if (data[3].length == 4)
+                            st += `${via},4|dotId:destination/via,4|text:${data[3]};`;
+                        else
+                            st += `@${(4 - data[3].length) / 2};${via},4|dotId:destination/via,4|text:${data[3]};@${(4 - data[3].length) / 2};`;
+
+                        st += `${data[4].replace("A", "Ａ").replace("B", "Ｂ").replace("C", "Ｃ").replace("D", "Ｄ")},2\n`;
+                        return st;
+                    }
+
+                    async function runEveryMinute() {
+                        let displaySt = "";
+
+                        let d = 0;
+                        for (let data of displayData_dr1) {
+                            const min = getComeMinutes(data[2]);
+                            if (min >= 0) {
+                                //console.log(d);
+                                displaySt += data_array2text(d, data, min);
+                                d++;
+                                if (d == 3) break;
+                            }
+                        }
+                        if (d == 0)
+                            displaySt +=
+                                "0$text:☆☆☆,2;本日の運転は終了しました,1;☆☆☆,2\n";
+                        d = 3;
+                        for (let data of displayData_dr2) {
+                            const min = getComeMinutes(data[2]);
+                            if (min >= 0) {
+                                displaySt += data_array2text(d, data, min);
+                                d++;
+                                if (d == 6) break;
+                            }
+                        }
+                        if (d == 3)
+                            displaySt +=
+                                "3$text:☆☆☆,2;本日の運転は終了しました,1;☆☆☆,2\n";
+
+                        //console.log(displaySt);
+                        color(displaySt);
+                    }
+
+                    function getStopTimeId(stops, target) {
+                        for (const stop of stops)
+                            if (stop.Name == target)
+                                return [stop.Time, stop.IdID];
+                        return null;
+                    }
+
+                    function dia2simple(dia, num, id) {
+                        let data = [];
+                        dia.forEach((bus) => {
+                            const timeId = getStopTimeId(bus.Stops, "若松");
+                            if (timeId) {
+                                let info = "";
+                                if (bus.IsRapid) info = "快速";
+                                if (bus.IsNotServiceDuringVacation)
+                                    info = "学期期間のみ";
+                                if (bus.Start == "若松") info = "当バス停始発";
+                                data.push([
+                                    num,
+                                    info,
+                                    timeId[0],
+                                    bus.Destination,
+                                    id ? id : timeId[1],
+                                ]);
+                            }
+                        });
+                        return data;
+                    }
+
+                    function startAt0s() {
+                        const now = new Date();
+                        const ms = now.getMilliseconds();
+                        const sec = now.getSeconds();
+                        const wait = (60 - sec) * 1000 - ms;
+                        setTimeout(() => {
+                            runEveryMinute();
+                            setInterval(runEveryMinute, 60 * 1000);
+                        }, wait);
+                    }
+
+                    startAt0s();
+
+                    setTimeout(() => {
+                        runEveryMinute();
+                    }, 1000);
+                </script>
             </div>
         </div>
 
@@ -773,46 +1068,40 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
             import * as ichihai from "/js/ichihai.js";
 
             const colors = {};
+            const colorDataSt = await ichihai.getText("data/color/_sample.txt");
+            const colorData = colorDataSt.replace("/: /g", ":").split(/\r?\n/);
+            colorData.forEach((line) => {
+                const kv = line.split(":");
+                colors[kv[0]] = kv[1];
+            });
 
-            async function color() {
-                const colorDataSt = await ichihai.getText(
-                    "data/color/_sample.txt",
-                );
-                const colorData = colorDataSt
-                    .replace("/: /g", ":")
-                    .split(/\r?\n/);
-                colorData.forEach((line) => {
-                    const kv = line.split(":");
-                    colors[kv[0]] = kv[1];
-                });
+            const data_all_raw =
+                "1$text:快速@5,2;〇,1|dotId:num-k/3,1|text:～,1|dotId:num-k/8,1|dotId:zero-32,1|text:18：20@4,2;敦　賀@4,1\n" +
+                "4$dotId:type/new-rapid.2,3|dotId:name/kosei-omimaiko,3|dotId:zero-16|text:13：20@3,2|dotId:zero-8|dotId:destination/himeji-dir-osaka\n" +
+                "5$text:北陸特快@5,3;△1～6@5,1;20：05@4,2;米　原@4,1\n" +
+                "6$text:急行@5,3;☐1～9@5,1; 0：45@3,2|dotId:zero-8|dotId:destination/osaka-dir-kyoto\n" +
+                "0$text:特急ｻﾝﾀﾞｰﾊﾞｰﾄﾞ@7,3|dotId:num-k/1,1|dotId:num-k/7,1|text:号@2,1|dotId:num-k/1,2|dotId:num-k/3,2|text:：,2|dotId:num-k/2,2|dotId:num-k/7,2|text: 和倉温泉,1\n" +
+                "2$text:普通　　,1;黄,1|dotId:position/arrow,1|text:1～20,1; 3：33@4,2;直江津,1\n" +
+                "3$text:☆☆☆,2;本日の運転は終了しました,1;☆☆☆,2";
+            //dot ex:  |dot:01\\00\\01\\00\\01\\00\\01\\00\\01\\00\\01\\00\\01\\00\\12\\34,3
 
-                //let data = await ichihai.getText("data/dot/parts/_temp.txt");
-                //let data = await ichihai.getText(
-                //    "data/dot/full/_tmp-akansasu.txt",
-                //);
+            /*
+            const data_all_raw =
+                "0$text:93@1.5,2;遅れ約15分@5.5,3;12：34@3,2;  金沢駅  @5,1;Ｂ@1.5,2\n" +
+                "1$text:93@1.5,2;快速@5.5,2; 8：00@3,2; 金沢大学 @5,1;Ａ@1.5,2\n" +
+                "2$text:  @1.5,2;市立病院線@5.5,1; 8：00@3,2; 金沢大学 @5,1;Ｃ@1.5,2\n" +
+                "3$text:94@1.5,2; @5.5,1; 8：00@3,2; 旭町@2.5,1|dotId:destination/via|text:金沢駅@3.5,1;Ｄ@1.5,2\n" +
+                "4$text:94@1.5,2;通学急行@5.5,3; 7：34@3,2;旭町@2,1|dotId:destination/via,1|text:金沢大学@4,1;Ｃ@1.5,2";
+            */
+            const dotCache = {};
 
-                /*
-                const data_all_raw =
-                    "1$text:快速@5,2;〇,1|dotId:num-k/3,1|text:～,1|dotId:num-k/8,1|dotId:zero-32,1|text:18：20@4,2;敦　賀@4,1\n" +
-                    "4$dotId:type/new-rapid.2,3|dotId:name/kosei-omimaiko,3|dotId:zero-16|text:13：20@3,2|dotId:zero-8|dotId:destination/himeji-dir-osaka\n" +
-                    "5$text:北陸特快@5,3;△1～6@5,1;20：05@4,2;米　原@4,1\n" +
-                    "6$text:急行@5,3;☐1～9@5,1; 0：45@3,2|dotId:zero-8|dotId:destination/osaka-dir-kyoto\n" +
-                    "0$text:特急ｻﾝﾀﾞｰﾊﾞｰﾄﾞ@7,3|dotId:num-k/1,1|dotId:num-k/7,1|text:号@2,1|dotId:num-k/1,2|dotId:num-k/3,2|text:：,2|dotId:num-k/2,2|dotId:num-k/7,2|text: 和倉温泉,1\n" +
-                    "2$text:普通　　,1;黄,1|dotId:position/arrow,1|text:1～20,1; 3：33@4,2;直江津,1\n" +
-                    "3$text:☆☆☆,2;本日の運転は終了しました,1;☆☆☆,2";
-                //dot ex:  |dot:01\\00\\01\\00\\01\\00\\01\\00\\01\\00\\01\\00\\01\\00\\12\\34,3
-                */
+            async function color(data_all_raw) {
+                clearDisplay();
 
-                const data_all_raw =
-                    "0$text:93@1.5,2;遅れ約15分@5.5,3;12：34@3,2;  金沢駅  @5,1;Ｂ@1.5,2\n" +
-                    "1$text:93@1.5,2;快速@5.5,2; 8：00@3,2; 金沢大学 @5,1;Ａ@1.5,2\n" +
-                    "2$text:  @1.5,2;市立病院線@5.5,1; 8：00@3,2; 金沢大学 @5,1;Ｃ@1.5,2\n" +
-                    "3$text:94@1.5,2; @5.5,1; 8：00@3,2; 旭町@2.5,1|dotId:destination/via|text:金沢駅@3.5,1;Ｄ@1.5,2\n" +
-                    "4$text:94@1.5,2;通学急行@5.5,3; 7：34@3,2;旭町@2,1|dotId:destination/via,1|text:金沢大学@4,1;Ｃ@1.5,2";
-                //dot ex:  |dot:01\\00\\01\\00\\01\\00\\01\\00\\01\\00\\01\\00\\01\\00\\12\\34,3
                 const data_raw_lines = data_all_raw.split("\n");
                 const data_lines = {};
                 for (const line of data_raw_lines) {
+                    if (line == "") continue;
                     const [indexStr, content] = line.split("$");
                     const index = Number(indexStr);
                     data_lines[index] = content;
@@ -874,9 +1163,18 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                                 break;
                             case "dotId":
                                 const data_dIc = data_tn[1].split(",");
-                                data = await ichihai.getText(
-                                    "data/dot/16/parts/" + data_dIc[0] + ".txt",
-                                );
+
+                                if (dotCache[data_dIc[0]]) {
+                                    data = dotCache[data_dIc[0]];
+                                } else {
+                                    data = await ichihai.getText(
+                                        "data/dot/16/parts/" +
+                                            data_dIc[0] +
+                                            ".txt",
+                                    );
+                                    dotCache[data_dIc[0]] = data;
+                                }
+
                                 if (data.includes("html")) continue;
                                 if (data_dIc.length > 1)
                                     data = data.replaceAll("1", data_dIc[1]);
@@ -921,7 +1219,8 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                     }
                 }
             }
-            color();
+            window.color = color;
+            //color(data_all_raw);
 
             function text2dot(text) {
                 const texts = text.split("@");
@@ -967,6 +1266,16 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
 
                 return lines.join("\n");
             }
+
+            function clearDisplay() {
+                document
+                    .querySelectorAll(".display-column-row")
+                    .forEach((el) => {
+                        el.style.backgroundColor = colors["0"];
+                    });
+            }
+
+            clearDisplay();
         </script>
     </body>
 </html>
