@@ -172,7 +172,7 @@ function text2dot(text) {
     ctx.fillRect(0, 0, W, H);
 
     ctx.fillStyle = "#000";
-    ctx.font = `${fontSize}px "JF Dot jiskan16s", "MS Gothic"`;
+    ctx.font = `${fontSize}px "MS Gothic", "JF Dot jiskan16s"`;
     ctx.textBaseline = "top";
     ctx.fillText(text, 0, 0);
 
