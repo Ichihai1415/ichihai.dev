@@ -120,15 +120,7 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
             rel="stylesheet"
         />
 
-        <style>
-            .info {
-                padding: 10px;
-            }
-
-            .departure-board{
-                overflow-x: auto;
-            }
-        </style>
+        <style></style>
     </head>
     <body>
         <header><!--/js/common.js で追加される--></header>
@@ -137,11 +129,21 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
             <h1>発車標シミュレーター</h1>
             <div class="update-date">2026/05/22作成 2026/05/22更新 v1.0</div>
             <div class="info-green">
-                <div class="info-green-head">a</div>
+                <div class="info-green-head">【情報】</div>
+                どこかをクリックすると発車標本体以外は非表示になります。もう一度クリックすると再表示されます。<br />
             </div>
+            <a href="displays/bus/wakamatsu-1.html" target="_blank"
+                >[リアルタイム]北鉄バス＠若松</a
+            ><br />
+            <a href="displays/train/kanazawa-1.html" target="_blank">金沢駅</a
+            ><br />
         </div>
 
-        <div class="departure-board" id="target" style="visibility: hidden;"></div>
+        <div
+            class="departure-board"
+            id="target"
+            style="visibility: hidden"
+        ></div>
         <footer><!--/js/common.js で追加される--></footer>
         <script defer type="module">
             let d = "bus/wakamatsu-1";

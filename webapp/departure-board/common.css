@@ -1,13 +1,7 @@
-/*
-html,
-body,
-main,
-.departure-board {
-    width: fit-content;
+.info {
+    padding: 10px;
 }
 
-main {
-    display: inline-flex;
-    flex-direction: column;
+.departure-board {
+    overflow-x: auto;
 }
-*/
