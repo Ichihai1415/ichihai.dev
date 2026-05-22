@@ -120,7 +120,13 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
             rel="stylesheet"
         />
 
-        <style></style>
+        <style>
+            .info2 {
+                border: 1px solid black;
+                margin: 4px;
+                padding: 4px;
+            }
+        </style>
     </head>
     <body>
         <header><!--/js/common.js で追加される--></header>
@@ -130,8 +136,19 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
             <div class="update-date">2026/05/22作成 2026/05/22更新 v1.0</div>
             <div class="info-green">
                 <div class="info-green-head">【情報】</div>
-                どこかをクリックすると発車標本体以外は非表示になります。もう一度クリックすると再表示されます。<br />
+                ↓枠以外のどこかをクリックすると発車標本体以外は非表示になります。もう一度クリックすると再表示されます。<br />
             </div>
+        </div>
+        <div class="info2">
+            <select id="select-d">
+                <option value="bus/wakamatsu-1">
+                    [リアルタイム]北鉄バス＠若松
+                </option>
+                <option value="train/kanazawa-1">金沢駅</option>
+            </select>
+            <button id="change">表示</button>
+            <br />
+            単品：<br />
             <a href="displays/bus/wakamatsu-1.html" target="_blank"
                 >[リアルタイム]北鉄バス＠若松</a
             ><br />
@@ -146,8 +163,10 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
         ></div>
         <footer><!--/js/common.js で追加される--></footer>
         <script defer type="module">
-            let d = "bus/wakamatsu-1";
-            //d = "train/kanazawa-1";
+            import * as ichihai from "/js/ichihai.js";
+
+            let d = ichihai.getParam("d");
+            if (!d) d = "bus/wakamatsu-1";
 
             fetch("displays/" + d + ".html")
                 .then((response) => response.text())
@@ -178,6 +197,11 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                         }
                     }
                 });
+
+            document.getElementById("change").onclick = () => {
+                location.href =
+                    "index.html?d=" + document.getElementById("select-d").value;
+            };
         </script>
     </body>
 </html>
