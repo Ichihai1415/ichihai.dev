@@ -168,17 +168,14 @@ function text2dot(text) {
     const cv = document.createElement("canvas");
     const ctx = cv.getContext("2d");
 
-    // 背景白
     ctx.fillStyle = "#fff";
     ctx.fillRect(0, 0, W, H);
 
-    // 黒で MS ゴシック描画
     ctx.fillStyle = "#000";
-    ctx.font = `${fontSize}px "MS Gothic"`;
+    ctx.font = `${fontSize}px "JF Dot jiskan16s", "MS Gothic"`;
     ctx.textBaseline = "top";
     ctx.fillText(text, 0, 0);
 
-    // ピクセル取得
     const img = ctx.getImageData(0, 0, W, H).data;
 
     let lines = [];
@@ -190,8 +187,7 @@ function text2dot(text) {
                 g = img[i + 1],
                 b = img[i + 2];
 
-            // 完全黒なら 1
-            const bit = r === 0 && g === 0 && b === 0 ? 1 : 0;
+            const bit = r < 128 ? 1 : 0;
             row += bit;
         }
         lines.push(row);
@@ -204,6 +200,15 @@ let hideOther = false;
 let ready = false;
 
 window.onload = async () => {
+    const font = new FontFace(
+        "JF Dot jiskan16s",
+        "url('/font/jfdotfont/JF-Dot-jiskan16s.ttf')",
+    );
+
+    font.load().then((loadedFont) => {
+        document.fonts.add(loadedFont);
+    });
+
     setTimeout(() => {
         display_init();
     }, 100);
