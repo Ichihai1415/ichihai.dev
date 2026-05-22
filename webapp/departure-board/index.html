@@ -158,7 +158,30 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                     else {
                         const insertTo = document.getElementById("target");
                         while (insertContent.firstChild) {
-                            insertTo.appendChild(insertContent.firstChild);
+                            const node = insertContent.firstChild;
+
+                            if (node.tagName === "SCRIPT") {
+                                const newScript =
+                                    document.createElement("script");
+
+                                // module の場合
+                                if (node.type === "module") {
+                                    newScript.type = "module";
+                                }
+
+                                // src がある場合
+                                if (node.src) {
+                                    newScript.src = node.src;
+                                } else {
+                                    // inline module script の場合
+                                    newScript.textContent = node.textContent;
+                                }
+
+                                insertTo.appendChild(newScript);
+                                insertContent.removeChild(node);
+                            } else {
+                                insertTo.appendChild(node);
+                            }
                         }
                     }
                 });

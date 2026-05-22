@@ -316,72 +316,12 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                     let isWeekDay = true;
                     let isSchoolSemester = true;
 
-                    const timeTable = JSON.parse(
-                        await ichihai.getText(
-                            "/webapp/hokutetsu-bus/bus_data.json",
-                        ),
-                    );
+                    let timeTable = {};
 
                     let data_dr1da1 = [];
                     let data_dr2da1 = [];
                     let data_dr1da2 = [];
                     let data_dr2da2 = [];
-                    timeTable.Routes.forEach((rt) => {
-                        if (
-                            rt.Number == "93" ||
-                            rt.Number == "94" ||
-                            rt.Number == "0_Kanazawa-Univ" ||
-                            rt.Number == "97" ||
-                            rt.Number == "99"
-                        ) {
-                            data_dr1da1.push(
-                                ...dia2simple(rt.Buses_Dir1_Dia1, rt.Number),
-                            );
-                            data_dr2da1.push(
-                                ...dia2simple(rt.Buses_Dir2_Dia1, rt.Number),
-                            );
-                            data_dr1da2.push(
-                                ...dia2simple(rt.Buses_Dir1_Dia2, rt.Number),
-                            );
-                            data_dr2da2.push(
-                                ...dia2simple(rt.Buses_Dir2_Dia2, rt.Number),
-                            );
-                        } else {
-                            data_dr1da1.push(
-                                ...dia2simple(
-                                    rt.Buses_Dir2_Dia1,
-                                    rt.Number,
-                                    "C",
-                                ),
-                            );
-                            data_dr2da1.push(
-                                ...dia2simple(
-                                    rt.Buses_Dir1_Dia1,
-                                    rt.Number,
-                                    "D",
-                                ),
-                            );
-                            data_dr1da2.push(
-                                ...dia2simple(
-                                    rt.Buses_Dir2_Dia2,
-                                    rt.Number,
-                                    "C",
-                                ),
-                            );
-                            data_dr2da2.push(
-                                ...dia2simple(
-                                    rt.Buses_Dir1_Dia2,
-                                    rt.Number,
-                                    "D",
-                                ),
-                            );
-                        }
-                    });
-
-                    //console.log(data_dr1da1);
-                    //console.log(data_dr2da1);
-                    //console.log(data_dr1da2);
-                    //console.log(data_dr2da2);
 
                     let displayData_dr1 = [];
                     let displayData_dr2 = [];
@@ -526,6 +466,7 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                     }
 
                     async function runEveryMinute() {
+                        console.log("a");
                         let displaySt = "";
 
                         let d = 0;
@@ -598,30 +539,87 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                         }, wait);
                     }
 
-                    startAt0s();
+                    timeTable = JSON.parse(
+                        await ichihai.getText(
+                            "/webapp/hokutetsu-bus/bus_data.json",
+                        ),
+                    );
+                    timeTable.Routes.forEach((rt) => {
+                        if (
+                            rt.Number == "93" ||
+                            rt.Number == "94" ||
+                            rt.Number == "0_Kanazawa-Univ" ||
+                            rt.Number == "97" ||
+                            rt.Number == "99"
+                        ) {
+                            data_dr1da1.push(
+                                ...dia2simple(rt.Buses_Dir1_Dia1, rt.Number),
+                            );
+                            data_dr2da1.push(
+                                ...dia2simple(rt.Buses_Dir2_Dia1, rt.Number),
+                            );
+                            data_dr1da2.push(
+                                ...dia2simple(rt.Buses_Dir1_Dia2, rt.Number),
+                            );
+                            data_dr2da2.push(
+                                ...dia2simple(rt.Buses_Dir2_Dia2, rt.Number),
+                            );
+                        } else {
+                            data_dr1da1.push(
+                                ...dia2simple(
+                                    rt.Buses_Dir2_Dia1,
+                                    rt.Number,
+                                    "C",
+                                ),
+                            );
+                            data_dr2da1.push(
+                                ...dia2simple(
+                                    rt.Buses_Dir1_Dia1,
+                                    rt.Number,
+                                    "D",
+                                ),
+                            );
+                            data_dr1da2.push(
+                                ...dia2simple(
+                                    rt.Buses_Dir2_Dia2,
+                                    rt.Number,
+                                    "C",
+                                ),
+                            );
+                            data_dr2da2.push(
+                                ...dia2simple(
+                                    rt.Buses_Dir1_Dia2,
+                                    rt.Number,
+                                    "D",
+                                ),
+                            );
+                        }
+                    });
 
-                    setTimeout(() => {
-                        runEveryMinute();
-                    }, 1000);
+                    //console.log(data_dr1da1);
+                    //console.log(data_dr2da1);
+                    //console.log(data_dr1da2);
+                    //console.log(data_dr2da2);
+
+                    startAt0s();
+                    await runEveryMinute();
+
+                    /*
+                    const data_all_raw =
+                        "0$text:93@1.5,2;遅れ約15分@5.5,3;12：34@3,2;  金沢駅  @5,1;Ｂ@1.5,2\n" +
+                        "1$text:93@1.5,2;快速@5.5,2; 8：00@3,2; 金沢大学 @5,1;Ａ@1.5,2\n" +
+                        "2$text:  @1.5,2;市立病院線@5.5,1; 8：00@3,2; 金沢大学 @5,1;Ｃ@1.5,2\n" +
+                        "3$text:94@1.5,2; @5.5,1; 8：00@3,2; 旭町@2.5,1|dotId:destination/via|text:金沢駅@3.5,1;Ｄ@1.5,2\n" +
+                        "4$text:94@1.5,2;通学急行@5.5,3; 7：34@3,2;旭町@2,1|dotId:destination/via,1|text:金沢大学@4,1;Ｃ@1.5,2";
+                        
+                    window.addEventListener("load", () => {
+                        setTimeout(() => {
+                            color(data_all_raw);
+                        }, 1000);
+                    });
+                    */
                 </script>
             </div>
         </main>
-        <!--
-        <script defer>
-            return;
-            const data_all_raw =
-                "0$text:93@1.5,2;遅れ約15分@5.5,3;12：34@3,2;  金沢駅  @5,1;Ｂ@1.5,2\n" +
-                "1$text:93@1.5,2;快速@5.5,2; 8：00@3,2; 金沢大学 @5,1;Ａ@1.5,2\n" +
-                "2$text:  @1.5,2;市立病院線@5.5,1; 8：00@3,2; 金沢大学 @5,1;Ｃ@1.5,2\n" +
-                "3$text:94@1.5,2; @5.5,1; 8：00@3,2; 旭町@2.5,1|dotId:destination/via|text:金沢駅@3.5,1;Ｄ@1.5,2\n" +
-                "4$text:94@1.5,2;通学急行@5.5,3; 7：34@3,2;旭町@2,1|dotId:destination/via,1|text:金沢大学@4,1;Ｃ@1.5,2";
-
-            window.addEventListener("load", () => {
-                setTimeout(() => {
-                    color(data_all_raw);
-                }, 1000);
-            });
-        </script>
-        -->
     </body>
 </html>

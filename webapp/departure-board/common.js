@@ -1,8 +1,6 @@
 //使う場合
 import * as ichihai from "/js/ichihai.js";
 
-display_init();
-
 function display_init() {
     const div_displays = document.querySelectorAll("div.display");
     for (let di = 0; di < div_displays.length; di++) {
@@ -29,21 +27,10 @@ function display_init() {
 }
 
 const colors = {};
-const colorDataSt = await ichihai.getText(
-    "/webapp/departure-board/data/color/_sample.txt",
-);
-const colorData = colorDataSt.replace("/: /g", ":").split(/\r?\n/);
-colorData.forEach((line) => {
-    const kv = line.split(":");
-    colors[kv[0]] = kv[1];
-});
-
-//dot ex:  |dot:01\\00\\01\\00\\01\\00\\01\\00\\01\\00\\01\\00\\01\\00\\12\\34,3
 
 const dotCache = {};
 
-
-export async function color(data_all_raw) {
+async function color(data_all_raw) {
     clearDisplay();
 
     const data_raw_lines = data_all_raw.split("\n");
@@ -146,8 +133,6 @@ export async function color(data_all_raw) {
         }
     }
 }
-window.color = color;
-//color(data_all_raw);
 
 function text2dot(text) {
     const texts = text.split("@");
@@ -199,8 +184,6 @@ function clearDisplay() {
     });
 }
 
-clearDisplay();
-
 let hideOther = false;
 
 document.querySelector("main").onclick = () => {
@@ -211,4 +194,21 @@ document.querySelector("main").onclick = () => {
     document.querySelector("h1").style.display = changeTo;
     document.querySelector(".update-date").style.display = changeTo;
     hideOther = !hideOther;
+};
+
+window.onload = async () => {
+    const colorDataSt = await ichihai.getText(
+        "/webapp/departure-board/data/color/_sample.txt",
+    );
+    const colorData = colorDataSt.replace("/: /g", ":").split(/\r?\n/);
+    colorData.forEach((line) => {
+        const kv = line.split(":");
+        colors[kv[0]] = kv[1];
+    });
+
+    display_init();
+    clearDisplay();
+
+    window.color = color;
+    //color("0$text:あああ");
 };
