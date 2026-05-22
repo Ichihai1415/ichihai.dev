@@ -218,7 +218,7 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                     .displays {
                         display: inline-flex;
                         flex-direction: column;
-                        gap: 6px;
+                        gap: 5px;
                         padding: 3px;
                         background-color: #222;
                     }
@@ -466,7 +466,7 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                     }
 
                     async function runEveryMinute() {
-                        console.log("a");
+                        //console.log("a");
                         let displaySt = "";
 
                         let d = 0;
@@ -602,7 +602,19 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                     //console.log(data_dr2da2);
 
                     startAt0s();
-                    await runEveryMinute();
+
+                    function startRetry() {
+                        const timer = setInterval(async () => {
+                            try {
+                                await runEveryMinute();
+                                clearInterval(timer);
+                            } catch (e) {
+                                console.warn("エラー（再試行します）:", e);
+                            }
+                        }, 1000);
+                    }
+
+                    startRetry();
 
                     /*
                     const data_all_raw =
@@ -611,7 +623,7 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                         "2$text:  @1.5,2;市立病院線@5.5,1; 8：00@3,2; 金沢大学 @5,1;Ｃ@1.5,2\n" +
                         "3$text:94@1.5,2; @5.5,1; 8：00@3,2; 旭町@2.5,1|dotId:destination/via|text:金沢駅@3.5,1;Ｄ@1.5,2\n" +
                         "4$text:94@1.5,2;通学急行@5.5,3; 7：34@3,2;旭町@2,1|dotId:destination/via,1|text:金沢大学@4,1;Ｃ@1.5,2";
-                        
+
                     window.addEventListener("load", () => {
                         setTimeout(() => {
                             color(data_all_raw);

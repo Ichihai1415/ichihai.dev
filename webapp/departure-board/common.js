@@ -1,5 +1,10 @@
-//使う場合
 import * as ichihai from "/js/ichihai.js";
+
+function clearDisplay() {
+    document.querySelectorAll(".display-column-row").forEach((el) => {
+        el.style.backgroundColor = colors["0"];
+    });
+}
 
 function display_init() {
     const div_displays = document.querySelectorAll("div.display");
@@ -24,6 +29,8 @@ function display_init() {
             div_display.appendChild(div_display_column);
         }
     }
+    clearDisplay();
+    document.querySelector(".departure-board").style.visibility = "visible";
 }
 
 const colors = {};
@@ -178,25 +185,14 @@ function text2dot(text) {
     return lines.join("\n");
 }
 
-function clearDisplay() {
-    document.querySelectorAll(".display-column-row").forEach((el) => {
-        el.style.backgroundColor = colors["0"];
-    });
-}
-
 let hideOther = false;
-
-document.querySelector("main").onclick = () => {
-    const changeTo = hideOther ? "inherit" : "none";
-    document.querySelector("header").style.display = changeTo;
-    document.querySelector("footer").style.display = changeTo;
-    document.querySelector("common-comment").style.display = changeTo;
-    document.querySelector("h1").style.display = changeTo;
-    document.querySelector(".update-date").style.display = changeTo;
-    hideOther = !hideOther;
-};
+let ready = false;
 
 window.onload = async () => {
+    setTimeout(() => {
+        display_init();
+    }, 100);
+
     const colorDataSt = await ichihai.getText(
         "/webapp/departure-board/data/color/_sample.txt",
     );
@@ -206,9 +202,24 @@ window.onload = async () => {
         colors[kv[0]] = kv[1];
     });
 
-    display_init();
-    clearDisplay();
+    document.querySelector(".info").onclick = () => {
+        const changeTo = hideOther ? "inherit" : "none";
+        document.querySelector("header").style.display = changeTo;
+        document.querySelector("footer").style.display = changeTo;
+        document.querySelector(".info").style.display = changeTo;
+        hideOther = !hideOther;
+    };
+    document.getElementById("target").onclick = () => {
+        const changeTo = hideOther ? "inherit" : "none";
+        document.querySelector("header").style.display = changeTo;
+        document.querySelector("footer").style.display = changeTo;
+        document.querySelector(".info").style.display = changeTo;
+        hideOther = !hideOther;
+    };
 
     window.color = color;
+
+    ready = true;
+
     //color("0$text:あああ");
 };

@@ -121,25 +121,27 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
         />
 
         <style>
-            .main {
-                overflow: auto;
+            .info {
+                padding: 10px;
+            }
+
+            .departure-board{
+                overflow-x: auto;
             }
         </style>
     </head>
     <body>
         <header><!--/js/common.js で追加される--></header>
-        <main>
+        <div class="info">
             <common-comment><!--/js/common.js で追加される--></common-comment>
             <h1>発車標シミュレーター</h1>
             <div class="update-date">2026/05/22作成 2026/05/22更新 v1.0</div>
             <div class="info-green">
                 <div class="info-green-head">a</div>
             </div>
-            <a href="displays/bus/wakamatsu-1.html"
-                >displays/bus/wakamatsu-1.html</a
-            >
-            <div class="departure-board" id="target"></div>
-        </main>
+        </div>
+
+        <div class="departure-board" id="target" style="visibility: hidden;"></div>
         <footer><!--/js/common.js で追加される--></footer>
         <script defer type="module">
             let d = "bus/wakamatsu-1";
@@ -164,25 +166,13 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                             if (node.tagName === "SCRIPT") {
                                 const newScript =
                                     document.createElement("script");
-
-                                // module の場合
-                                if (node.type === "module") {
+                                if (node.type === "module")
                                     newScript.type = "module";
-                                }
-
-                                // src がある場合
-                                if (node.src) {
-                                    newScript.src = node.src;
-                                } else {
-                                    // inline module script の場合
-                                    newScript.textContent = node.textContent;
-                                }
-
+                                if (node.src) newScript.src = node.src;
+                                else newScript.textContent = node.textContent;
                                 insertTo.appendChild(newScript);
                                 insertContent.removeChild(node);
-                            } else {
-                                insertTo.appendChild(node);
-                            }
+                            } else insertTo.appendChild(node);
                         }
                     }
                 });
