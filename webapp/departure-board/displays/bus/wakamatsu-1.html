@@ -100,21 +100,528 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
         <!--変えたければ変える要素-->
         <!--<link rel="icon" href="/icon/favicon.png" />-->
         <!--毎回変わる要素-->
-        <title>template | ichihai.dev</title>
-        <meta property="og:title" content="template | ichihai.dev" />
-        <meta name="description" content="[template description...]" />
-        <meta property="og:description" content="[template description...]" />
+        <title>発車標シミュレーター 個別ページ | webapp | ichihai.dev</title>
+        <meta
+            property="og:title"
+            content="発車標シミュレーター 個別ページ | webapp | ichihai.dev"
+        />
+        <meta
+            name="description"
+            content="発車標シミュレーターの個別ページです。"
+        />
+        <meta
+            property="og:description"
+            content="発車標シミュレーターの個別ページです。"
+        />
         <meta property="og:type" content="website" />
         <meta property="og:image" content="" />
 
         <script defer src="/js/common.js"></script>
-        <!--必要な場合-->
-        <!--<script defer type="module" src="script.js"></script>-->
-
         <link rel="stylesheet" href="/common.css" />
+
+        <link rel="stylesheet" href="../../common.css" />
+        <script defer type="module" src="../../common.js"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=family=Noto+Sans+JP:wght@100..900&display=swap"
+            rel="stylesheet"
+        />
         <style></style>
     </head>
     <body>
-        
+        <header><!--/js/common.js で追加される--></header>
+        <nav class="go2top"><!--/js/common.js で追加される--></nav>
+        <main>
+            <div class="common-comment"><!--/js/common.js で追加される--></div>
+            <h1>発車標シミュレーター：北鉄バス 若松</h1>
+            <div class="update-date">2026/05/22作成 2026/05/22更新 v1.0</div>
+            <div class="departure-board" id="target">
+                <div class="db-hokubus-wakamatsu">
+                    <div class="panel-top">
+                        <div class="texts">
+                            <div class="text1">北鉄バス</div>
+                            <div class="text2">金沢大学</div>
+                            <div class="text3">方面</div>
+                        </div>
+                        <div class="hd-texts">
+                            <span class="hd-text-1">路線番号</span>
+                            <span class="hd-text-2">情報</span>
+                            <span class="hd-text-3">時刻</span>
+                            <span class="hd-text-4">行先</span>
+                            <span class="hd-text-5">のりば</span>
+                        </div>
+                        <div class="displays">
+                            <div
+                                class="display"
+                                id="d0"
+                                db_r="16"
+                                db_c="18"
+                            ></div>
+                            <div
+                                class="display"
+                                id="d1"
+                                db_r="16"
+                                db_c="18"
+                            ></div>
+                            <div
+                                class="display"
+                                id="d2"
+                                db_r="16"
+                                db_c="18"
+                            ></div>
+                        </div>
+                    </div>
+                    <div class="panel-bottom">
+                        <div class="texts">
+                            <div class="text1">北鉄バス</div>
+                            <div class="text2">香林坊・金沢駅</div>
+                            <div class="text3">方面</div>
+                        </div>
+                        <div class="hd-texts">
+                            <span class="hd-text-1">路線番号</span>
+                            <span class="hd-text-2">情報</span>
+                            <span class="hd-text-3">時刻</span>
+                            <span class="hd-text-4">行先</span>
+                            <span class="hd-text-5">のりば</span>
+                        </div>
+                        <div class="displays">
+                            <div
+                                class="display"
+                                id="d3"
+                                db_r="16"
+                                db_c="18"
+                            ></div>
+                            <div
+                                class="display"
+                                id="d4"
+                                db_r="16"
+                                db_c="18"
+                            ></div>
+                            <div
+                                class="display"
+                                id="d5"
+                                db_r="16"
+                                db_c="18"
+                            ></div>
+                        </div>
+                    </div>
+                </div>
+                <style>
+                    .db-hokubus-wakamatsu {
+                        display: block;
+                        font-family: "Noto Sans JP";
+                        width: fit-content;
+                        color: #ffe;
+                    }
+
+                    .displays {
+                        display: inline-flex;
+                        flex-direction: column;
+                        gap: 6px;
+                        padding: 3px;
+                        background-color: #222;
+                    }
+
+                    .display {
+                        display: inline-flex;
+                        gap: 1px;
+                        padding: 1px;
+                        background-color: #000;
+                    }
+
+                    .display-column {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 1px;
+                    }
+
+                    .display-column-row {
+                        width: 3px;
+                        height: 3px;
+                        background-color: #322;
+                        border-radius: 100%;
+                    }
+
+                    .panel-top {
+                        margin: 0px;
+                        padding: 4px 20px 0 20px;
+                        padding: 4px 20px;
+                        background-color: #667;
+                    }
+
+                    .panel-bottom {
+                        margin: 0px;
+                        padding: 0 20px 20px 20px;
+                        background-color: #667;
+                    }
+
+                    .texts {
+                        display: flex;
+                        justify-content: center;
+                        margin-top: -10px;
+                    }
+
+                    .hd-texts {
+                        display: flex;
+                        margin-top: -6px;
+                        margin-bottom: -10px;
+                    }
+
+                    .text1 {
+                        margin-right: 20px;
+                        margin-top: 8px;
+                        font-size: 32px;
+                        font-weight: bold;
+                        letter-spacing: 4px;
+                    }
+
+                    .text2 {
+                        margin-right: 10px;
+                        font-size: 48px;
+                        font-weight: bold;
+                        letter-spacing: 12px;
+                    }
+
+                    .text3 {
+                        margin-top: 14px;
+                        font-weight: bold;
+                        font-size: 32px;
+                        letter-spacing: 4px;
+                    }
+
+                    .hd-text-1 {
+                        margin-left: 0px;
+                    }
+
+                    .hd-text-2 {
+                        margin-left: 180px;
+                    }
+
+                    .hd-text-3 {
+                        margin-left: 250px;
+                    }
+
+                    .hd-text-4 {
+                        margin-left: 290px;
+                    }
+
+                    .hd-text-5 {
+                        margin-left: 220px;
+                    }
+                </style>
+                <script type="module">
+                    import * as ichihai from "/js/ichihai.js";
+
+                    let isWeekDay = true;
+                    let isSchoolSemester = true;
+
+                    const timeTable = JSON.parse(
+                        await ichihai.getText(
+                            "/webapp/hokutetsu-bus/bus_data.json",
+                        ),
+                    );
+
+                    let data_dr1da1 = [];
+                    let data_dr2da1 = [];
+                    let data_dr1da2 = [];
+                    let data_dr2da2 = [];
+                    timeTable.Routes.forEach((rt) => {
+                        if (
+                            rt.Number == "93" ||
+                            rt.Number == "94" ||
+                            rt.Number == "0_Kanazawa-Univ" ||
+                            rt.Number == "97" ||
+                            rt.Number == "99"
+                        ) {
+                            data_dr1da1.push(
+                                ...dia2simple(rt.Buses_Dir1_Dia1, rt.Number),
+                            );
+                            data_dr2da1.push(
+                                ...dia2simple(rt.Buses_Dir2_Dia1, rt.Number),
+                            );
+                            data_dr1da2.push(
+                                ...dia2simple(rt.Buses_Dir1_Dia2, rt.Number),
+                            );
+                            data_dr2da2.push(
+                                ...dia2simple(rt.Buses_Dir2_Dia2, rt.Number),
+                            );
+                        } else {
+                            data_dr1da1.push(
+                                ...dia2simple(
+                                    rt.Buses_Dir2_Dia1,
+                                    rt.Number,
+                                    "C",
+                                ),
+                            );
+                            data_dr2da1.push(
+                                ...dia2simple(
+                                    rt.Buses_Dir1_Dia1,
+                                    rt.Number,
+                                    "D",
+                                ),
+                            );
+                            data_dr1da2.push(
+                                ...dia2simple(
+                                    rt.Buses_Dir2_Dia2,
+                                    rt.Number,
+                                    "C",
+                                ),
+                            );
+                            data_dr2da2.push(
+                                ...dia2simple(
+                                    rt.Buses_Dir1_Dia2,
+                                    rt.Number,
+                                    "D",
+                                ),
+                            );
+                        }
+                    });
+
+                    //console.log(data_dr1da1);
+                    //console.log(data_dr2da1);
+                    //console.log(data_dr1da2);
+                    //console.log(data_dr2da2);
+
+                    let displayData_dr1 = [];
+                    let displayData_dr2 = [];
+
+                    function displayDataReset() {
+                        displayData_dr1 = [];
+                        displayData_dr2 = [];
+
+                        if (isWeekDay) {
+                            displayData_dr1 = isSchoolSemester
+                                ? data_dr1da1
+                                : data_dr1da1.filter(
+                                      (row) => row[1] != "学期期間のみ",
+                                  );
+                            displayData_dr2 = isSchoolSemester
+                                ? data_dr2da1
+                                : data_dr2da1.filter(
+                                      (row) => row[1] != "学期期間のみ",
+                                  );
+                        } else {
+                            displayData_dr1 = isSchoolSemester
+                                ? data_dr1da2
+                                : data_dr1da2.filter(
+                                      (row) => row[1] != "学期期間のみ",
+                                  );
+                            displayData_dr2 = isSchoolSemester
+                                ? data_dr2da2
+                                : data_dr2da2.filter(
+                                      (row) => row[1] != "学期期間のみ",
+                                  );
+                        }
+                        //console.log(displayData_dr1);
+                        //console.log(displayData_dr2);
+
+                        displayData_dr1.sort((a, b) => {
+                            const toMinutes = (t) => {
+                                const [h, m] = t.split(":").map(Number);
+                                return h * 60 + m;
+                            };
+                            return toMinutes(a[2]) - toMinutes(b[2]);
+                        });
+                        displayData_dr2.sort((a, b) => {
+                            const toMinutes = (t) => {
+                                const [h, m] = t.split(":").map(Number);
+                                return h * 60 + m;
+                            };
+                            return toMinutes(a[2]) - toMinutes(b[2]);
+                        });
+                    }
+
+                    displayDataReset();
+
+                    function getComeMinutes(timeStr) {
+                        const now = new Date();
+                        //now.setHours(0, 0, 0, 0); //任意時刻
+                        const [h, m] = timeStr.split(":").map(Number);
+                        return (
+                            h * 60 +
+                            m -
+                            (now.getHours() * 60 + now.getMinutes())
+                        );
+                    }
+
+                    function data_array2text(i, data, min) {
+                        //console.log(data);
+                        let st = `${i}$text:`;
+                        switch (data[0]) {
+                            case "92":
+                            case "93":
+                            case "94":
+                            case "95":
+                            case "96":
+                            case "97":
+                            case "99":
+                                st += `${data[0]}@1,6;`;
+                                break;
+                            case "53":
+                                st += `${data[0]}@1,7;`;
+                                break;
+                            default:
+                                st += `@1;`;
+                                break;
+                        }
+
+                        let arrPre = "到着";
+                        if (data[1] == "快速") arrPre = "快速";
+
+                        switch (data[1]) {
+                            case "":
+                            case "学期期間のみ":
+                            case "快速":
+                                if (min == 0) st += `まもなく到着,3;`;
+                                else if (min < 10)
+                                    st += ` ${arrPre}@2.5,${data[1] == "快速" ? "2" : "4"};約 ${min}分@3.5,1;`;
+                                else if (min < 100)
+                                    st += ` ${arrPre}@2.5,${data[1] == "快速" ? "2" : "4"};約${min}分@3.5,1;`;
+                                else
+                                    st += `@0.25;到着,${data[1] == "快速" ? "2" : "4"};約${min}分@3.75,1;`;
+                                break;
+                            case "当バス停始発":
+                                st += "当バス停始発,4;";
+                                break;
+                            default:
+                                st += `@6;`;
+                                break;
+                        }
+                        if (data[2].length == 4)
+                            st += ` ${data[2].replace(":", "：")}@3,2;`;
+                        else st += `${data[2].replace(":", "：")}@3,2;`;
+
+                        let via = "";
+                        switch (data[0]) {
+                            case "92":
+                            case "93":
+                            case "97":
+                            case "99":
+                                via = "鈴見";
+                                break;
+                            case "94":
+                            case "95":
+                            case "96":
+                            case "53":
+                            case "0_Shiritsubyoin":
+                                via = "旭町";
+                                break;
+                            default:
+                                via = "";
+                                break;
+                        }
+
+                        if (data[3] == "若松") st += "当バス停止まり,4;";
+                        else if (via == "")
+                            //
+                            st += `@${(7 - data[3].length) / 2};${data[3]};@${(7 - data[3].length) / 2};`;
+                        else if (data[3].length == 4)
+                            st += `${via},4|dotId:destination/via,4|text:${data[3]};`;
+                        else
+                            st += `@${(4 - data[3].length) / 2};${via},4|dotId:destination/via,4|text:${data[3]};@${(4 - data[3].length) / 2};`;
+
+                        st += `${data[4].replace("A", "Ａ").replace("B", "Ｂ").replace("C", "Ｃ").replace("D", "Ｄ")},2\n`;
+                        return st;
+                    }
+
+                    async function runEveryMinute() {
+                        let displaySt = "";
+
+                        let d = 0;
+                        for (let data of displayData_dr1) {
+                            const min = getComeMinutes(data[2]);
+                            if (min >= 0) {
+                                //console.log(d);
+                                displaySt += data_array2text(d, data, min);
+                                d++;
+                                if (d == 3) break;
+                            }
+                        }
+                        if (d == 0)
+                            displaySt +=
+                                "0$text:☆☆☆,2;本日の運転は終了しました,1;☆☆☆,2\n";
+                        d = 3;
+                        for (let data of displayData_dr2) {
+                            const min = getComeMinutes(data[2]);
+                            if (min >= 0) {
+                                displaySt += data_array2text(d, data, min);
+                                d++;
+                                if (d == 6) break;
+                            }
+                        }
+                        if (d == 3)
+                            displaySt +=
+                                "3$text:☆☆☆,2;本日の運転は終了しました,1;☆☆☆,2\n";
+
+                        //console.log(displaySt);
+                        color(displaySt);
+                    }
+
+                    function getStopTimeId(stops, target) {
+                        for (const stop of stops)
+                            if (stop.Name == target)
+                                return [stop.Time, stop.IdID];
+                        return null;
+                    }
+
+                    function dia2simple(dia, num, id) {
+                        let data = [];
+                        dia.forEach((bus) => {
+                            const timeId = getStopTimeId(bus.Stops, "若松");
+                            if (timeId) {
+                                let info = "";
+                                if (bus.IsRapid) info = "快速";
+                                if (bus.IsNotServiceDuringVacation)
+                                    info = "学期期間のみ";
+                                if (bus.Start == "若松") info = "当バス停始発";
+                                data.push([
+                                    num,
+                                    info,
+                                    timeId[0],
+                                    bus.Destination,
+                                    id ? id : timeId[1],
+                                ]);
+                            }
+                        });
+                        return data;
+                    }
+
+                    function startAt0s() {
+                        const now = new Date();
+                        const ms = now.getMilliseconds();
+                        const sec = now.getSeconds();
+                        const wait = (60 - sec) * 1000 - ms;
+                        setTimeout(() => {
+                            runEveryMinute();
+                            setInterval(runEveryMinute, 60 * 1000);
+                        }, wait);
+                    }
+
+                    startAt0s();
+
+                    setTimeout(() => {
+                        runEveryMinute();
+                    }, 1000);
+                </script>
+            </div>
+        </main>
+        <!--
+        <script defer>
+            return;
+            const data_all_raw =
+                "0$text:93@1.5,2;遅れ約15分@5.5,3;12：34@3,2;  金沢駅  @5,1;Ｂ@1.5,2\n" +
+                "1$text:93@1.5,2;快速@5.5,2; 8：00@3,2; 金沢大学 @5,1;Ａ@1.5,2\n" +
+                "2$text:  @1.5,2;市立病院線@5.5,1; 8：00@3,2; 金沢大学 @5,1;Ｃ@1.5,2\n" +
+                "3$text:94@1.5,2; @5.5,1; 8：00@3,2; 旭町@2.5,1|dotId:destination/via|text:金沢駅@3.5,1;Ｄ@1.5,2\n" +
+                "4$text:94@1.5,2;通学急行@5.5,3; 7：34@3,2;旭町@2,1|dotId:destination/via,1|text:金沢大学@4,1;Ｃ@1.5,2";
+
+            window.addEventListener("load", () => {
+                setTimeout(() => {
+                    color(data_all_raw);
+                }, 1000);
+            });
+        </script>
+        -->
     </body>
 </html>

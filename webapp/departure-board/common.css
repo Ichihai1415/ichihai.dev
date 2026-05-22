@@ -1,0 +1,13 @@
+/*
+html,
+body,
+main,
+.departure-board {
+    width: fit-content;
+}
+
+main {
+    display: inline-flex;
+    flex-direction: column;
+}
+*/

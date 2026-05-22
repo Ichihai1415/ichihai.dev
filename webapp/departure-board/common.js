@@ -1,35 +1,49 @@
 //使う場合
 import * as ichihai from "/js/ichihai.js";
 
+display_init();
+
+function display_init() {
+    const div_displays = document.querySelectorAll("div.display");
+    for (let di = 0; di < div_displays.length; di++) {
+        const div_display = div_displays[di];
+        const d = Number(div_display.id.replace("d", ""));
+        const rows = Number(div_display.getAttribute("db_r"));
+        const columns = rows * Number(div_display.getAttribute("db_c"));
+
+        for (let c = 0; c < columns; c++) {
+            let div_display_column = document.createElement("div");
+            div_display_column.classList.add("display-column");
+            div_display_column.id = "d" + d + "-c" + c;
+
+            for (let r = 0; r < rows; r++) {
+                let div_display_column_row = document.createElement("div");
+                div_display_column_row.classList.add("display-column-row");
+                div_display_column_row.id = "d" + d + "-c" + c + "-r" + r;
+
+                div_display_column.appendChild(div_display_column_row);
+            }
+            div_display.appendChild(div_display_column);
+        }
+    }
+}
+
 const colors = {};
-const colorDataSt = await ichihai.getText("data/color/_sample.txt");
+const colorDataSt = await ichihai.getText(
+    "/webapp/departure-board/data/color/_sample.txt",
+);
 const colorData = colorDataSt.replace("/: /g", ":").split(/\r?\n/);
 colorData.forEach((line) => {
     const kv = line.split(":");
     colors[kv[0]] = kv[1];
 });
 
-const data_all_raw =
-    "1$text:快速@5,2;〇,1|dotId:num-k/3,1|text:～,1|dotId:num-k/8,1|dotId:zero-32,1|text:18：20@4,2;敦　賀@4,1\n" +
-    "4$dotId:type/new-rapid.2,3|dotId:name/kosei-omimaiko,3|dotId:zero-16|text:13：20@3,2|dotId:zero-8|dotId:destination/himeji-dir-osaka\n" +
-    "5$text:北陸特快@5,3;△1～6@5,1;20：05@4,2;米　原@4,1\n" +
-    "6$text:急行@5,3;☐1～9@5,1; 0：45@3,2|dotId:zero-8|dotId:destination/osaka-dir-kyoto\n" +
-    "0$text:特急ｻﾝﾀﾞｰﾊﾞｰﾄﾞ@7,3|dotId:num-k/1,1|dotId:num-k/7,1|text:号@2,1|dotId:num-k/1,2|dotId:num-k/3,2|text:：,2|dotId:num-k/2,2|dotId:num-k/7,2|text: 和倉温泉,1\n" +
-    "2$text:普通　　,1;黄,1|dotId:position/arrow,1|text:1～20,1; 3：33@4,2;直江津,1\n" +
-    "3$text:☆☆☆,2;本日の運転は終了しました,1;☆☆☆,2";
 //dot ex:  |dot:01\\00\\01\\00\\01\\00\\01\\00\\01\\00\\01\\00\\01\\00\\12\\34,3
 
-/*
-            const data_all_raw =
-                "0$text:93@1.5,2;遅れ約15分@5.5,3;12：34@3,2;  金沢駅  @5,1;Ｂ@1.5,2\n" +
-                "1$text:93@1.5,2;快速@5.5,2; 8：00@3,2; 金沢大学 @5,1;Ａ@1.5,2\n" +
-                "2$text:  @1.5,2;市立病院線@5.5,1; 8：00@3,2; 金沢大学 @5,1;Ｃ@1.5,2\n" +
-                "3$text:94@1.5,2; @5.5,1; 8：00@3,2; 旭町@2.5,1|dotId:destination/via|text:金沢駅@3.5,1;Ｄ@1.5,2\n" +
-                "4$text:94@1.5,2;通学急行@5.5,3; 7：34@3,2;旭町@2,1|dotId:destination/via,1|text:金沢大学@4,1;Ｃ@1.5,2";
-            */
 const dotCache = {};
 
-async function color(data_all_raw) {
+
+export async function color(data_all_raw) {
     clearDisplay();
 
     const data_raw_lines = data_all_raw.split("\n");
@@ -85,7 +99,9 @@ async function color(data_all_raw) {
                         data = dotCache[data_dIc[0]];
                     } else {
                         data = await ichihai.getText(
-                            "data/dot/16/parts/" + data_dIc[0] + ".txt",
+                            "/webapp/departure-board/data/dot/16/parts/" +
+                                data_dIc[0] +
+                                ".txt",
                         );
                         dotCache[data_dIc[0]] = data;
                     }
@@ -184,3 +200,15 @@ function clearDisplay() {
 }
 
 clearDisplay();
+
+let hideOther = false;
+
+document.querySelector("main").onclick = () => {
+    const changeTo = hideOther ? "inherit" : "none";
+    document.querySelector("header").style.display = changeTo;
+    document.querySelector("footer").style.display = changeTo;
+    document.querySelector("common-comment").style.display = changeTo;
+    document.querySelector("h1").style.display = changeTo;
+    document.querySelector(".update-date").style.display = changeTo;
+    hideOther = !hideOther;
+};
