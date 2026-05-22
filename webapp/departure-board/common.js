@@ -207,6 +207,7 @@ window.onload = async () => {
         document.querySelector("header").style.display = changeTo;
         document.querySelector("footer").style.display = changeTo;
         document.querySelector(".info").style.display = changeTo;
+        document.querySelector(".info2").style.display = changeTo;
         hideOther = !hideOther;
     };
     document.getElementById("target").onclick = () => {
@@ -214,6 +215,7 @@ window.onload = async () => {
         document.querySelector("header").style.display = changeTo;
         document.querySelector("footer").style.display = changeTo;
         document.querySelector(".info").style.display = changeTo;
+        document.querySelector(".info2").style.display = changeTo;
         hideOther = !hideOther;
     };
 
