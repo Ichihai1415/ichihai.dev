@@ -199,7 +199,20 @@ function text2dot(text) {
 let hideOther = false;
 let ready = false;
 
+function onReady(func) {
+    if (ready) func();
+    else setTimeout(() => onReady(func), 100);
+}
+
 window.onload = async () => {
+    window.color = color;
+    window.onReady = onReady;
+
+    while (document.querySelectorAll("div.display").length == 0) {
+        await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+    display_init();
+
     const font = new FontFace(
         "JF Dot jiskan16s",
         "url('/font/jfdotfont/JF-Dot-jiskan16s.ttf')",
@@ -208,10 +221,6 @@ window.onload = async () => {
     font.load().then((loadedFont) => {
         document.fonts.add(loadedFont);
     });
-
-    setTimeout(() => {
-        display_init();
-    }, 100);
 
     const colorDataSt = await ichihai.getText(
         "/webapp/departure-board/data/color/_sample.txt",
@@ -238,8 +247,6 @@ window.onload = async () => {
         document.querySelector(".info2").style.display = changeTo;
         hideOther = !hideOther;
     };
-
-    window.color = color;
 
     ready = true;
 

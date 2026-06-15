@@ -552,8 +552,6 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                 //console.log(data_dr1da2);
                 //console.log(data_dr2da2);
 
-                startAt0s();
-
                 function startRetry() {
                     const timer = setInterval(async () => {
                         try {
@@ -564,8 +562,6 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                         }
                     }, 1000);
                 }
-
-                startRetry();
 
                 /*
                     const data_all_raw =
@@ -581,6 +577,10 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                         }, 1000);
                     });
                     */
+                onReady(() => {
+                    runEveryMinute();
+                    startAt0s();
+                });
             </script>
         </div>
     </body>
