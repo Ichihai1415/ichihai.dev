@@ -140,14 +140,14 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
         <header><!--/js/common.js で追加される--></header>
 
         <main>
-            2026/01/30更新（データ除く）
+            2026/06/18更新（データ除く）
             <h1>北鉄バス金大付近運用表</h1>
             注意:
             私は知識がないので適当です。表現も独自のものです。記録ミス等で誤りがある可能性があります。<br />
             ナンバー、塗装、所属？は異なる記録が|区切りで出ます。表記揺れで実質同じものが複数並ぶことがあります。<br />
             コメント欄の雨、雪、積雪は後で一括でやるためミス頻発です。積雪は気象台の観測データあるいは目視で5cmごと、前日比は基本24時間前です。歩道積雪・凍結時は記録できない場合があります。<br />
             塗装の備考:
-            記載がなければ基本通常色で、通常/[広告名]の表記もします。前面ノンステップは前面に白枠文字の「ノンステップバス」<br />
+            記載がなければ基本通常色で、通常/[広告名]の表記もします。前面ノンステップは前面に白枠文字の「ノンステップバス」、側面ノンステップは側面に青地。最近は単に「ノンステップ」に。<br />
             <span style="color: red"
                 >金沢大学方面には金沢駅方面の記録が混入している可能性があります。<br />
                 2025/12/18以前のものは、ミスで金沢駅と東金沢が混ざっている可能性があります。2025/12/31以前の金沢城塗装のものは、ミスで違う可能性があります。</span
@@ -173,6 +173,13 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                     type="checkbox"
                     checked
                 />~を含む</label
+            >
+            <label
+                ><input
+                    id="onlyThisYear"
+                    type="checkbox"
+                    checked
+                />2026年度のみ</label
             >
 
             <h2>金沢大学方面</h2>
@@ -221,6 +228,20 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                                         row[0].split("_")[0] === filter_num,
                                 ),
                             );
+                    }
+
+                    if (document.getElementById("onlyThisYear").checked) {
+                        result = result
+                            .map((group) =>
+                                group.filter((row) => {
+                                    const [y, m] = row[3]
+                                        .split("/")
+                                        .map(Number);
+                                    const year = m < 4 ? y - 1 : y;
+                                    return year === 2026;
+                                }),
+                            )
+                            .filter((group) => group.length > 0);
                     }
 
                     document.getElementById("dataCount-" + file).innerText =
@@ -393,6 +414,8 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
 
             document.getElementById("filterShow").onclick = filterShow;
             document.getElementById("numFilter").oninput = autoShow;
+            document.getElementById("containSearch").onchange = filterShow;
+            document.getElementById("onlyThisYear").onchange = filterShow;
 
             get();
         </script>
