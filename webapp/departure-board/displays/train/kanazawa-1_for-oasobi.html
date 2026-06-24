@@ -1,0 +1,551 @@
+<!-- This note was updated on 2025/12/12.
+The template (latest note): https://ichihai.dev/_temp.html
+
+ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
+- ichihai.dev is a personal static website by Ichihai1415.
+- Contact information can be found at https://ichihai.dev/aboutme/links.html. I would recommend contacting me at X (@ProjectS31415_1).
+- ichihai.dev is hosted on Cloudflare Pages. Domain was registered on Cloudflare on 2024/03/01.
+- The repository is on GitHub: https://github.com/Ichihai1415/ichihai.dev
+- This repository is licensed under the MIT License.
+- Some content includes AI-generated content.
+- Some text is machine translated. I'm not good at English so please excuse any mistakes.
+- Data from other sources are under the license of that source.
+- Most of codes are formatted by Prettier.
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::@@@@@::::::::::::::::::::::::::::@@@@@::::::::::::::::::::::::::::@@@@@:::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::@@@@@@@@@::::::::::::::::::::::::@@@@@@@@@::::::::::::::::::::::::@@@@@@@@@:::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::@@@@@@@@@::::::::::::::::::::::::@@@@@@@@@::::::::::::::::::::::::@@@@@@@@@:::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::@@@@@@@@@::::::::::::::::::::::::@@@@@@@@@::::::::::::::::::::::::@@@@@@@@@:::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::@@@@@::oooo::::::::::::::::::::::@@@@@::::::::::::::::::::::oooo::@@@@@:::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::8::::::oooo:::::::::::::::::8:::::8:::::::::::::::::oooo::::::8:::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::8:::::::::oooo::::::::::::8:::::::8::::::::::::oooo:::::::::8::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::8::::::::::::oooo:::::::8:::::::::8:::::::oooo::::::::::::8:::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::8:::::::::::::::oooo::8:::::::::::8::oooo:::::::::::::::8::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::8::::::::::::::::::o8oo:::::::::oo8o::::::::::::::::::8:::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::8:::::::::::::::::8:::oooo:oooo:::8:::::::::::::::::8::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::8:::::::::::::::8:::::oooooo::::::8:::::::::::::::8:::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::8:::::::::::::8::oooo::::::oooo:::8:::::::::::::8::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::8:::::::::::8ooo::::::::::::::oooo8:::::::::::8:::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::8:::::oooo8:::::::::::::::::::::::8ooo::::::8::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::8oooo:::8:::::::::::::::::::::::::8::oooo:8:::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::oooo8:::::8:::::::::::::::::::::::::::8:::::8oooo;:::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::@@@@@::oooo:::::8:::8::::::::::::@@@@@::::::::::::8:::8:::::oooo;:@@@@@:::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::@@@@@@@@@::::::::::8:8:::::::::::@@@@@@@@@:::::::::::8:8::::::::::@@@@@@@@@:::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::@@@@@@@@@:::::::::::8::::::::::::@@@@@@@@@888888888888888888888888@@@@@@@@@:::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::@@@@@@@@@::::::::::8:8:::::::::::@@@@@@@@@:::::::::::8:8::::::::::@@@@@@@@@:::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::@@@@@::oooo:::::8:::8::::::::::::@@@@@::::::::::::8:::8:::::::::::@@@@@:::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::oooo8:::::8:::::::::::::::::::::::::::8:::::8::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::8:oooo::8:::::::::::::::::::::::::8:::::::8:::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::8::::::ooo8:::::::::::::::::::::::8:::::::::8::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::8:::::::::::8ooo::::::::::::::::::8:::::::::::8:::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::8:::::::::::::8::oooo:::::::::::::8:::::::::::::8::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::8:::::::::::::::8:::::oooo::::::::8:::::::::::::::8:::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::8:::::::::::::::::8::::::::oooo:::8:::::::::::::::::8::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::8:::::::::::::::::::8:::::::::::oo8o::::::::::::::::::8:::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::8:::::::::::::::::::::8:::::::::::8::oooo:::::::::::::::8::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::8:::::::::::::::::::::::8:::::::::8:::::::oooo::::::::::::8:::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::8:::::::::::::::::::::::::8:::::::8::::::::::::oooo:::::::::8::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::8:::::::::::::::::::::::::::8:::::8:::::::::::::::::oooo::::::8:::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::@@@@@::::::::::::::::::::::::::::@@@@@::::::::::::::::::::::oooo::@@@@@:::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::@@@@@@@@@::::::::::::::::::::::::@@@@@@@@@::::::::::::::::::::::::@@@@@@@@@:::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::@@@@@@@@@::::::::::::::::::::::::@@@@@@@@@::::::::::::::::::::::::@@@@@@@@@:::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::@@@@@@@@@::::::::::::::::::::::::@@@@@@@@@::::::::::::::::::::::::@@@@@@@@@:::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::@@@@@::::::::::::::::::::::::::::@@@@@::::::::::::::::::::::::::::@@@@@:::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+-->
+<!doctype html>
+<html lang="ja-JP">
+    <head>
+        <!--不変要素-->
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="theme-color" content="#1E3C5A" />
+        <meta name="author" content="Ichihai1415" />
+        <meta
+            name="copyright"
+            content="(c) 2024 Ichihai1415 All right reserved."
+        />
+        <meta property="og:site_name" content="Ichihai1415のウェブサイト" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@Ichihai1415" />
+        <meta name="twitter:creator" content="@Ichihai1415" />
+        <!--変えたければ変える要素-->
+        <!--<link rel="icon" href="/icon/favicon.png" />-->
+        <!--毎回変わる要素-->
+        <title>発車標シミュレーター 個別ページ | webapp | ichihai.dev</title>
+        <meta
+            property="og:title"
+            content="発車標シミュレーター 個別ページ | webapp | ichihai.dev"
+        />
+        <meta
+            name="description"
+            content="発車標シミュレーターの個別ページです。"
+        />
+        <meta
+            property="og:description"
+            content="発車標シミュレーターの個別ページです。"
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="" />
+
+        <script defer src="/js/common.js"></script>
+        <link rel="stylesheet" href="/common.css" />
+
+        <link rel="stylesheet" href="../../common.css" />
+        <script defer type="module" src="../../common.js"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=family=Noto+Sans+JP:wght@100..900&display=swap"
+            rel="stylesheet"
+        />
+        <style></style>
+    </head>
+    <body>
+        <header><!--/js/common.js で追加される--></header>
+        <nav class="go2top"><!--/js/common.js で追加される--></nav>
+        <div class="info">
+            <div class="common-comment"><!--/js/common.js で追加される--></div>
+            <h1>発車標シミュレーター：金沢駅（在来線3,4,5番線[2015~]）</h1>
+            <div class="update-date">2026/05/22作成 2026/05/22更新 v1.0</div>
+        </div>
+        <div class="departure-board" id="target">
+            <div class="db-kanazawa345">
+                <div class="panel1">
+                    <div class="panel-top">
+                        <div class="hd-container">
+                            <div class="hd-arrow-left">
+                                <img
+                                    src="/webapp/departure-board/displays/train/arrow.svg"
+                                    width="50px"
+                                    height="50px"
+                                    alt="arrow"
+                                />
+                            </div>
+                            <div class="hd-text">
+                                <div class="hd-text1">
+                                    3番のりばの発車<span class="deleted-text"
+                                        >は</span
+                                    >
+                                </div>
+                                <div class="hd-text2">
+                                    Next
+                                    <span class="hd-text2-space"></span>Train
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hd-text0">
+                            <span class="hd-text0-1 hd-text0-ja">種別</span>
+                            <span class="hd-text0-en">Type</span>
+                            <span class="hd-text0-2 hd-text0-ja">列車名</span>
+                            <span class="hd-text0-en">Train Name</span>
+                            <span class="hd-text0-3 hd-text0-ja"
+                                >／乗車位置</span
+                            >
+                            <span class="hd-text0-en">Boarding Position</span>
+                            <span class="hd-text0-4 hd-text0-ja">時刻</span>
+                            <span class="hd-text0-en">Departure Time</span>
+                            <span class="hd-text0-5 hd-text0-ja">行先</span>
+                            <span class="hd-text0-en">Destination</span>
+                        </div>
+                        <div class="displays">
+                            <div
+                                class="display"
+                                id="d0"
+                                db_r="16"
+                                db_c="18"
+                            ></div>
+                            <div
+                                class="display"
+                                id="d1"
+                                db_r="16"
+                                db_c="18"
+                            ></div>
+                            <div
+                                class="display"
+                                id="d2"
+                                db_r="16"
+                                db_c="18"
+                            ></div>
+                        </div>
+                    </div>
+                    <div class="panel-bottom">
+                        <fieldset class="border-4">
+                            <legend class="hd-text1">
+                                4番のりばの発車<span class="deleted-text"
+                                    >は</span
+                                ><span class="hd-text2">
+                                    Next
+                                    <span class="hd-text2-space"></span>Train
+                                </span>
+                            </legend>
+
+                            <div class="hd-text0">
+                                <span class="hd-text0-1 hd-text0-ja">種別</span>
+                                <span class="hd-text0-en">Type</span>
+                                <span class="hd-text0-2 hd-text0-ja"
+                                    >列車名</span
+                                >
+                                <span class="hd-text0-en">Train Name</span>
+                                <span class="hd-text0-3 hd-text0-ja"
+                                    >／乗車位置</span
+                                >
+                                <span class="hd-text0-en"
+                                    >Boarding Position</span
+                                >
+                                <span class="hd-text0-4 hd-text0-ja">時刻</span>
+                                <span class="hd-text0-en">Departure Time</span>
+                                <span class="hd-text0-5 hd-text0-ja">行先</span>
+                                <span class="hd-text0-en">Destination</span>
+                            </div>
+
+                            <div class="displays">
+                                <div
+                                    class="display"
+                                    id="d3"
+                                    db_r="16"
+                                    db_c="18"
+                                ></div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+                <div class="panel-space"></div>
+                <div class="panel2">
+                    <div class="panel-top">
+                        <div class="clock"></div>
+                    </div>
+                    <div class="panel-bottom">
+                        <div class="border-4">
+                            <div class="hd-text-c">4番のりば</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-space"></div>
+                <div class="panel3">
+                    <div class="panel-top">
+                        <div class="hd-container">
+                            <div class="hd-text">
+                                <div class="hd-text1">
+                                    5番のりばの発車<span class="deleted-text"
+                                        >は</span
+                                    >
+                                </div>
+                                <div class="hd-text2">
+                                    Next
+                                    <span class="hd-text2-space"></span>Train
+                                </div>
+                            </div>
+                            <div class="hd-arrow-right">
+                                <img
+                                    src="/webapp/departure-board/displays/train/arrow.svg"
+                                    width="50px"
+                                    height="50px"
+                                    alt="arrow"
+                                />
+                            </div>
+                        </div>
+                        <div class="hd-text0">
+                            <span class="hd-text0-1 hd-text0-ja">種別</span>
+                            <span class="hd-text0-en">Type</span>
+                            <span class="hd-text0-2 hd-text0-ja">列車名</span>
+                            <span class="hd-text0-en">Train Name</span>
+                            <span class="hd-text0-3 hd-text0-ja"
+                                >／乗車位置</span
+                            >
+                            <span class="hd-text0-en">Boarding Position</span>
+                            <span class="hd-text0-4 hd-text0-ja">時刻</span>
+                            <span class="hd-text0-en">Departure Time</span>
+                            <span class="hd-text0-5 hd-text0-ja">行先</span>
+                            <span class="hd-text0-en">Destination</span>
+                        </div>
+                        <div class="displays">
+                            <div
+                                class="display"
+                                id="d4"
+                                db_r="16"
+                                db_c="18"
+                            ></div>
+                            <div
+                                class="display"
+                                id="d5"
+                                db_r="16"
+                                db_c="18"
+                            ></div>
+                            <div
+                                class="display"
+                                id="d6"
+                                db_r="16"
+                                db_c="18"
+                            ></div>
+                        </div>
+                    </div>
+                    <div class="panel-bottom">
+                        <div class="border-4">
+                            <div class="hd-text-rb">
+                                4番のりばは後方　130mです
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <style>
+                :root {
+                    --text-color: #ffef;
+                }
+
+                .db-kanazawa345 {
+                    display: inline-flex;
+                    /*padding: 3px;*/
+                    color: var(--text-color);
+                    background-color: #777774;
+                    font-family: "Noto Sans JP";
+                }
+
+                .panel-top {
+                    height: 250px;
+                    padding: 0 40px;
+                }
+
+                .panel-bottom {
+                    height: 150px;
+                    padding: 0 40px;
+                }
+
+                .panel-space {
+                    width: 4px;
+                    background-color: #000e;
+                }
+
+                .hd-container {
+                    display: flex;
+                    justify-content: center;
+                    margin: 0 auto;
+                }
+
+                .hd-arrow-left {
+                    margin: 10px 24px 0 48px;
+                }
+
+                .hd-arrow-right {
+                    margin: 10px 24px 0 24px; /*仮*/
+                    transform: scale(-1, 1);
+                }
+
+                .hd-text1 {
+                    margin-top: -4px;
+                    font-size: 40px;
+                    font-weight: bold;
+                    letter-spacing: 0.4em;
+                }
+
+                .deleted-text {
+                    color: #7666;
+                }
+
+                .hd-text2 {
+                    margin-top: -12px;
+                    font-size: 24px;
+                    font-weight: bold;
+                    letter-spacing: 2px;
+                }
+
+                .hd-text2-space {
+                    width: 8px;
+                    display: inline-block;
+                }
+
+                .hd-text0 {
+                    margin: -8px 0 -2px 0;
+                }
+
+                .hd-text0-ja {
+                    font-weight: bold;
+                }
+
+                .hd-text0-en {
+                    margin-left: 2px;
+                    font-size: 0.8rem;
+                }
+
+                .hd-text0-1 {
+                    margin-left: 14px;
+                }
+
+                .hd-text0-2 {
+                    margin-left: 28px;
+                }
+
+                .hd-text0-3 {
+                    margin-left: 0px;
+                }
+
+                .hd-text0-4 {
+                    margin-left: 54px;
+                }
+
+                .hd-text0-5 {
+                    margin-left: 90px;
+                }
+
+                .border-4 {
+                    border: 4px solid var(--text-color);
+                    padding: 14px;
+                }
+
+                .panel1 .border-4 {
+                    margin: -8px -40px 0 -18px;
+                    padding-right: 40px;
+                    border-right: 0;
+                }
+
+                .panel1 .border-4 .hd-text1 {
+                    margin-left: 170px;
+                    padding-left: 10px;
+                    font-size: 34px;
+                }
+
+                .panel1 .border-4 .hd-text2 {
+                    margin-left: -8px;
+                    padding-right: 8px;
+                    font-size: 24px;
+                    letter-spacing: 1px;
+                }
+
+                .panel1 .border-4 .hd-text0 {
+                    margin-top: -20px;
+                }
+
+                .panel2 {
+                    width: 180px;
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                .panel2 .border-4 {
+                    height: 103px;
+                    margin: 15px -40px 0 -40px;
+                    padding: 2px;
+                    border-left: 0;
+                    border-right: 0;
+                    display: flex;
+                    align-items: end;
+                }
+
+                .hd-text-c {
+                    width: 100%;
+                    margin-bottom: 8px;
+                    font-size: 34px;
+                    font-weight: bold;
+                    text-align: center;
+                }
+
+                .panel3 .panel-bottom {
+                    height: 135px;
+                    padding-top: 15px;
+                }
+
+                .panel3 .border-4 {
+                    height: 103px;
+                    margin: 0px -18px 0 -40px;
+                    padding: 2px;
+                    border-left: 0;
+                    display: flex;
+                    align-items: end;
+                }
+
+                .hd-text-rb {
+                    width: 100%;
+                    margin-bottom: 8px;
+                    font-size: 40px;
+                    font-weight: bold;
+                    text-align: center;
+                    text-decoration: underline;
+                    text-decoration-thickness: 2px;
+                    text-underline-offset: 6px;
+                    letter-spacing: 4px;
+                }
+
+                .clock {
+                    width: 100px;
+                    height: 100px;
+                    margin-top: 120px;
+                    background-color: #fff;
+                    border-radius: 5px;
+                }
+
+                .db-kanazawa345 .displays {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 3px;
+                    padding: 3px;
+                    background-color: #222;
+                }
+
+                .db-kanazawa345 .display {
+                    display: flex;
+                    gap: 1px;
+                    padding: 1px;
+                    background-color: #000;
+                }
+
+                .db-kanazawa345 .display-column {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 1px;
+                }
+
+                .db-kanazawa345 .display-column-row {
+                    width: 2px;
+                    height: 2px;
+                    background-color: #322;
+                    /*つけると暗く*/
+                    /*border-radius: 100%;*/
+                }
+
+                .db-kanazawa345 .display-column:last-child > * {
+                    /*margin-right: 1px;*/
+                }
+            </style>
+            <script>
+                const data_all_raw =
+                    "0$text:ゲンキー　金沢田上店,2;は、本日をもちま\n" +
+                    "1$text:して;営業を終了,3;しました。,1;これまでのご\n" +
+                    "2$text:愛顧、;ありがとうございました,3;。\n" +
+                    "3$text:☆☆☆,2;本日の営業は終了しました,1;☆☆☆,2";
+                setTimeout(() => {
+                    onReady(() => color(data_all_raw));
+                }, 1000);
+            </script>
+        </div>
+        <footer><!--/js/common.js で追加される--></footer>
+    </body>
+</html>

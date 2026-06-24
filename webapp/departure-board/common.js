@@ -48,9 +48,11 @@ function display_init() {
     document.querySelector(".departure-board").style.visibility = "visible";
 }
 
-const colors = {};
+let colors = {};
 
-const dotCache = {};
+let dotCache = {};
+
+let dotJson = {};
 
 async function color(data_all_raw) {
     clearDisplay();
@@ -72,7 +74,7 @@ async function color(data_all_raw) {
             const data_tn = datas_d[ps].split(":");
             let data = null;
             switch (data_tn[0]) {
-                case "text":
+                case "text_old":
                     const tx_tcs = data_tn[1].split(";");
                     for (let ti = 0; ti < tx_tcs.length; ti++) {
                         const tx_tc = tx_tcs[ti].split(",");
@@ -91,6 +93,55 @@ async function color(data_all_raw) {
                         }
                         if (data == null) {
                             data = "text2dot\n" + data_t;
+                        } else {
+                            const data_t_l = data_t.split(/\r?\n/);
+                            const d_l = data.split(/\r?\n/);
+                            for (let li = 1; li < d_l.length; li++) {
+                                d_l[li] += data_t_l[li - 1];
+                            }
+                            data = d_l.join("\n");
+                        }
+                    }
+                    break;
+                case "text":
+                    const tx_tcs2 = data_tn[1].split(";");
+                    for (let ti = 0; ti < tx_tcs2.length; ti++) {
+                        const tx_tc = tx_tcs2[ti].split(",");
+
+                        const chars = [...tx_tc[0]];
+                        let data_t = null;
+
+                        for (const char of chars) {
+                            const code = char.codePointAt(0);
+                            const char_dot = dotJson[code];
+                            if (!char_dot) continue;
+
+                            if (data_t === null) {
+                                data_t = char_dot;
+                            } else {
+                                const char_dot_l = char_dot.split(/\r?\n/);
+                                const data_t_l = data_t.split(/\r?\n/);
+                                for (let li = 0; li < data_t_l.length; li++) {
+                                    data_t_l[li] += char_dot_l[li] ?? "";
+                                }
+                                data_t = data_t_l.join("\n");
+                            }
+                        }
+
+                        if (data_t === null) continue;
+
+                        if (tx_tc.length > 1) {
+                            if (tx_tc.length > 2) {
+                                data_t = data_t.replaceAll("0", "/");
+                            }
+                            data_t = data_t.replaceAll("1", tx_tc[1]);
+                            if (tx_tc.length > 2) {
+                                data_t = data_t.replaceAll("/", tx_tc[2]);
+                            }
+                        }
+
+                        if (data == null) {
+                            data = "text2dot_from:dot-text.json\n" + data_t;
                         } else {
                             const data_t_l = data_t.split(/\r?\n/);
                             const d_l = data.split(/\r?\n/);
@@ -231,6 +282,11 @@ window.onload = async () => {
         colors[kv[0]] = kv[1];
     });
 
+    const dotJsonSt = await ichihai.getText(
+        "/webapp/departure-board/data/dot/16/dot-text.json",
+    );
+    dotJson = JSON.parse(dotJsonSt);
+
     document.querySelector(".info").onclick = () => {
         const changeTo = hideOther ? "inherit" : "none";
         document.querySelector("header").style.display = changeTo;
@@ -244,7 +300,8 @@ window.onload = async () => {
         document.querySelector("header").style.display = changeTo;
         document.querySelector("footer").style.display = changeTo;
         document.querySelector(".info").style.display = changeTo;
-        document.querySelector(".info2").style.display = changeTo;
+        if (document.querySelector(".info2"))
+            document.querySelector(".info2").style.display = changeTo;
         hideOther = !hideOther;
     };
 
