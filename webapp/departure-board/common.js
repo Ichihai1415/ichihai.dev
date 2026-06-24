@@ -74,7 +74,7 @@ async function color(data_all_raw) {
             const data_tn = datas_d[ps].split(":");
             let data = null;
             switch (data_tn[0]) {
-                case "text_old":
+                case "text_old": {
                     const tx_tcs = data_tn[1].split(";");
                     for (let ti = 0; ti < tx_tcs.length; ti++) {
                         const tx_tc = tx_tcs[ti].split(",");
@@ -103,18 +103,52 @@ async function color(data_all_raw) {
                         }
                     }
                     break;
+                }
                 case "text":
-                    const tx_tcs2 = data_tn[1].split(";");
-                    for (let ti = 0; ti < tx_tcs2.length; ti++) {
-                        const tx_tc = tx_tcs2[ti].split(",");
+                    const tx_tcs = data_tn[1].split(";");
+                    for (let ti = 0; ti < tx_tcs.length; ti++) {
+                        const tx_tc = tx_tcs[ti].split(",");
+                        if (tx_tc == "") {
+                            console.log("Empty text, skipping.");
+                            continue;
+                        }
 
-                        const chars = [...tx_tc[0]];
+                        const tx_tc_s = tx_tc[0].split("@");
+                        const text = tx_tc_s[0].replaceAll("[at]", "@");
+                        const tx_size =
+                            tx_tc_s.length == 2
+                                ? parseFloat(tx_tc_s[1])
+                                : text.length;
+
+                        const chars = [...text];
                         let data_t = null;
 
                         for (const char of chars) {
                             const code = char.codePointAt(0);
-                            const char_dot = dotJson[code];
-                            if (!char_dot) continue;
+                            let char_dot = dotJson[code];
+
+                            if (code == 12288)
+                                //全角スペース
+                                char_dot = ("0".repeat(16) + "\n").repeat(16);
+                            if (!char_dot) {
+                                console.log(
+                                    `Character not found: ${char} (code=${code})`,
+                                );
+                                continue;
+                            }
+
+                            console.log(
+                                `${char}, ${code}, ${char_dot.split(/\r?\n/)[0].length}`,
+                            );
+                            if (char_dot === null)
+                                if (char == " ")
+                                    char_dot = ("0".repeat(8) + "\n").repeat(
+                                        16,
+                                    );
+                                else if (char == "　")
+                                    char_dot = ("0".repeat(16) + "\n").repeat(
+                                        16,
+                                    );
 
                             if (data_t === null) {
                                 data_t = char_dot;
@@ -128,11 +162,32 @@ async function color(data_all_raw) {
                             }
                         }
 
-                        if (data_t === null) continue;
+                        if (!data_t) data_t = "\n".repeat(16);
+
+                        if (tx_tc_s.length == 2) {
+                            const data_t_l = data_t.split(/\r?\n/);
+                            const dotW_default = data_t_l[0].length;
+                            const dotW_override = tx_size * 16;
+
+                            const sized_lines = data_t_l.map((line) => {
+                                if (dotW_override <= dotW_default) {
+                                    return line.slice(0, dotW_override);
+                                } else {
+                                    return (
+                                        line +
+                                        "0".repeat(dotW_override - dotW_default)
+                                    );
+                                }
+                            });
+                            data_t = sized_lines.join("\n");
+                            console.log(
+                                `${text} : ${dotW_default} -> ${dotW_override}`,
+                            );
+                        }
 
                         if (tx_tc.length > 1) {
                             if (tx_tc.length > 2) {
-                                data_t = data_t.replaceAll("0", "/");
+                                data_t = data_t.replaceAll("0", "/"); //01反転用一時置換
                             }
                             data_t = data_t.replaceAll("1", tx_tc[1]);
                             if (tx_tc.length > 2) {
@@ -141,7 +196,7 @@ async function color(data_all_raw) {
                         }
 
                         if (data == null) {
-                            data = "text2dot_from:dot-text.json\n" + data_t;
+                            data = "text2dot\n" + data_t;
                         } else {
                             const data_t_l = data_t.split(/\r?\n/);
                             const d_l = data.split(/\r?\n/);
@@ -166,19 +221,32 @@ async function color(data_all_raw) {
                         dotCache[data_dIc[0]] = data;
                     }
 
-                    if (data.includes("html")) continue;
-                    if (data_dIc.length > 1)
+                    if (data.includes("html")) {
+                        console.log("ID指定ミスです");
+                        continue;
+                    }
+                    if (data_dIc.length > 1) {
+                        if (data_dIc.length > 2) {
+                            data = data.replaceAll("0", "/"); //01反転用一時置換
+                        }
                         data = data.replaceAll("1", data_dIc[1]);
-                    if (data_dIc.length > 2)
-                        data = data.replaceAll("0", data_dIc[2]);
+                        if (data_dIc.length > 2) {
+                            data = data.replaceAll("/", data_dIc[2]);
+                        }
+                    }
                     break;
                 case "dot":
                     const data_dc = data_tn[1].split(",");
                     data = "userInput\n" + data_dc[0].replaceAll("\\", "\n");
-                    if (data_dc.length > 1)
+                    if (data_dc.length > 1) {
+                        if (data_dc.length > 2) {
+                            data = data.replaceAll("0", "/"); //01反転用一時置換
+                        }
                         data = data.replaceAll("1", data_dc[1]);
-                    if (data_dc.length > 2)
-                        data = data.replaceAll("0", data_dc[2]);
+                        if (data_dc.length > 2) {
+                            data = data.replaceAll("/", data_dc[2]);
+                        }
+                    }
                     break;
             }
 
@@ -196,9 +264,10 @@ async function color(data_all_raw) {
                     const char = rest[r].charAt(_c);
                     if (char != 0)
                         if (Object.hasOwn(colors, char)) {
-                            document.getElementById(
-                                `d${d}-c${c}-r${r}`,
-                            ).style.backgroundColor = colors[char];
+                            if (document.getElementById(`d${d}-c${c}-r${r}`))
+                                document.getElementById(
+                                    `d${d}-c${c}-r${r}`,
+                                ).style.backgroundColor = colors[char];
                         }
                 }
             }
