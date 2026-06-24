@@ -109,7 +109,7 @@ async function color(data_all_raw) {
                     for (let ti = 0; ti < tx_tcs.length; ti++) {
                         const tx_tc = tx_tcs[ti].split(",");
                         if (tx_tc == "") {
-                            console.log("Empty text, skipping.");
+                            console.log("(文字幅指定なし空文字です)");
                             continue;
                         }
 
@@ -131,15 +131,15 @@ async function color(data_all_raw) {
                                 //全角スペース
                                 char_dot = ("0".repeat(16) + "\n").repeat(16);
                             if (!char_dot) {
-                                console.log(
-                                    `Character not found: ${char} (code=${code})`,
-                                );
+                                //console.log(
+                                //    `Character not found: ${char} (code=${code})`,
+                                //);
                                 continue;
                             }
 
-                            console.log(
-                                `${char}, ${code}, ${char_dot.split(/\r?\n/)[0].length}`,
-                            );
+                            //console.log(
+                            //    `${char}, ${code}, ${char_dot.split(/\r?\n/)[0].length}`,
+                            //);
                             if (char_dot === null)
                                 if (char == " ")
                                     char_dot = ("0".repeat(8) + "\n").repeat(
@@ -180,9 +180,9 @@ async function color(data_all_raw) {
                                 }
                             });
                             data_t = sized_lines.join("\n");
-                            console.log(
-                                `${text} : ${dotW_default} -> ${dotW_override}`,
-                            );
+                            //console.log(
+                            //    `${text} : ${dotW_default} -> ${dotW_override}`,
+                            //);
                         }
 
                         if (tx_tc.length > 1) {
