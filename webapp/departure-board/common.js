@@ -54,8 +54,12 @@ let dotCache = {};
 
 let dotJson = {};
 
+let datas = {};
+let scrollLoc = {};
+
 async function color(data_all_raw) {
     clearDisplay();
+    datas = {};
 
     const data_raw_lines = data_all_raw.split("\n");
     const data_lines = {};
@@ -66,9 +70,10 @@ async function color(data_all_raw) {
         data_lines[index] = content;
     }
 
-    for (let d = 0; d < document.querySelectorAll("div.display").length; d++) {
-        if (!data_lines[d]) continue;
-        const datas_d = data_lines[d].split("|");
+    for (let [key, value] of Object.entries(data_lines)) {
+        let d = Number(key.replace("-", ""));
+        //console.log(d);
+        const datas_d = value.split("|");
         let cp = 0;
         for (let ps = 0; ps < datas_d.length; ps++) {
             const data_tn = datas_d[ps].split(":");
@@ -258,6 +263,13 @@ async function color(data_all_raw) {
             let columns = rest[0].length;
             let rows = rest.length;
 
+            datas[d] ??= [];
+            datas[d].push(data);
+            scrollLoc[d] =
+                columns > document.getElementById(`d${d}`).children.length
+                    ? document.getElementById(`d${d}`).children.length
+                    : null;
+
             for (let _c = 0; _c < columns; _c++) {
                 const c = cp + _c;
                 for (let r = 0; r < rows; r++) {
@@ -273,6 +285,47 @@ async function color(data_all_raw) {
             }
             cp += columns;
         }
+    }
+}
+
+async function display() {
+    clearDisplay();
+    console.log(datas);
+    //console.log(scrollLoc);
+    for (let [key, value] of Object.entries(datas)) {
+        //console.log(`display: ${key} -> ${value}`);
+        let cp = 0;
+        const d = key;
+        let s = 0;
+        if (value.length == 2) if (new Date().getSeconds() % 2 == 1) s = 1;
+        const lines = value[s].split(/\r?\n/);
+        const title = lines[0];
+        const rest = lines.slice(1).filter((line) => line.trim() !== "");
+        let columns = rest[0].length;
+        let rows = rest.length;
+        const offset = scrollLoc[d] ?? -1;
+        if (scrollLoc[d] != null) {
+            scrollLoc[d]--;
+            if (
+                scrollLoc[d] < -columns //-16
+            ) {
+                scrollLoc[d] = document.getElementById(`d${d}`).children.length;
+            }
+        }
+        for (let _c = 0; _c < columns; _c++) {
+            const c = cp + _c;
+            for (let r = 0; r < rows; r++) {
+                const char = rest[r].charAt(_c - offset);
+                if (char != 0)
+                    if (Object.hasOwn(colors, char)) {
+                        if (document.getElementById(`d${d}-c${c}-r${r}`))
+                            document.getElementById(
+                                `d${d}-c${c}-r${r}`,
+                            ).style.backgroundColor = colors[char];
+                    }
+            }
+        }
+        cp += columns;
     }
 }
 
@@ -326,6 +379,7 @@ function onReady(func) {
 
 window.onload = async () => {
     window.color = color;
+    window.display = display;
     window.onReady = onReady;
 
     while (document.querySelectorAll("div.display").length == 0) {
