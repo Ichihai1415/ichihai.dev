@@ -245,14 +245,16 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                 const data_all_raw =
                     "1$text:あいう\n" +
                     "2$text:あいうえ\n" +
-                    "3$text:あいうえお\n" +
-                    "-3$text:かきくけこ,2\n"+
-                    "9$text:列車がまいります,0,2\n"+
-                    "-9$text:Train Approaching,2\n";
+                    "3#0.3$text:あいうえお\n" +
+                    "3#0.3$text:かきくけこ,2\n" +
+                    "3#0.4$text:さしすせそ,3\n" +
+                    "4#0.2$text:[do][pi][nc][sc][at][co],1$text:[do][pi][nc][sc][at][co],2$text:[do][pi][nc][sc][at][co],3$text:[do][pi][nc][sc][at][co],4$text:[do][pi][nc][sc][at][co],5\n" +
+                    "9#0.5$text:列車がまいります,0,2$text:Train Approaching,2\n";
 
                 setTimeout(() => {
-                    onReady(() => color(data_all_raw));
-                    setInterval(() => display(), 1);
+                    onReady(() => {
+                        color(data_all_raw);
+                    });
                 }, 1000);
             </script>
         </div>

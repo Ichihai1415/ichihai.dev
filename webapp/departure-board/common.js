@@ -15,6 +15,14 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
 
 import * as ichihai from "/js/ichihai.js";
 
+function clearDisplay_single(d) {
+    document
+        .querySelectorAll("#d" + d + " .display-column-row")
+        .forEach((el) => {
+            el.style.backgroundColor = colors["0"];
+        });
+}
+
 function clearDisplay() {
     document.querySelectorAll(".display-column-row").forEach((el) => {
         el.style.backgroundColor = colors["0"];
@@ -51,282 +59,338 @@ function display_init() {
 let colors = {};
 
 let dotCache = {};
-
 let dotJson = {};
 
 let datas = {};
 let scrollLoc = {};
+let changeIndexSec = {};
 
 async function color(data_all_raw) {
     clearDisplay();
     datas = {};
-
+    scrollLoc = {};
+    changeIndexSec = {};
     const data_raw_lines = data_all_raw.split("\n");
     const data_lines = {};
     for (const line of data_raw_lines) {
         if (line == "") continue;
-        const [indexStr, content] = line.split("$");
-        const index = Number(indexStr);
-        data_lines[index] = content;
-    }
+        const ls = line.split("$");
 
-    for (let [key, value] of Object.entries(data_lines)) {
-        let d = Number(key.replace("-", ""));
-        //console.log(d);
-        const datas_d = value.split("|");
-        let cp = 0;
-        for (let ps = 0; ps < datas_d.length; ps++) {
-            const data_tn = datas_d[ps].split(":");
-            let data = null;
-            switch (data_tn[0]) {
-                case "text_old": {
-                    const tx_tcs = data_tn[1].split(";");
-                    for (let ti = 0; ti < tx_tcs.length; ti++) {
-                        const tx_tc = tx_tcs[ti].split(",");
-                        let data_t = text2dot(tx_tc[0]);
-                        if (tx_tc.length > 1) {
-                            if (tx_tc.length > 2) {
-                                //01反転用一時置換
-                                data_t = data_t.replaceAll("0", "/");
+        const [d_str, changeSec_str] = ls[0].split("#");
+        let d = Number(d_str);
+        changeIndexSec[d] ??= [0];
+        if (changeSec_str) {
+            const changeSec_t = Number(changeSec_str);
+            if (changeSec_t > 0) changeIndexSec[d].push(changeSec_t);
+        }
+
+        for (const content of ls.slice(1)) {
+            //console.log(d);
+            let i = 0;
+            const datas_d = content.split("|");
+            let cp = 0;
+            for (let ps = 0; ps < datas_d.length; ps++) {
+                const data_tn = datas_d[ps].split(":");
+                let data = null;
+                switch (data_tn[0]) {
+                    case "text_old": {
+                        const tx_tcs = data_tn[1].split(";");
+                        for (let ti = 0; ti < tx_tcs.length; ti++) {
+                            const tx_tc = tx_tcs[ti].split(",");
+                            let data_t = text2dot(tx_tc[0]);
+                            if (tx_tc.length > 1) {
+                                if (tx_tc.length > 2) {
+                                    //01反転用一時置換
+                                    data_t = data_t.replaceAll("0", "/");
+                                }
+
+                                data_t = data_t.replaceAll("1", tx_tc[1]);
+
+                                if (tx_tc.length > 2) {
+                                    data_t = data_t.replaceAll("/", tx_tc[2]);
+                                }
                             }
-
-                            data_t = data_t.replaceAll("1", tx_tc[1]);
-
-                            if (tx_tc.length > 2) {
-                                data_t = data_t.replaceAll("/", tx_tc[2]);
+                            if (data == null) {
+                                data = "text2dot\n" + data_t;
+                            } else {
+                                const data_t_l = data_t.split(/\r?\n/);
+                                const d_l = data.split(/\r?\n/);
+                                for (let li = 1; li < d_l.length; li++) {
+                                    d_l[li] += data_t_l[li - 1];
+                                }
+                                data = d_l.join("\n");
                             }
                         }
-                        if (data == null) {
-                            data = "text2dot\n" + data_t;
-                        } else {
-                            const data_t_l = data_t.split(/\r?\n/);
-                            const d_l = data.split(/\r?\n/);
-                            for (let li = 1; li < d_l.length; li++) {
-                                d_l[li] += data_t_l[li - 1];
-                            }
-                            data = d_l.join("\n");
-                        }
+                        break;
                     }
-                    break;
-                }
-                case "text":
-                    const tx_tcs = data_tn[1].split(";");
-                    for (let ti = 0; ti < tx_tcs.length; ti++) {
-                        const tx_tc = tx_tcs[ti].split(",");
-                        if (tx_tc == "") {
-                            console.log("(文字幅指定なし空文字です)");
-                            continue;
-                        }
-
-                        const tx_tc_s = tx_tc[0].split("@");
-                        const text = tx_tc_s[0].replaceAll("[at]", "@");
-                        const tx_size =
-                            tx_tc_s.length == 2
-                                ? parseFloat(tx_tc_s[1])
-                                : text.length;
-
-                        const chars = [...text];
-                        let data_t = null;
-
-                        for (const char of chars) {
-                            const code = char.codePointAt(0);
-                            let char_dot = dotJson[code];
-
-                            if (code == 12288)
-                                //全角スペース
-                                char_dot = ("0".repeat(16) + "\n").repeat(16);
-                            if (!char_dot) {
-                                //console.log(
-                                //    `Character not found: ${char} (code=${code})`,
-                                //);
+                    case "text":
+                        const tx_tcs = data_tn[1].split(";");
+                        for (let ti = 0; ti < tx_tcs.length; ti++) {
+                            const tx_tc = tx_tcs[ti].split(",");
+                            if (tx_tc == "") {
+                                console.log("(文字幅指定なし空文字です)");
                                 continue;
                             }
 
-                            //console.log(
-                            //    `${char}, ${code}, ${char_dot.split(/\r?\n/)[0].length}`,
-                            //);
-                            if (char_dot === null)
-                                if (char == " ")
-                                    char_dot = ("0".repeat(8) + "\n").repeat(
-                                        16,
-                                    );
-                                else if (char == "　")
+                            const tx_tc_s = tx_tc[0].split("@");
+                            const text = tx_tc_s[0]
+                                .replaceAll("[do]", "$")
+                                .replaceAll("[pi]", "|")
+                                .replaceAll("[nc]", ":")
+                                .replaceAll("[sc]", ";")
+                                .replaceAll("[at]", "@")
+                                .replaceAll("[co]", ",");
+                            const tx_size =
+                                tx_tc_s.length == 2
+                                    ? parseFloat(tx_tc_s[1])
+                                    : text.length;
+
+                            const chars = [...text];
+                            let data_t = null;
+
+                            for (const char of chars) {
+                                const code = char.codePointAt(0);
+                                let char_dot = dotJson[code];
+
+                                if (code == 12288)
+                                    //全角スペース
                                     char_dot = ("0".repeat(16) + "\n").repeat(
                                         16,
                                     );
-
-                            if (data_t === null) {
-                                data_t = char_dot;
-                            } else {
-                                const char_dot_l = char_dot.split(/\r?\n/);
-                                const data_t_l = data_t.split(/\r?\n/);
-                                for (let li = 0; li < data_t_l.length; li++) {
-                                    data_t_l[li] += char_dot_l[li] ?? "";
+                                if (!char_dot) {
+                                    //console.log(
+                                    //    `Character not found: ${char} (code=${code})`,
+                                    //);
+                                    continue;
                                 }
-                                data_t = data_t_l.join("\n");
-                            }
-                        }
 
-                        if (!data_t) data_t = "\n".repeat(16);
+                                //console.log(
+                                //    `${char}, ${code}, ${char_dot.split(/\r?\n/)[0].length}`,
+                                //);
+                                if (char_dot === null)
+                                    if (char == " ")
+                                        char_dot = (
+                                            "0".repeat(8) + "\n"
+                                        ).repeat(16);
+                                    else if (char == "　")
+                                        char_dot = (
+                                            "0".repeat(16) + "\n"
+                                        ).repeat(16);
 
-                        if (tx_tc_s.length == 2) {
-                            const data_t_l = data_t.split(/\r?\n/);
-                            const dotW_default = data_t_l[0].length;
-                            const dotW_override = tx_size * 16;
-
-                            const sized_lines = data_t_l.map((line) => {
-                                if (dotW_override <= dotW_default) {
-                                    return line.slice(0, dotW_override);
+                                if (data_t === null) {
+                                    data_t = char_dot;
                                 } else {
-                                    return (
-                                        line +
-                                        "0".repeat(dotW_override - dotW_default)
-                                    );
+                                    const char_dot_l = char_dot.split(/\r?\n/);
+                                    const data_t_l = data_t.split(/\r?\n/);
+                                    for (
+                                        let li = 0;
+                                        li < data_t_l.length;
+                                        li++
+                                    ) {
+                                        data_t_l[li] += char_dot_l[li] ?? "";
+                                    }
+                                    data_t = data_t_l.join("\n");
                                 }
-                            });
-                            data_t = sized_lines.join("\n");
-                            //console.log(
-                            //    `${text} : ${dotW_default} -> ${dotW_override}`,
-                            //);
-                        }
-
-                        if (tx_tc.length > 1) {
-                            if (tx_tc.length > 2) {
-                                data_t = data_t.replaceAll("0", "/"); //01反転用一時置換
                             }
-                            data_t = data_t.replaceAll("1", tx_tc[1]);
-                            if (tx_tc.length > 2) {
-                                data_t = data_t.replaceAll("/", tx_tc[2]);
+
+                            if (!data_t) data_t = "\n".repeat(16);
+
+                            if (tx_tc_s.length == 2) {
+                                const data_t_l = data_t.split(/\r?\n/);
+                                const dotW_default = data_t_l[0].length;
+                                const dotW_override = tx_size * 16;
+
+                                const sized_lines = data_t_l.map((line) => {
+                                    if (dotW_override <= dotW_default) {
+                                        return line.slice(0, dotW_override);
+                                    } else {
+                                        return (
+                                            line +
+                                            "0".repeat(
+                                                dotW_override - dotW_default,
+                                            )
+                                        );
+                                    }
+                                });
+                                data_t = sized_lines.join("\n");
+                                //console.log(
+                                //    `${text} : ${dotW_default} -> ${dotW_override}`,
+                                //);
+                            }
+
+                            if (tx_tc.length > 1) {
+                                if (tx_tc.length > 2) {
+                                    data_t = data_t.replaceAll("0", "/"); //01反転用一時置換
+                                }
+                                data_t = data_t.replaceAll("1", tx_tc[1]);
+                                if (tx_tc.length > 2) {
+                                    data_t = data_t.replaceAll("/", tx_tc[2]);
+                                }
+                            }
+
+                            if (data == null) {
+                                data = "text2dot\n" + data_t;
+                            } else {
+                                const data_t_l = data_t.split(/\r?\n/);
+                                const d_l = data.split(/\r?\n/);
+                                for (let li = 1; li < d_l.length; li++) {
+                                    d_l[li] += data_t_l[li - 1];
+                                }
+                                data = d_l.join("\n");
                             }
                         }
+                        break;
+                    case "dotId":
+                        const data_dIc = data_tn[1].split(",");
 
-                        if (data == null) {
-                            data = "text2dot\n" + data_t;
+                        if (dotCache[data_dIc[0]]) {
+                            data = dotCache[data_dIc[0]];
                         } else {
-                            const data_t_l = data_t.split(/\r?\n/);
-                            const d_l = data.split(/\r?\n/);
-                            for (let li = 1; li < d_l.length; li++) {
-                                d_l[li] += data_t_l[li - 1];
+                            data = await ichihai.getText(
+                                "/webapp/departure-board/data/dot/16/parts/" +
+                                    data_dIc[0] +
+                                    ".txt",
+                            );
+                            dotCache[data_dIc[0]] = data;
+                        }
+
+                        if (data.includes("html")) {
+                            console.log("ID指定ミスです");
+                            continue;
+                        }
+                        if (data_dIc.length > 1) {
+                            if (data_dIc.length > 2) {
+                                data = data.replaceAll("0", "/"); //01反転用一時置換
                             }
-                            data = d_l.join("\n");
+                            data = data.replaceAll("1", data_dIc[1]);
+                            if (data_dIc.length > 2) {
+                                data = data.replaceAll("/", data_dIc[2]);
+                            }
                         }
-                    }
-                    break;
-                case "dotId":
-                    const data_dIc = data_tn[1].split(",");
-
-                    if (dotCache[data_dIc[0]]) {
-                        data = dotCache[data_dIc[0]];
-                    } else {
-                        data = await ichihai.getText(
-                            "/webapp/departure-board/data/dot/16/parts/" +
-                                data_dIc[0] +
-                                ".txt",
-                        );
-                        dotCache[data_dIc[0]] = data;
-                    }
-
-                    if (data.includes("html")) {
-                        console.log("ID指定ミスです");
-                        continue;
-                    }
-                    if (data_dIc.length > 1) {
-                        if (data_dIc.length > 2) {
-                            data = data.replaceAll("0", "/"); //01反転用一時置換
+                        break;
+                    case "dot":
+                        const data_dc = data_tn[1].split(",");
+                        data =
+                            "userInput\n" + data_dc[0].replaceAll("\\", "\n");
+                        if (data_dc.length > 1) {
+                            if (data_dc.length > 2) {
+                                data = data.replaceAll("0", "/"); //01反転用一時置換
+                            }
+                            data = data.replaceAll("1", data_dc[1]);
+                            if (data_dc.length > 2) {
+                                data = data.replaceAll("/", data_dc[2]);
+                            }
                         }
-                        data = data.replaceAll("1", data_dIc[1]);
-                        if (data_dIc.length > 2) {
-                            data = data.replaceAll("/", data_dIc[2]);
-                        }
-                    }
-                    break;
-                case "dot":
-                    const data_dc = data_tn[1].split(",");
-                    data = "userInput\n" + data_dc[0].replaceAll("\\", "\n");
-                    if (data_dc.length > 1) {
-                        if (data_dc.length > 2) {
-                            data = data.replaceAll("0", "/"); //01反転用一時置換
-                        }
-                        data = data.replaceAll("1", data_dc[1]);
-                        if (data_dc.length > 2) {
-                            data = data.replaceAll("/", data_dc[2]);
-                        }
-                    }
-                    break;
-            }
-
-            const lines = data.split(/\r?\n/);
-            const title = lines[0];
-
-            const rest = lines.slice(1).filter((line) => line.trim() !== "");
-
-            let columns = rest[0].length;
-            let rows = rest.length;
-
-            datas[d] ??= [];
-            datas[d].push(data);
-            scrollLoc[d] =
-                columns > document.getElementById(`d${d}`).children.length
-                    ? document.getElementById(`d${d}`).children.length
-                    : null;
-
-            for (let _c = 0; _c < columns; _c++) {
-                const c = cp + _c;
-                for (let r = 0; r < rows; r++) {
-                    const char = rest[r].charAt(_c);
-                    if (char != 0)
-                        if (Object.hasOwn(colors, char)) {
-                            if (document.getElementById(`d${d}-c${c}-r${r}`))
-                                document.getElementById(
-                                    `d${d}-c${c}-r${r}`,
-                                ).style.backgroundColor = colors[char];
-                        }
+                        break;
                 }
+
+                const lines = data.split(/\r?\n/);
+                const title = lines[0];
+
+                const rest = lines
+                    .slice(1)
+                    .filter((line) => line.trim() !== "");
+
+                let columns = rest[0].length;
+                let rows = rest.length;
+
+                datas[d] ??= [];
+                datas[d].push(data);
+                scrollLoc[d] =
+                    columns > document.getElementById(`d${d}`).children.length
+                        ? document.getElementById(`d${d}`).children.length
+                        : null;
             }
-            cp += columns;
         }
+    }
+    display_start();
+}
+
+function display_single(d, data = null, isScroll = false) {
+    //console.log(
+    //    `display_single: d=${d}, data_isNull=${data == null}, isScroll=${isScroll}`,
+    //);
+    clearDisplay_single(d);
+    let cp = 0;
+    let s = changeIndexSec[d][0] ? changeIndexSec[d][0] : 0;
+    data ??= datas[d][s];
+    //console.log(`display: ${d} -> ${data}`);
+    const lines = data.split(/\r?\n/);
+    const title = lines[0];
+    const rest = lines.slice(1).filter((line) => line.trim() !== "");
+    let columns = rest[0].length;
+    let rows = rest.length;
+    const offset = scrollLoc[d] ?? 0;
+
+    if (isScroll && scrollLoc[d] != null) {
+        scrollLoc[d]--;
+        if (
+            scrollLoc[d] <= -columns //-16
+        ) {
+            scrollLoc[d] = document.getElementById(`d${d}`).children.length;
+        }
+    }
+    for (let _c = 0; _c < columns; _c++) {
+        const c = cp + _c;
+        for (let r = 0; r < rows; r++) {
+            const char = rest[r].charAt(_c - offset);
+            if (char != 0)
+                if (Object.hasOwn(colors, char)) {
+                    if (document.getElementById(`d${d}-c${c}-r${r}`))
+                        document.getElementById(
+                            `d${d}-c${c}-r${r}`,
+                        ).style.backgroundColor = colors[char];
+                }
+        }
+    }
+    cp += columns;
+    if (!isScroll)
+        if (changeIndexSec[d].length > 1)
+            if (changeIndexSec[d].length == 2)
+                setTimeout(() => {
+                    display_single_toNext(d);
+                }, changeIndexSec[d][1] * 1000);
+            else
+                setTimeout(
+                    () => {
+                        display_single_toNext(d);
+                    },
+                    changeIndexSec[d][changeIndexSec[d][0] + 1] * 1000,
+                );
+}
+
+function display_single_toNext(d) {
+    changeIndexSec[d][0]++;
+    if (changeIndexSec[d][0] >= datas[d].length) changeIndexSec[d][0] = 0;
+    display_single(d, datas[d][changeIndexSec[d][0]]);
+}
+
+async function display_allOfScroll() {
+    //console.log(datas);
+    //console.log(scrollLoc);
+    for (let [d, data] of Object.entries(datas)) {
+        if (
+            data[0].split(/\r?\n/)[1].length >
+            document.getElementById(`d${d}`).children.length
+        )
+            display_single(d, null, true);
     }
 }
 
-async function display() {
+async function display_all() {
     clearDisplay();
-    console.log(datas);
+    //console.log(datas);
     //console.log(scrollLoc);
-    for (let [key, value] of Object.entries(datas)) {
-        //console.log(`display: ${key} -> ${value}`);
-        let cp = 0;
-        const d = key;
-        let s = 0;
-        if (value.length == 2) if (new Date().getSeconds() % 2 == 1) s = 1;
-        const lines = value[s].split(/\r?\n/);
-        const title = lines[0];
-        const rest = lines.slice(1).filter((line) => line.trim() !== "");
-        let columns = rest[0].length;
-        let rows = rest.length;
-        const offset = scrollLoc[d] ?? -1;
-        if (scrollLoc[d] != null) {
-            scrollLoc[d]--;
-            if (
-                scrollLoc[d] < -columns //-16
-            ) {
-                scrollLoc[d] = document.getElementById(`d${d}`).children.length;
-            }
-        }
-        for (let _c = 0; _c < columns; _c++) {
-            const c = cp + _c;
-            for (let r = 0; r < rows; r++) {
-                const char = rest[r].charAt(_c - offset);
-                if (char != 0)
-                    if (Object.hasOwn(colors, char)) {
-                        if (document.getElementById(`d${d}-c${c}-r${r}`))
-                            document.getElementById(
-                                `d${d}-c${c}-r${r}`,
-                            ).style.backgroundColor = colors[char];
-                    }
-            }
-        }
-        cp += columns;
+    for (let [d, data] of Object.entries(datas)) {
+        display_single(d);
     }
+}
+
+function display_start(sc) {
+    display_all();
+    setInterval(async () => {
+        await display_allOfScroll();
+    }, sc);
 }
 
 function text2dot(text) {
@@ -377,9 +441,19 @@ function onReady(func) {
     else setTimeout(() => onReady(func), 100);
 }
 
+function changeColor(config) {
+    colors = {};
+    const colorData = config.replace("/: /g", ":").split(/\r?\n/);
+    colorData.forEach((line) => {
+        const kv = line.split(":");
+        colors[kv[0]] = kv[1];
+    });
+}
+
 window.onload = async () => {
     window.color = color;
-    window.display = display;
+    window.display_start = display_start;
+    window.changeColor = changeColor;
     window.onReady = onReady;
 
     while (document.querySelectorAll("div.display").length == 0) {
@@ -399,11 +473,7 @@ window.onload = async () => {
     const colorDataSt = await ichihai.getText(
         "/webapp/departure-board/data/color/_sample.txt",
     );
-    const colorData = colorDataSt.replace("/: /g", ":").split(/\r?\n/);
-    colorData.forEach((line) => {
-        const kv = line.split(":");
-        colors[kv[0]] = kv[1];
-    });
+    changeColor(colorDataSt);
 
     const dotJsonSt = await ichihai.getText(
         "/webapp/departure-board/data/dot/16/dot-text.json",
