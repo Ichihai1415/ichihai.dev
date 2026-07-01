@@ -134,47 +134,100 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
         <nav class="go2top"><!--/js/common.js で追加される--></nav>
         <div class="info">
             <div class="common-comment"><!--/js/common.js で追加される--></div>
-            <h1>発車標シミュレーター：北鉄バス 若松</h1>
-            <div class="update-date">2026/05/22作成 2026/05/22更新 v1.0</div>
+            <h1>発車標シミュレーター 個別ページ</h1>
         </div>
-        <div class="departure-board" id="target">
-            <div class="db-hokubus-wakamatsu">
-                <div class="panel-top">
-                    <div class="texts">
-                        <div class="text1">北鉄バス</div>
-                        <div class="text2">金沢大学</div>
-                        <div class="text3">方面</div>
-                    </div>
-                    <div class="hd-texts">
-                        <span class="hd-text-1">路線番号</span>
-                        <span class="hd-text-2">情報</span>
-                        <span class="hd-text-3">時刻</span>
-                        <span class="hd-text-4">行先</span>
-                        <span class="hd-text-5">のりば</span>
-                    </div>
-                    <div class="displays">
-                        <div class="display" id="d0" db_r="16" db_c="18"></div>
-                        <div class="display" id="d1" db_r="16" db_c="18"></div>
-                        <div class="display" id="d2" db_r="16" db_c="18"></div>
+        <div id="target">
+            <div class="info3">
+                <div class="info-magenta">
+                    <div class="info-magenta-head">【情報】</div>
+                    <b>北鉄バス 若松：仮想リアルタイム</b><br />
+                    <div class="update-date">
+                        2026/05/22作成 2026/07/01更新 v1.1 (script:
+                        v1.2.0-beta2.1)<br />
+                        ※キャッシュの状態にもよりますが、
+                        制作時のスクリプトのバージョンがシミュレータートップページと異なる場合、
+                        制作時と異なるバージョンのスクリプトが使用され、
+                        更新の対応ができていない可能性があります。
                     </div>
                 </div>
-                <div class="panel-bottom">
-                    <div class="texts">
-                        <div class="text1">北鉄バス</div>
-                        <div class="text2">香林坊・金沢駅</div>
-                        <div class="text3">方面</div>
+                <div class="info-blue">
+                    <div class="info-blue-head">【備考】</div>
+                    主要駅の中2階にあるような方向別発車標風。時刻表を元にしているため、遅延は表示されません。
+                    <span style="color: red"
+                        >休日や学期休み期間は現在対応しておらず毎日が学期期間の平日です。</span
+                    >
+                    鈴見線や加越能バスを追加予定です。
+                </div>
+            </div>
+            <div class="departure-board">
+                <div class="db-hokubus-wakamatsu">
+                    <div class="panel-top">
+                        <div class="texts">
+                            <div class="text1">北鉄バス</div>
+                            <div class="text2">金沢大学</div>
+                            <div class="text3">方面</div>
+                        </div>
+                        <div class="hd-texts">
+                            <span class="hd-text-1">路線番号</span>
+                            <span class="hd-text-2">情報</span>
+                            <span class="hd-text-3">時刻</span>
+                            <span class="hd-text-4">行先</span>
+                            <span class="hd-text-5">のりば</span>
+                        </div>
+                        <div class="displays">
+                            <div
+                                class="display"
+                                id="d0"
+                                db_r="16"
+                                db_c="18"
+                            ></div>
+                            <div
+                                class="display"
+                                id="d1"
+                                db_r="16"
+                                db_c="18"
+                            ></div>
+                            <div
+                                class="display"
+                                id="d2"
+                                db_r="16"
+                                db_c="18"
+                            ></div>
+                        </div>
                     </div>
-                    <div class="hd-texts">
-                        <span class="hd-text-1">路線番号</span>
-                        <span class="hd-text-2">情報</span>
-                        <span class="hd-text-3">時刻</span>
-                        <span class="hd-text-4">行先</span>
-                        <span class="hd-text-5">のりば</span>
-                    </div>
-                    <div class="displays">
-                        <div class="display" id="d3" db_r="16" db_c="18"></div>
-                        <div class="display" id="d4" db_r="16" db_c="18"></div>
-                        <div class="display" id="d5" db_r="16" db_c="18"></div>
+                    <div class="panel-bottom">
+                        <div class="texts">
+                            <div class="text1">北鉄バス</div>
+                            <div class="text2">香林坊・金沢駅</div>
+                            <div class="text3">方面</div>
+                        </div>
+                        <div class="hd-texts">
+                            <span class="hd-text-1">路線番号</span>
+                            <span class="hd-text-2">情報</span>
+                            <span class="hd-text-3">時刻</span>
+                            <span class="hd-text-4">行先</span>
+                            <span class="hd-text-5">のりば</span>
+                        </div>
+                        <div class="displays">
+                            <div
+                                class="display"
+                                id="d3"
+                                db_r="16"
+                                db_c="18"
+                            ></div>
+                            <div
+                                class="display"
+                                id="d4"
+                                db_r="16"
+                                db_c="18"
+                            ></div>
+                            <div
+                                class="display"
+                                id="d5"
+                                db_r="16"
+                                db_c="18"
+                            ></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -464,7 +517,8 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                             "3$text:☆☆☆,2;本日の運転は終了しました,1;☆☆☆,2\n";
 
                     //console.log(displaySt);
-                    color(displaySt);
+                    await color(displaySt);
+                    display_all();
                 }
 
                 function getStopTimeId(stops, target) {

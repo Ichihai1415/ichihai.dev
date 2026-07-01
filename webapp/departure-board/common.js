@@ -71,7 +71,6 @@ async function color(data_all_raw) {
     scrollLoc = {};
     changeIndexSec = {};
     const data_raw_lines = data_all_raw.split("\n");
-    const data_lines = {};
     for (const line of data_raw_lines) {
         if (line == "") continue;
         const ls = line.split("$");
@@ -85,18 +84,18 @@ async function color(data_all_raw) {
         }
 
         for (const content of ls.slice(1)) {
-            //console.log(d);
             let i = 0;
             const datas_d = content.split("|");
             let cp = 0;
-            for (let ps = 0; ps < datas_d.length; ps++) {
-                const data_tn = datas_d[ps].split(":");
+            let data_l = null;
+            for (let j = 0; j < datas_d.length; j++) {
+                const data_tn = datas_d[j].split(":");
                 let data = null;
                 switch (data_tn[0]) {
                     case "text_old": {
                         const tx_tcs = data_tn[1].split(";");
-                        for (let ti = 0; ti < tx_tcs.length; ti++) {
-                            const tx_tc = tx_tcs[ti].split(",");
+                        for (const tx_tc_t of tx_tcs) {
+                            const tx_tc = tx_tc_t.split(",");
                             let data_t = text2dot(tx_tc[0]);
                             if (tx_tc.length > 1) {
                                 if (tx_tc.length > 2) {
@@ -284,40 +283,43 @@ async function color(data_all_raw) {
                         break;
                 }
 
-                const lines = data.split(/\r?\n/);
-                const title = lines[0];
-
-                const rest = lines
-                    .slice(1)
-                    .filter((line) => line.trim() !== "");
-
-                let columns = rest[0].length;
-                let rows = rest.length;
-
-                datas[d] ??= [];
-                datas[d].push(data);
-                scrollLoc[d] =
-                    columns > document.getElementById(`d${d}`).children.length
-                        ? document.getElementById(`d${d}`).children.length
-                        : null;
+                if (data_l == null) {
+                    data_l = data.split(/\r?\n/).slice(1).join("\n");
+                } else {
+                    const data_ls = data_l.split(/\r?\n/);
+                    let data_l_new = data.split(/\r?\n/).slice(1);
+                    for (let li = 0; li < data_l_new.length; li++) {
+                        data_ls[li] += data_l_new[li] ?? "";
+                    }
+                    data_l = data_ls.join("\n");
+                }
             }
+            const lines = data_l.split(/\r?\n/);
+            const title = lines[0];
+
+            const rest = lines.slice(1).filter((line) => line.trim() !== "");
+
+            let columns = rest[0].length;
+            let rows = rest.length;
+            datas[d] ??= [];
+            datas[d].push(data_l);
+            scrollLoc[d] =
+                columns > document.getElementById(`d${d}`).children.length
+                    ? document.getElementById(`d${d}`).children.length
+                    : null;
         }
     }
-    display_start();
+    //console.log(datas);
 }
 
 function display_single(d, data = null, isScroll = false) {
-    //console.log(
-    //    `display_single: d=${d}, data_isNull=${data == null}, isScroll=${isScroll}`,
-    //);
     clearDisplay_single(d);
     let cp = 0;
     let s = changeIndexSec[d][0] ? changeIndexSec[d][0] : 0;
     data ??= datas[d][s];
-    //console.log(`display: ${d} -> ${data}`);
     const lines = data.split(/\r?\n/);
     const title = lines[0];
-    const rest = lines.slice(1).filter((line) => line.trim() !== "");
+    const rest = lines.filter((line) => line.trim() !== "");
     let columns = rest[0].length;
     let rows = rest.length;
     const offset = scrollLoc[d] ?? 0;
@@ -325,7 +327,7 @@ function display_single(d, data = null, isScroll = false) {
     if (isScroll && scrollLoc[d] != null) {
         scrollLoc[d]--;
         if (
-            scrollLoc[d] <= -columns //-16
+            scrollLoc[d] <= -columns
         ) {
             scrollLoc[d] = document.getElementById(`d${d}`).children.length;
         }
@@ -366,8 +368,6 @@ function display_single_toNext(d) {
 }
 
 async function display_allOfScroll() {
-    //console.log(datas);
-    //console.log(scrollLoc);
     for (let [d, data] of Object.entries(datas)) {
         if (
             data[0].split(/\r?\n/)[1].length >
@@ -379,8 +379,6 @@ async function display_allOfScroll() {
 
 async function display_all() {
     clearDisplay();
-    //console.log(datas);
-    //console.log(scrollLoc);
     for (let [d, data] of Object.entries(datas)) {
         display_single(d);
     }
@@ -453,6 +451,7 @@ function changeColor(config) {
 window.onload = async () => {
     window.color = color;
     window.display_start = display_start;
+    window.display_all = display_all;
     window.changeColor = changeColor;
     window.onReady = onReady;
 
@@ -484,17 +483,24 @@ window.onload = async () => {
         const changeTo = hideOther ? "inherit" : "none";
         document.querySelector("header").style.display = changeTo;
         document.querySelector("footer").style.display = changeTo;
-        document.querySelector(".info").style.display = changeTo;
-        document.querySelector(".info2").style.display = changeTo;
+        if (document.querySelector(".info"))
+            document.querySelector(".info").style.display = changeTo;
+        if (document.querySelector(".info2"))
+            document.querySelector(".info2").style.display = changeTo;
+        if (document.querySelector(".info3"))
+            document.querySelector(".info3").style.display = changeTo;
         hideOther = !hideOther;
     };
     document.getElementById("target").onclick = () => {
         const changeTo = hideOther ? "inherit" : "none";
         document.querySelector("header").style.display = changeTo;
         document.querySelector("footer").style.display = changeTo;
-        document.querySelector(".info").style.display = changeTo;
+        if (document.querySelector(".info"))
+            document.querySelector(".info").style.display = changeTo;
         if (document.querySelector(".info2"))
             document.querySelector(".info2").style.display = changeTo;
+        if (document.querySelector(".info3"))
+            document.querySelector(".info3").style.display = changeTo;
         hideOther = !hideOther;
     };
 

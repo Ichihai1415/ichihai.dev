@@ -542,7 +542,10 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                     "2$text:愛顧、;ありがとうございました,3;。\n" +
                     "3$text:[at]@1;い@2;う;@2;0;1@1;2@1.5;ｻﾝﾀﾞｰ@4;1,2";
                 setTimeout(() => {
-                    onReady(() => color(data_all_raw));
+                    onReady(async () => {
+                        await color(data_all_raw);
+                        display_all();
+                    });
                 }, 1000);
             </script>
         </div>

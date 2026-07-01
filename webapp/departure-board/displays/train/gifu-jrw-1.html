@@ -544,7 +544,10 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                     "5$text:この列車は、各駅に停車します。,2\n" +
                     "3$text:特急ひだ5・25号,3;@1.5;10：10,2;飛騨古川高山;10両,2";
                 setTimeout(() => {
-                    onReady(() => color(data_all_raw));
+                    onReady(async () => {
+                        await color(data_all_raw);
+                        display_all();
+                    });
                 }, 1000);
             </script>
         </div>

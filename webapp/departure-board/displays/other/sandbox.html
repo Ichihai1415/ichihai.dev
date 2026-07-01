@@ -128,71 +128,66 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
         <nav class="go2top"><!--/js/common.js で追加される--></nav>
         <div class="info">
             <div class="common-comment"><!--/js/common.js で追加される--></div>
-            <h1>発車標シミュレーター：サンドボックス</h1>
-            <div class="update-date">2026/06/25作成 2026/06/25更新 v0.1</div>
+            <h1>発車標シミュレーター 個別ページ</h1>
         </div>
-
-        <div class="departure-board" id="target">
-            <div class="db-sandbox">
-                <div class="displays">
-                    <div class="display" id="d1" db_r="16" db_c="1"></div>
+        <div id="target">
+            <div class="info3">
+                <div class="info-magenta">
+                    <div class="info-magenta-head">【情報】</div>
+                    <b>サンドボックス</b><br />
+                    <div class="update-date">
+                        2026/06/25作成 2026/07/01更新 v0.2 (script:
+                        v1.2.0-beta2.1)<br />
+                        ※キャッシュの状態にもよりますが、
+                        制作時のスクリプトのバージョンがシミュレータートップページと異なる場合、
+                        制作時と異なるバージョンのスクリプトが使用され、
+                        更新の対応ができていない可能性があります。
+                    </div>
                 </div>
-                <div class="displays">
-                    <div class="display" id="d2" db_r="16" db_c="2"></div>
+                <div class="info-blue">
+                    <div class="info-blue-head">【備考】</div>
+                    1~20文字幅で自由に動作を確認できます。
+                    <span style="color: red"
+                        >バグ:
+                        表示ボタンで表示する際、非スクロールが表示されない、または点滅が加速する</span
+                    ><br />
+                    開発メモ:#275 display_all();すると加速
                 </div>
-                <div class="displays">
-                    <div class="display" id="d3" db_r="16" db_c="3"></div>
-                </div>
-                <div class="displays">
-                    <div class="display" id="d4" db_r="16" db_c="4"></div>
-                </div>
-                <div class="displays">
-                    <div class="display" id="d5" db_r="16" db_c="5"></div>
-                </div>
-                <div class="displays">
-                    <div class="display" id="d6" db_r="16" db_c="6"></div>
-                </div>
-                <div class="displays">
-                    <div class="display" id="d7" db_r="16" db_c="7"></div>
-                </div>
-                <div class="displays">
-                    <div class="display" id="d8" db_r="16" db_c="8"></div>
-                </div>
-                <div class="displays">
-                    <div class="display" id="d9" db_r="16" db_c="9"></div>
-                </div>
-                <div class="displays">
-                    <div class="display" id="d10" db_r="16" db_c="10"></div>
-                </div>
-                <div class="displays">
-                    <div class="display" id="d11" db_r="16" db_c="11"></div>
-                </div>
-                <div class="displays">
-                    <div class="display" id="d12" db_r="16" db_c="12"></div>
-                </div>
-                <div class="displays">
-                    <div class="display" id="d13" db_r="16" db_c="13"></div>
-                </div>
-                <div class="displays">
-                    <div class="display" id="d14" db_r="16" db_c="14"></div>
-                </div>
-                <div class="displays">
-                    <div class="display" id="d15" db_r="16" db_c="15"></div>
-                </div>
-                <div class="displays">
-                    <div class="display" id="d16" db_r="16" db_c="16"></div>
-                </div>
-                <div class="displays">
-                    <div class="display" id="d17" db_r="16" db_c="17"></div>
-                </div>
-                <div class="displays">
-                    <div class="display" id="d18" db_r="16" db_c="18"></div>
-                </div>
-                <div class="displays">
-                    <div class="display" id="d19" db_r="16" db_c="19"></div>
-                </div>
-                <div class="displays">
-                    <div class="display" id="d20" db_r="16" db_c="20"></div>
+            </div>
+            <textarea id="data_all_raw">
+1$text:あいう
+2$text:あいうえ
+3#0.3$text:あいうえお
+3#0.3$text:かきくけこ,2
+3#0.4$text:さしすせそ,3
+4#0.2$text:[do][pi][nc][sc][at][co],1$text:[do][pi][nc][sc][at][co],2$text:[do][pi][nc][sc][at][co],3$text:[do][pi][nc][sc][at][co],4$text:[do][pi][nc][sc][at][co],5
+9#0.5$text:列車がまいります,0,2$text:Train Approaching,2</textarea
+            >
+            <button id="view">表示</button>
+            <div class="departure-board">
+                <div class="db-sandbox">
+                    <div class="displays">
+                        <div class="display" id="d1" db_r="16" db_c="1"></div>
+                        <div class="display" id="d2" db_r="16" db_c="2"></div>
+                        <div class="display" id="d3" db_r="16" db_c="3"></div>
+                        <div class="display" id="d4" db_r="16" db_c="4"></div>
+                        <div class="display" id="d5" db_r="16" db_c="5"></div>
+                        <div class="display" id="d6" db_r="16" db_c="6"></div>
+                        <div class="display" id="d7" db_r="16" db_c="7"></div>
+                        <div class="display" id="d8" db_r="16" db_c="8"></div>
+                        <div class="display" id="d9" db_r="16" db_c="9"></div>
+                        <div class="display" id="d10" db_r="16" db_c="10"></div>
+                        <div class="display" id="d11" db_r="16" db_c="11"></div>
+                        <div class="display" id="d12" db_r="16" db_c="12"></div>
+                        <div class="display" id="d13" db_r="16" db_c="13"></div>
+                        <div class="display" id="d14" db_r="16" db_c="14"></div>
+                        <div class="display" id="d15" db_r="16" db_c="15"></div>
+                        <div class="display" id="d16" db_r="16" db_c="16"></div>
+                        <div class="display" id="d17" db_r="16" db_c="17"></div>
+                        <div class="display" id="d18" db_r="16" db_c="18"></div>
+                        <div class="display" id="d19" db_r="16" db_c="19"></div>
+                        <div class="display" id="d20" db_r="16" db_c="20"></div>
+                    </div>
                 </div>
             </div>
             <style>
@@ -240,8 +235,22 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                 .display-column:last-child > * {
                     /*margin-right: 1px;*/
                 }
+
+                textarea {
+                    width: 100%;
+                    height: 200px;
+                    margin: 0 10px;
+                    white-space: nowrap;
+                }
+                button {
+                    margin: 4px;
+                }
             </style>
             <script>
+                document.getElementById("data_all_raw").onclick = function (e) {
+                    e.stopPropagation();
+                };
+
                 const data_all_raw =
                     "1$text:あいう\n" +
                     "2$text:あいうえ\n" +
@@ -252,8 +261,18 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                     "9#0.5$text:列車がまいります,0,2$text:Train Approaching,2\n";
 
                 setTimeout(() => {
-                    onReady(() => {
-                        color(data_all_raw);
+                    onReady(async () => {
+                        await color(data_all_raw);
+                        display_start();
+                        document.getElementById("view").onclick =
+                            async function (e) {
+                                e.stopPropagation();
+                                await color(
+                                    document.getElementById("data_all_raw")
+                                        .value,
+                                );
+                                display_all();
+                            };
                     });
                 }, 1000);
             </script>
