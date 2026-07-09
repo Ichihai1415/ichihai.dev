@@ -120,7 +120,7 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
         <link rel="stylesheet" href="/common.css" />
 
         <link rel="stylesheet" href="../../common.css" />
-        <script defer type="module" src="../../common.js"></script>
+        <script defer type="module" src="../../common.js?v=1.2.0-beta2.1"></script>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
@@ -134,181 +134,80 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
         <nav class="go2top"><!--/js/common.js で追加される--></nav>
         <div class="info">
             <div class="common-comment"><!--/js/common.js で追加される--></div>
-            <h1>発車標シミュレーター 個別ページ</h1>
+            <h1>発車標シミュレーター</h1>
+            <div class="update-date">2026/06/29作成 2026/05/22更新 v1.0</div>
         </div>
-        <div id="target">
-            <div class="info3">
-                <div class="info-magenta">
-                    <div class="info-magenta-head">【情報】</div>
-                    <b>金沢駅（在来線3,4,5番線[2015~]）：再現+仮想</b><br />
-                    <div class="update-date">
-                        2026/05/22作成 2026/07/01更新 v1.1 (script:
-                        v1.2.0-beta2.1)<br />
-                        ※キャッシュの状態にもよりますが、
-                        制作時のスクリプトのバージョンがシミュレータートップページと異なる場合、
-                        制作時と異なるバージョンのスクリプトが使用され、
-                        更新の対応ができていない可能性があります。
-                    </div>
-                </div>
-                <div class="info-blue">
-                    <div class="info-blue-head">【備考】</div>
-                    枠は再現、内容はいろいろ。枠は時計とか作ってない、フォント違うなど。
-                    内容は一部の数字はJR西日本標準（？）のままになっています（面倒）。
-                </div>
-            </div>
-            <div class="departure-board">
-                <div class="db-kanazawa345">
-                    <div class="panel1">
-                        <div class="panel-top">
-                            <div class="hd-container">
-                                <div class="hd-arrow-left">
-                                    <img
-                                        src="/webapp/departure-board/displays/train/arrow.svg"
-                                        width="50px"
-                                        height="50px"
-                                        alt="arrow"
-                                    />
-                                </div>
-                                <div class="hd-text">
-                                    <div class="hd-text1">
-                                        3番のりばの発車<span
-                                            class="deleted-text"
-                                            >は</span
-                                        >
-                                    </div>
-                                    <div class="hd-text2">
-                                        Next
-                                        <span class="hd-text2-space"></span
-                                        >Train
-                                    </div>
-                                </div>
+        <div class="departure-board" id="target">
+            <div class="db-kanazawa345">
+                <div class="panel1">
+                    <div class="panel-top">
+                        <div class="hd-container">
+                            <div class="hd-arrow-left">
+                                <img
+                                    src="/webapp/departure-board/displays/train/arrow.svg"
+                                    width="50px"
+                                    height="50px"
+                                    alt="arrow"
+                                />
                             </div>
-                            <div class="hd-text0">
-                                <span class="hd-text0-1 hd-text0-ja">種別</span>
-                                <span class="hd-text0-en">Type</span>
-                                <span class="hd-text0-2 hd-text0-ja"
-                                    >列車名</span
-                                >
-                                <span class="hd-text0-en">Train Name</span>
-                                <span class="hd-text0-3 hd-text0-ja"
-                                    >／乗車位置</span
-                                >
-                                <span class="hd-text0-en"
-                                    >Boarding Position</span
-                                >
-                                <span class="hd-text0-4 hd-text0-ja">時刻</span>
-                                <span class="hd-text0-en">Departure Time</span>
-                                <span class="hd-text0-5 hd-text0-ja">行先</span>
-                                <span class="hd-text0-en">Destination</span>
-                            </div>
-                            <div class="displays">
-                                <div
-                                    class="display"
-                                    id="d0"
-                                    db_r="16"
-                                    db_c="18"
-                                ></div>
-                                <div
-                                    class="display"
-                                    id="d1"
-                                    db_r="16"
-                                    db_c="18"
-                                ></div>
-                                <div
-                                    class="display"
-                                    id="d2"
-                                    db_r="16"
-                                    db_c="18"
-                                ></div>
-                            </div>
-                        </div>
-                        <div class="panel-bottom">
-                            <fieldset class="border-4">
-                                <legend class="hd-text1">
-                                    4番のりばの発車<span class="deleted-text"
+                            <div class="hd-text">
+                                <div class="hd-text1">
+                                    3番のりばの発車<span class="deleted-text"
                                         >は</span
-                                    ><span class="hd-text2">
-                                        Next
-                                        <span class="hd-text2-space"></span
-                                        >Train
-                                    </span>
-                                </legend>
-
-                                <div class="hd-text0">
-                                    <span class="hd-text0-1 hd-text0-ja"
-                                        >種別</span
                                     >
-                                    <span class="hd-text0-en">Type</span>
-                                    <span class="hd-text0-2 hd-text0-ja"
-                                        >列車名</span
-                                    >
-                                    <span class="hd-text0-en">Train Name</span>
-                                    <span class="hd-text0-3 hd-text0-ja"
-                                        >／乗車位置</span
-                                    >
-                                    <span class="hd-text0-en"
-                                        >Boarding Position</span
-                                    >
-                                    <span class="hd-text0-4 hd-text0-ja"
-                                        >時刻</span
-                                    >
-                                    <span class="hd-text0-en"
-                                        >Departure Time</span
-                                    >
-                                    <span class="hd-text0-5 hd-text0-ja"
-                                        >行先</span
-                                    >
-                                    <span class="hd-text0-en">Destination</span>
                                 </div>
-
-                                <div class="displays">
-                                    <div
-                                        class="display"
-                                        id="d3"
-                                        db_r="16"
-                                        db_c="18"
-                                    ></div>
-                                </div>
-                            </fieldset>
-                        </div>
-                    </div>
-                    <div class="panel-space"></div>
-                    <div class="panel2">
-                        <div class="panel-top">
-                            <div class="clock"></div>
-                        </div>
-                        <div class="panel-bottom">
-                            <div class="border-4">
-                                <div class="hd-text-c">4番のりば</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel-space"></div>
-                    <div class="panel3">
-                        <div class="panel-top">
-                            <div class="hd-container">
-                                <div class="hd-text">
-                                    <div class="hd-text1">
-                                        5番のりばの発車<span
-                                            class="deleted-text"
-                                            >は</span
-                                        >
-                                    </div>
-                                    <div class="hd-text2">
-                                        Next
-                                        <span class="hd-text2-space"></span
-                                        >Train
-                                    </div>
-                                </div>
-                                <div class="hd-arrow-right">
-                                    <img
-                                        src="/webapp/departure-board/displays/train/arrow.svg"
-                                        width="50px"
-                                        height="50px"
-                                        alt="arrow"
-                                    />
+                                <div class="hd-text2">
+                                    Next
+                                    <span class="hd-text2-space"></span>Train
                                 </div>
                             </div>
+                        </div>
+                        <div class="hd-text0">
+                            <span class="hd-text0-1 hd-text0-ja">種別</span>
+                            <span class="hd-text0-en">Type</span>
+                            <span class="hd-text0-2 hd-text0-ja">列車名</span>
+                            <span class="hd-text0-en">Train Name</span>
+                            <span class="hd-text0-3 hd-text0-ja"
+                                >／乗車位置</span
+                            >
+                            <span class="hd-text0-en">Boarding Position</span>
+                            <span class="hd-text0-4 hd-text0-ja">時刻</span>
+                            <span class="hd-text0-en">Departure Time</span>
+                            <span class="hd-text0-5 hd-text0-ja">行先</span>
+                            <span class="hd-text0-en">Destination</span>
+                        </div>
+                        <div class="displays">
+                            <div
+                                class="display"
+                                id="d0"
+                                db_r="16"
+                                db_c="20"
+                            ></div>
+                            <div
+                                class="display"
+                                id="d1"
+                                db_r="16"
+                                db_c="20"
+                            ></div>
+                            <div
+                                class="display"
+                                id="d2"
+                                db_r="16"
+                                db_c="20"
+                            ></div>
+                        </div>
+                    </div>
+                    <div class="panel-bottom">
+                        <fieldset class="border-4">
+                            <legend class="hd-text1">
+                                4番のりばの発車<span class="deleted-text"
+                                    >は</span
+                                ><span class="hd-text2">
+                                    Next
+                                    <span class="hd-text2-space"></span>Train
+                                </span>
+                            </legend>
+
                             <div class="hd-text0">
                                 <span class="hd-text0-1 hd-text0-ja">種別</span>
                                 <span class="hd-text0-en">Type</span>
@@ -327,32 +226,92 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                                 <span class="hd-text0-5 hd-text0-ja">行先</span>
                                 <span class="hd-text0-en">Destination</span>
                             </div>
+
                             <div class="displays">
                                 <div
                                     class="display"
-                                    id="d4"
+                                    id="d3"
                                     db_r="16"
-                                    db_c="18"
-                                ></div>
-                                <div
-                                    class="display"
-                                    id="d5"
-                                    db_r="16"
-                                    db_c="18"
-                                ></div>
-                                <div
-                                    class="display"
-                                    id="d6"
-                                    db_r="16"
-                                    db_c="18"
+                                    db_c="20"
                                 ></div>
                             </div>
+                        </fieldset>
+                    </div>
+                </div>
+                <div class="panel-space"></div>
+                <div class="panel2">
+                    <div class="panel-top">
+                        <div class="clock"></div>
+                    </div>
+                    <div class="panel-bottom">
+                        <div class="border-4">
+                            <div class="hd-text-c">4番のりば</div>
                         </div>
-                        <div class="panel-bottom">
-                            <div class="border-4">
-                                <div class="hd-text-rb">
-                                    4番のりばは後方　130mです
+                    </div>
+                </div>
+                <div class="panel-space"></div>
+                <div class="panel3">
+                    <div class="panel-top">
+                        <div class="hd-container">
+                            <div class="hd-text">
+                                <div class="hd-text1">
+                                    5番のりばの発車<span class="deleted-text"
+                                        >は</span
+                                    >
                                 </div>
+                                <div class="hd-text2">
+                                    Next
+                                    <span class="hd-text2-space"></span>Train
+                                </div>
+                            </div>
+                            <div class="hd-arrow-right">
+                                <img
+                                    src="/webapp/departure-board/displays/train/arrow.svg"
+                                    width="50px"
+                                    height="50px"
+                                    alt="arrow"
+                                />
+                            </div>
+                        </div>
+                        <div class="hd-text0">
+                            <span class="hd-text0-1 hd-text0-ja">種別</span>
+                            <span class="hd-text0-en">Type</span>
+                            <span class="hd-text0-2 hd-text0-ja">列車名</span>
+                            <span class="hd-text0-en">Train Name</span>
+                            <span class="hd-text0-3 hd-text0-ja"
+                                >／乗車位置</span
+                            >
+                            <span class="hd-text0-en">Boarding Position</span>
+                            <span class="hd-text0-4 hd-text0-ja">時刻</span>
+                            <span class="hd-text0-en">Departure Time</span>
+                            <span class="hd-text0-5 hd-text0-ja">行先</span>
+                            <span class="hd-text0-en">Destination</span>
+                        </div>
+                        <div class="displays">
+                            <div
+                                class="display"
+                                id="d4"
+                                db_r="16"
+                                db_c="18"
+                            ></div>
+                            <div
+                                class="display"
+                                id="d5"
+                                db_r="16"
+                                db_c="18"
+                            ></div>
+                            <div
+                                class="display"
+                                id="d6"
+                                db_r="16"
+                                db_c="18"
+                            ></div>
+                        </div>
+                    </div>
+                    <div class="panel-bottom">
+                        <div class="border-4">
+                            <div class="hd-text-rb">
+                                4番のりばは後方　130mです
                             </div>
                         </div>
                     </div>
@@ -367,7 +326,7 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                     display: inline-flex;
                     /*padding: 3px;*/
                     color: var(--text-color);
-                    background-color: #777774;
+                    background-color: #333;
                     font-family: "Noto Sans JP";
                 }
 
@@ -578,14 +537,12 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
             </style>
             <script>
                 const data_all_raw =
-                    "1$text:快速@5,2;〇,1|dotId:num-k/3,1|text:～,1|dotId:num-k/8,1|dotId:zero-32,1|text:18：20@4,2;敦　賀@4,1\n" +
-                    "4$dotId:type/new-rapid.2,3|dotId:name/kosei-omimaiko,3|dotId:zero-16|text:13：20@3,2|dotId:zero-8|dotId:destination/himeji-dir-osaka\n" +
-                    "5$text:北陸特快@5,3;△1～6@5,1;20：05@4,2;米　原@4,1\n" +
-                    "6$text:急行@5,3;☐1～9@5,1; 0：45@3,2|dotId:zero-8|dotId:destination/osaka-dir-kyoto\n" +
-                    "0$text:特急ｻﾝﾀﾞｰﾊﾞｰﾄﾞ@7,3|dotId:num-k/1,1|dotId:num-k/7,1|text:号@2,1|dotId:num-k/1,2|dotId:num-k/3,2|text:：,2|dotId:num-k/2,2|dotId:num-k/7,2|text: 和倉温泉,1\n" +
-                    "2$text_old:普通　　,1;黄,1|dotId:position/arrow,1|text:1～20@4,1; 3：33@4,2;直江津,1\n" +
-                    "3$text:☆☆☆,2;本日の運転は終了しました,1;☆☆☆,2";
-
+                    "0$text:特別快速,2;遅れ約 7分,3; 9：39,2;@1; 大　垣 ;　 6両,2\n" +
+                    "1$text:新快速　,2;遅れ約 3分,3; 9：52,2;@1; 大　垣 ;　 6両,2\n" +
+                    "2$text:快　速　,2;@1;〇1～8;@1; 9：56,2;@1; 大　垣 ;　 8両,2\n" +
+                    "4$text:特別快速,2;@2; 9：39,1;@1;大　　垣;　6,1\n" +
+                    "5$text:この列車は、各駅に停車します。,2\n" +
+                    "3$text:特急ひだ5・25号,3;@1.5;10：10,2;飛騨古川高山;10両,2";
                 setTimeout(() => {
                     onReady(async () => {
                         await color(data_all_raw);

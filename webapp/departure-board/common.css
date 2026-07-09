@@ -17,6 +17,10 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
     padding: 10px;
 }
 
+.info3 {
+    padding: 0 10px;
+}
+
 .departure-board {
     overflow-x: auto;
 }
