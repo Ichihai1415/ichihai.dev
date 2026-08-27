@@ -120,7 +120,11 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
         <link rel="stylesheet" href="/common.css" />
 
         <link rel="stylesheet" href="../../common.css" />
-        <script defer type="module" src="../../common.js?v=1.2.0-beta2.1"></script>
+        <script
+            defer
+            type="module"
+            src="../../common.js?v=1.2.0-beta2.1"
+        ></script>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
@@ -140,42 +144,17 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
         <div class="departure-board" id="target">
             <div class="db-kanazawa345">
                 <div class="panel1">
-                    <div class="panel-top">
-                        <div class="hd-container">
-                            <div class="hd-arrow-left">
-                                <img
-                                    src="/webapp/departure-board/displays/train/arrow.svg"
-                                    width="50px"
-                                    height="50px"
-                                    alt="arrow"
-                                />
-                            </div>
-                            <div class="hd-text">
-                                <div class="hd-text1">
-                                    3番のりばの発車<span class="deleted-text"
-                                        >は</span
-                                    >
-                                </div>
-                                <div class="hd-text2">
-                                    Next
-                                    <span class="hd-text2-space"></span>Train
-                                </div>
-                            </div>
+                    <div class="hd-container">
+                        <div class="hd-1">
+                            <div class="hd-1-1">発車ご案内</div>
+                            <div class="hd-1-2">Train Departures</div>
                         </div>
-                        <div class="hd-text0">
-                            <span class="hd-text0-1 hd-text0-ja">種別</span>
-                            <span class="hd-text0-en">Type</span>
-                            <span class="hd-text0-2 hd-text0-ja">列車名</span>
-                            <span class="hd-text0-en">Train Name</span>
-                            <span class="hd-text0-3 hd-text0-ja"
-                                >／乗車位置</span
-                            >
-                            <span class="hd-text0-en">Boarding Position</span>
-                            <span class="hd-text0-4 hd-text0-ja">時刻</span>
-                            <span class="hd-text0-en">Departure Time</span>
-                            <span class="hd-text0-5 hd-text0-ja">行先</span>
-                            <span class="hd-text0-en">Destination</span>
+                        <div class="hd-2">
+                            <div class="hd-2-1">6</div>
                         </div>
+                    </div>
+
+                    <div class="panel-inner">
                         <div class="displays">
                             <div
                                 class="display"
@@ -189,6 +168,51 @@ ichihai.dev - (c) 2024 Ichihai1415 All right reserved.
                                 db_r="16"
                                 db_c="20"
                             ></div>
+                        </div>
+
+                        <div class="panel-top">
+                            <div class="hd-container">
+                                <div class="hd-arrow-left">
+                                    <img
+                                        src="/webapp/departure-board/displays/train/arrow.svg"
+                                        width="50px"
+                                        height="50px"
+                                        alt="arrow"
+                                    />
+                                </div>
+                                <div class="hd-text">
+                                    <div class="hd-text1">
+                                        3番のりばの発車<span
+                                            class="deleted-text"
+                                            >は</span
+                                        >
+                                    </div>
+                                    <div class="hd-text2">
+                                        Next
+                                        <span class="hd-text2-space"></span
+                                        >Train
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hd-text0">
+                                <span class="hd-text0-1 hd-text0-ja">種別</span>
+                                <span class="hd-text0-en">Type</span>
+                                <span class="hd-text0-2 hd-text0-ja"
+                                    >列車名</span
+                                >
+                                <span class="hd-text0-en">Train Name</span>
+                                <span class="hd-text0-3 hd-text0-ja"
+                                    >／乗車位置</span
+                                >
+                                <span class="hd-text0-en"
+                                    >Boarding Position</span
+                                >
+                                <span class="hd-text0-4 hd-text0-ja">時刻</span>
+                                <span class="hd-text0-en">Departure Time</span>
+                                <span class="hd-text0-5 hd-text0-ja">行先</span>
+                                <span class="hd-text0-en">Destination</span>
+                            </div>
+
                             <div
                                 class="display"
                                 id="d2"
